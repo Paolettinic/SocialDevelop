@@ -37,7 +37,7 @@ public class Index extends HttpServlet {
 		private void action_home(HttpServletRequest request, HttpServletResponse response)throws IOException, ServletException, TemplateManagerException{
 				request.setAttribute("test", "I did it.");
 				TemplateResult tmp = new TemplateResult(getServletContext());
-				tmp.activate("index.html", request, response);
+				tmp.activate("main_content.html", request, response);
 		}
 		
 		protected void processRequest(HttpServletRequest request, HttpServletResponse response)
