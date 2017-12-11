@@ -1,9 +1,12 @@
 package socialdevelop.data.impl;
 
+import it.univaq.f4i.iw.framework.data.DataLayerException;
 import java.util.GregorianCalendar;
 import java.util.Map;
 import socialdevelop.data.model.Skill;
+import socialdevelop.data.model.SocialDevelopDataLayer;
 import socialdevelop.data.model.Task;
+import socialdevelop.data.model.Tipo;
 import socialdevelop.data.model.Utente;
 
 /**
@@ -143,7 +146,7 @@ public class TaskImpl implements Task {
     }
 
     @Override
-    public Tipo getTipo() {
+    public Tipo getTipo() throws DataLayerException{
         if (tipo == null && tipo_key > 0) {
             tipo = ownerdatalayer.getTipo(tipo_key);
         }

@@ -1,9 +1,13 @@
 package socialdevelop.data.impl;
 
+import it.univaq.f4i.iw.framework.data.DataLayerException;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
+import socialdevelop.data.model.Curriculum;
+import socialdevelop.data.model.Immagine;
 import socialdevelop.data.model.Skill;
+import socialdevelop.data.model.SocialDevelopDataLayer;
 import socialdevelop.data.model.Task;
 import socialdevelop.data.model.Utente;
 
@@ -214,7 +218,7 @@ public class UtenteImpl implements Utente {
     @Override
     public List<Progetto> getProgetti() throws DataLayerException {
         if(progetti == null) {
-            progetti = ownerdatalayer.getTipiBySkill(this);
+            progetti = ownerdatalayer.getProgettiByUtente(this);
         }
         return progetti;
     }

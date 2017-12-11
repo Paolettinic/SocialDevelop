@@ -1,7 +1,10 @@
 package socialdevelop.data.impl;
 
+import it.univaq.f4i.iw.framework.data.DataLayerException;
 import java.util.List;
 import socialdevelop.data.model.Skill;
+import socialdevelop.data.model.SocialDevelopDataLayer;
+import socialdevelop.data.model.Tipo;
 
 /**
  * @author Mario

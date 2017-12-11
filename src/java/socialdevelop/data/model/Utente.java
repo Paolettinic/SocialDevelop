@@ -1,5 +1,6 @@
 package socialdevelop.data.model;
 
+import it.univaq.f4i.iw.framework.data.DataLayerException;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
