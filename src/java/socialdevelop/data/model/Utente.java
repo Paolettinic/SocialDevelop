@@ -1,6 +1,7 @@
 package socialdevelop.data.model;
 
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -55,6 +56,10 @@ public interface Utente {
     Map<Task, Integer> getTasks() throws DataLayerException;
 
     void setTasks(Map<Task, Integer> tasks);
+    
+    List<Progetto> getProgetti() throws DataLayerException;
+
+    void setProgetti(List<Progetto> progetti);
     
     // ----------
     

@@ -1,11 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package socialdevelop.data.impl;
 
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Map;
 import socialdevelop.data.model.Skill;
 import socialdevelop.data.model.Task;
@@ -21,7 +17,7 @@ public class UtenteImpl implements Utente {
     private String cognome;
     private String username;
     private String email;
-    private GregorianCalendar datanascita;
+    private GregorianCalendar data_nascita;
     private String password;
     private String biografia;
     // ----------
@@ -31,6 +27,7 @@ public class UtenteImpl implements Utente {
     private int immagine_key;
     private Map<Skill, Integer> skills;
     private Map<Task, Integer> tasks;
+    private List<Progetto> progetti;
     // ----------
     protected SocialDevelopDataLayer ownerdatalayer;
     protected boolean dirty;
@@ -43,7 +40,7 @@ public class UtenteImpl implements Utente {
         cognome = "";
         username = "";
         email = "";
-        datanascita = null;
+        data_nascita = null;
         password = "";
         biografia = "";
         // ----------
@@ -53,6 +50,7 @@ public class UtenteImpl implements Utente {
         immagine_key = 0;
         skills = null;
         tasks = null;
+        progetti = null;
         // ----------
         dirty = false;
     }
@@ -112,12 +110,12 @@ public class UtenteImpl implements Utente {
 
     @Override
     public GregorianCalendar getDataNascita() {
-        return datanascita;
+        return data_nascita;
     }
 
     @Override
     public void setDataNascita(GregorianCalendar datanascita) {
-        this.datanascita = datanascita;
+        this.data_nascita = datanascita;
         this.dirty = true;
     }
 
@@ -150,6 +148,7 @@ public class UtenteImpl implements Utente {
         if (curriculum == null && curriculum_key > 0) {
             curriculum = ownerdatalayer.getCurriculum(curriculum_key);
         }
+        return curriculum;
     }
 
     @Override
@@ -169,6 +168,7 @@ public class UtenteImpl implements Utente {
         if (immagine == null && immagine_key > 0) {
             immagine = ownerdatalayer.getImmagine(immagine_key);
         }
+        return immagine;
     }
 
     @Override
@@ -185,7 +185,7 @@ public class UtenteImpl implements Utente {
     
     @Override
     public Map<Skill, Integer> getSkills() throws DataLayerException {
-        if(skills == null){
+        if(skills == null) {
             skills = ownerdatalayer.getSkillsByUtente(this);
         }
         return skills;
@@ -199,7 +199,7 @@ public class UtenteImpl implements Utente {
     
     @Override
     public Map<Task, Integer> getTasks() throws DataLayerException {
-        if(tasks == null){
+        if(tasks == null) {
             tasks = ownerdatalayer.getTasksByUtente(this);
         }
         return tasks;
@@ -208,6 +208,20 @@ public class UtenteImpl implements Utente {
     @Override
     public void setTasks(Map<Task, Integer> tasks) {
         this.tasks = tasks;
+        this.dirty = true;
+    }
+    
+    @Override
+    public List<Progetto> getProgetti() throws DataLayerException {
+        if(progetti == null) {
+            progetti = ownerdatalayer.getTipiBySkill(this);
+        }
+        return progetti;
+    }
+
+    @Override
+    public void setProgetti(List<Progetto> progetti) {
+        this.progetti = progetti;
         this.dirty = true;
     }
     
@@ -220,11 +234,13 @@ public class UtenteImpl implements Utente {
         cognome = utente.getCognome();
         username = utente.getUsername();
         email = utente.getEmail();
-        datanascita = utente.getDataNascita();
+        data_nascita = utente.getDataNascita();
         password = utente.getPassword();
         biografia = utente.getBiografia();
+        // ----------
         curriculum_key = utente.getCurriculum().getKey();
         immagine_key = utente.getImmagine().getKey();
+        // ----------
         this.dirty = true;
     }
 
