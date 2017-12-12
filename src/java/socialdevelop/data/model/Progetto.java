@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public interface Progetto {
     
-    int getId();
+    int getKey();
     
     void setNome();
     

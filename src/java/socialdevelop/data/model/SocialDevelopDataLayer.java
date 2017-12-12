@@ -42,9 +42,9 @@ public interface SocialDevelopDataLayer extends DataLayer{
 
 	List<Tipo> getTipiBySkill(Skill skill);
 
-	Curriculum getCurriculum(int curriculum_key);
+	FileSD getCurriculum(int curriculum_key);
 
-	Immagine getImmagine(int immagine_key);
+	FileSD getImmagine(int immagine_key);
 
 	Map<Skill, Integer> getSkillsByUtente(Utente utente);
 
@@ -56,12 +56,12 @@ public interface SocialDevelopDataLayer extends DataLayer{
 
 	Map<Utente, Integer> getUtentiByTask(Task task);
         
-        Discussione getDiscussione(int discussione_key);
+	Discussione getDiscussione(int discussione_key);
         
-        List<Task> getTasksByProgetto(Progetto progetto);
+	List<Task> getTasksByProgetto(Progetto progetto);
 	
-        Map<Discussione, Integer> getDiscussioneByProgetto(Progetto progetto);
-        
-        List<Messaggio> getMessaggioByDiscussione(Discussione discussione);
+	Map<Discussione, Integer> getDiscussioneByProgetto(Progetto progetto);
+
+	List<Messaggio> getMessaggioByDiscussione(Discussione discussione);
 
 }

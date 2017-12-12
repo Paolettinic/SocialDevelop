@@ -49,7 +49,7 @@ public class ProgettoImpl implements Progetto{
     }
     
     @Override
-    public int getId() {
+    public int getKey() {
         return id;
     }
     
@@ -120,7 +120,7 @@ public class ProgettoImpl implements Progetto{
     
     @Override
     public void copyFrom(Progetto progetto) throws DataLayerException {
-        id = progetto.getId();
+        id = progetto.getKey();
         nome = progetto.getNome();
         descrizione = progetto.getDescrizione();
         

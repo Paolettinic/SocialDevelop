@@ -15,10 +15,10 @@ import socialdevelop.data.model.Utente;
  */
 public class FileSDImpl implements FileSD{
 	
-	private int file_id;
+	private int key;
 	private File percorso;
 	private String nome;
-	private int userID;
+	private int utente_key;
 	private Utente utente;
 	protected boolean dirty;
 	protected SocialDevelopDataLayer ownerdatalayer;
@@ -26,19 +26,23 @@ public class FileSDImpl implements FileSD{
 	
 	public FileSDImpl(SocialDevelopDataLayer ownerdatalayer){
 		this.ownerdatalayer = ownerdatalayer;
-		this.file_id = 0;
+		this.key = 0;
 		this.percorso = null;
 		this.nome = "";
-		this.userID = 0;
+		this.utente_key = 0;
 		this.utente = null;
 		this.dirty = false;
 	}
 	
 	@Override
 	public int getKey() {
-		return this.file_id;
+		return this.key;
 	}
 
+	protected void setKey(int key){
+		this.key = key;
+	}
+	
 	@Override
 	public String getNome() {
 		return this.nome;
@@ -62,14 +66,14 @@ public class FileSDImpl implements FileSD{
 
 	@Override
 	public Utente getUtente() throws DataLayerException {
-		if(this.utente == null && this.userID > 0)
-			this.utente = ownerdatalayer.getUser(this.userID);
+		if(this.utente == null && this.utente_key > 0)
+			this.utente = ownerdatalayer.getUser(this.utente_key);
 		return this.utente;
 	}
 
 	@Override
 	public void setUtente(Utente utente) {
-		this.userID = utente.getKey();
+		this.utente_key = utente.getKey();
 		this.utente = utente;
 		this.dirty = true;
 	}
@@ -86,13 +90,20 @@ public class FileSDImpl implements FileSD{
 
 	@Override
 	public int getUtenteKey() {
-		return this.userID;
+		return this.utente_key;
+	}
+
+	protected void setUtenteKey(int utente_key) {
+		this.utente_key = utente_key;
+		this.utente = null;
 	}
 
 	@Override
-	public void setUtenteKey(int utente_key) {
-		this.userID = utente_key;
+	public void copyFrom(FileSD file) throws DataLayerException {
+		this.key = file.getKey();
+		this.nome = file.getNome();
+		this.percorso = file.getPercorso();
+		this.utente_key = file.getUtenteKey();
 		this.dirty = true;
 	}
-
 }

@@ -97,7 +97,7 @@ public class DiscussioneImpl implements Discussione {
     @Override
     public void setProgetto(Progetto progetto) {
         this.progetto = progetto;
-        this.progetto_key = progetto.getId();
+        this.progetto_key = progetto.getKey();
         this.dirty = true;
     }
     
@@ -160,7 +160,7 @@ public class DiscussioneImpl implements Discussione {
         pubblica = discussione.getPubblica();
         data = discussione.getData();
         
-        progetto_key = discussione.getProgetto().getId();
+        progetto_key = discussione.getProgetto().getKey();
         taskID = discussione.getTask().getKey();
         userID = discussione.getUtente().getKey();
         

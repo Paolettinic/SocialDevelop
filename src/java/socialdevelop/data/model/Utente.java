@@ -42,13 +42,13 @@ public interface Utente {
     
     // ----------
     
-    Curriculum getCurriculum() throws DataLayerException;
+    FileSD getCurriculum() throws DataLayerException;
 
-    void setCurriculum(Curriculum curriculum);
+    void setCurriculum(FileSD curriculum);
     
-    Immagine getImmagine() throws DataLayerException;
+    FileSD getImmagine() throws DataLayerException;
 
-    void setImmagine(Immagine immagine);
+    void setImmagine(FileSD immagine);
     
     Map<Skill, Integer> getSkills() throws DataLayerException;
 

@@ -15,7 +15,7 @@ import socialdevelop.data.model.Tipo;
  * @author Nicolò Paoletti
  */
 public class TipoImpl implements Tipo{
-	private int typeID;
+	private int key;
 	private String nome;
 	private List<Skill> skills;
 	protected SocialDevelopDataLayer ownerdatalayer;
@@ -23,7 +23,7 @@ public class TipoImpl implements Tipo{
 	
 	public TipoImpl(SocialDevelopDataLayer ownerdatalayer){
 		this.ownerdatalayer = ownerdatalayer;
-		this.typeID = 0;
+		this.key = 0;
 		this.nome = "";
 		this.skills = null;
 		this.dirty = false;
@@ -31,9 +31,13 @@ public class TipoImpl implements Tipo{
 	
 	@Override
 	public int getKey() {
-		return this.typeID;
+		return this.key;
 	}
-
+	
+	protected void setKey(int key){
+		this.key = key;
+	}
+	
 	@Override
 	public String getNome() {
 		return this.nome;
@@ -60,6 +64,13 @@ public class TipoImpl implements Tipo{
 	@Override
 	public void setDirty(boolean dirty) {
 		this.dirty = dirty;
+	}
+
+	@Override
+	public void copyFrom(Tipo tipo) throws DataLayerException {
+		this.key = tipo.getKey();
+		this.nome = tipo.getNome();
+		this.dirty = true;
 	}
 	
 }

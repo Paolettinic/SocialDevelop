@@ -7,7 +7,7 @@ package socialdevelop.data.impl;
 
 import it.univaq.f4i.iw.framework.data.DataLayerException;
 import java.io.File;
-import socialdevelop.data.model.Immagine;
+import socialdevelop.data.model.FileSD;
 import socialdevelop.data.model.SocialDevelopDataLayer;
 import socialdevelop.data.model.Utente;
 
@@ -15,7 +15,7 @@ import socialdevelop.data.model.Utente;
  *
  * @author Nicolò Paoletti
  */
-public class ImmagineImpl implements Immagine {
+public class ImmagineImpl implements FileSD {
 
 	private int key;
 	private String nome;
@@ -38,6 +38,10 @@ public class ImmagineImpl implements Immagine {
 	@Override
 	public int getKey() {
 		return this.key;
+	}
+	
+	protected void setKey(int key){
+		this.key = key;
 	}
 
 	@Override
@@ -82,9 +86,9 @@ public class ImmagineImpl implements Immagine {
 		return this.utente_key;
 	}
 
-	@Override
-	public void setUtenteKey(int utente_key) {
+	protected void setUtenteKey(int utente_key) {
 		this.utente_key = utente_key;
+		this.utente = null;
 	}
 
 	@Override
@@ -96,5 +100,13 @@ public class ImmagineImpl implements Immagine {
 	public void setDirty(boolean dirty) {
 		this.dirty = dirty;
 	}
-
+	
+	@Override
+	public void copyFrom(FileSD file) throws DataLayerException {
+		this.key = file.getKey();
+		this.nome = file.getNome();
+		this.percorso = file.getPercorso();
+		this.utente_key = file.getUtenteKey();
+		this.dirty = true;
+	}
 }

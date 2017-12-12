@@ -4,8 +4,8 @@ import it.univaq.f4i.iw.framework.data.DataLayerException;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
-import socialdevelop.data.model.Curriculum;
-import socialdevelop.data.model.Immagine;
+import socialdevelop.data.model.FileSD;
+import socialdevelop.data.model.Progetto;
 import socialdevelop.data.model.Skill;
 import socialdevelop.data.model.SocialDevelopDataLayer;
 import socialdevelop.data.model.Task;
@@ -25,9 +25,9 @@ public class UtenteImpl implements Utente {
     private String password;
     private String biografia;
     // ----------
-    private Curriculum curriculum;
+    private FileSD curriculum;
     private int curriculum_key;
-    private Immagine immagine;
+    private FileSD immagine;
     private int immagine_key;
     private Map<Skill, Integer> skills;
     private Map<Task, Integer> tasks;
@@ -148,7 +148,7 @@ public class UtenteImpl implements Utente {
     // ----------
 
     @Override
-    public Curriculum getCurriculum() throws DataLayerException {
+    public FileSD getCurriculum() throws DataLayerException {
         if (curriculum == null && curriculum_key > 0) {
             curriculum = ownerdatalayer.getCurriculum(curriculum_key);
         }
@@ -156,7 +156,7 @@ public class UtenteImpl implements Utente {
     }
 
     @Override
-    public void setCurriculum(Curriculum curriculum) {
+    public void setCurriculum(FileSD curriculum) {
         this.curriculum = curriculum;
         this.curriculum_key = curriculum.getKey();
         this.dirty = true;
@@ -168,7 +168,7 @@ public class UtenteImpl implements Utente {
     }
 
     @Override
-    public Immagine getImmagine() throws DataLayerException {
+    public FileSD getImmagine() throws DataLayerException {
         if (immagine == null && immagine_key > 0) {
             immagine = ownerdatalayer.getImmagine(immagine_key);
         }
@@ -176,7 +176,7 @@ public class UtenteImpl implements Utente {
     }
 
     @Override
-    public void setImmagine(Immagine immagine) {
+    public void setImmagine(FileSD immagine) {
         this.immagine = immagine;
         this.immagine_key = immagine.getKey();
         this.dirty = true;

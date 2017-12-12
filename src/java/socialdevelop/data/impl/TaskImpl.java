@@ -3,6 +3,7 @@ package socialdevelop.data.impl;
 import it.univaq.f4i.iw.framework.data.DataLayerException;
 import java.util.GregorianCalendar;
 import java.util.Map;
+import socialdevelop.data.model.Progetto;
 import socialdevelop.data.model.Skill;
 import socialdevelop.data.model.SocialDevelopDataLayer;
 import socialdevelop.data.model.Task;
@@ -131,7 +132,7 @@ public class TaskImpl implements Task {
     // ----------
 
     @Override
-    public Progetto getProgetto() {
+    public Progetto getProgetto() throws DataLayerException{
         if (progetto == null && progetto_key > 0) {
             progetto = ownerdatalayer.getProgetto(progetto_key);
         }

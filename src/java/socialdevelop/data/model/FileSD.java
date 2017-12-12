@@ -28,10 +28,10 @@ public interface FileSD {
 	
 	int getUtenteKey();
 	
-	void setUtenteKey(int utente_key);
-	
 	boolean isDirty();
 	
 	void setDirty(boolean dirty);
+	
+	void copyFrom(FileSD file) throws DataLayerException;
 	
 }

@@ -18,9 +18,11 @@ public interface Tipo {
 	
 	void setNome(String nome);
 	
-	List<Skill> getSkills()throws DataLayerException;
+	List<Skill> getSkills() throws DataLayerException;
 	
 	boolean isDirty();
 	
 	void setDirty(boolean dirty);
+	
+	void copyFrom(Tipo tipo) throws DataLayerException;
 }

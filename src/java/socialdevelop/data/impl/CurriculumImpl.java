@@ -6,7 +6,7 @@
 package socialdevelop.data.impl;
 import it.univaq.f4i.iw.framework.data.DataLayerException;
 import socialdevelop.data.model.SocialDevelopDataLayer;
-import socialdevelop.data.model.Curriculum;
+import socialdevelop.data.model.FileSD;
 import socialdevelop.data.model.Utente;
 import java.io.File;
 
@@ -14,7 +14,7 @@ import java.io.File;
  *
  * @author Nicolò Paoletti
  */
-public class CurriculumImpl implements Curriculum{
+public class CurriculumImpl implements FileSD{
 
 	private int key;
 	private String nome;
@@ -37,6 +37,11 @@ public class CurriculumImpl implements Curriculum{
 	@Override
 	public int getKey() {
 		return this.key;
+	}
+	
+	protected void setKey(int key){
+		this.key = key;
+		//this.dirty = true;???
 	}
 
 	@Override
@@ -80,9 +85,9 @@ public class CurriculumImpl implements Curriculum{
 		return this.utente_key;
 	}
 
-	@Override
-	public void setUtenteKey(int utente_key) {
+	protected void setUtenteKey(int utente_key) {
 		this.utente_key = utente_key;
+		this.utente = null;
 	}
 
 	@Override
@@ -93,6 +98,15 @@ public class CurriculumImpl implements Curriculum{
 	@Override
 	public void setDirty(boolean dirty) {
 		this.dirty = dirty;
+	}
+
+	@Override
+	public void copyFrom(FileSD file) throws DataLayerException {
+		this.key = file.getKey();
+		this.nome = file.getNome();
+		this.percorso = file.getPercorso();
+		this.utente_key = file.getUtenteKey();
+		this.dirty = true;
 	}
 
 	

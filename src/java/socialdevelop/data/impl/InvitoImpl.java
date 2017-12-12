@@ -10,6 +10,7 @@ import java.util.GregorianCalendar;
 import socialdevelop.data.model.Task;
 import socialdevelop.data.model.Utente;
 import socialdevelop.data.model.Invito;
+import socialdevelop.data.model.Progetto;
 
 /**
  *
@@ -47,6 +48,10 @@ public class InvitoImpl implements Invito{
 	@Override
 	public int getKey() {
 		return this.key;
+	}
+	
+	protected void setKey(int key){
+		this.key = key;
 	}
 	
 	public boolean isDirty(){
@@ -114,6 +119,11 @@ public class InvitoImpl implements Invito{
 		this.task_key = task.getKey();
 		this.dirty = true;
 	}
+	
+	protected void setTaskKey(int task_key){
+		this.task_key = task_key;
+		this.task = null;
+	}
 
 	@Override
 	public GregorianCalendar getDate() {
@@ -137,6 +147,24 @@ public class InvitoImpl implements Invito{
 	public void setProgetto(Progetto progetto) {
 		this.progetto = progetto;
 		this.progetto_key = progetto.getKey();
+		this.dirty = true;
+	}
+	
+	protected void setProgettoKey(int progetto_key){
+		this.progetto_key = progetto_key;
+		this.progetto = null;
+	}
+
+	@Override
+	public void copyFrom(Invito invito) throws DataLayerException {
+		this.key = invito.getKey();
+		this.message = invito.getMessage();
+		this.date = invito.getDate();
+		this.isOffer = invito.isOffer();
+		this.progetto_key = invito.getProgetto().getKey();
+		this.utente_key = invito.getUser().getKey();
+		this.status = invito.getStatus();
+		this.task_key = invito.getTask().getKey();
 		this.dirty = true;
 	}
 	

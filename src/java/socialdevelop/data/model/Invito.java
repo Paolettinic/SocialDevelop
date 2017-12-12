@@ -42,4 +42,5 @@ public interface Invito {
 	
 	void setDate(GregorianCalendar date);
 	
+	void copyFrom(Invito invito) throws DataLayerException;
 }
