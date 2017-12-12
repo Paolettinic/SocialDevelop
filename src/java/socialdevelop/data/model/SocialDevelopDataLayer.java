@@ -12,6 +12,7 @@ import java.util.Map;
 import socialdevelop.data.impl.SkillImpl;
 import socialdevelop.data.impl.TaskImpl;
 import socialdevelop.data.impl.UtenteImpl;
+import socialdevelop.data.impl.DiscussioneImpl;
 
 /**
  *
@@ -54,5 +55,13 @@ public interface SocialDevelopDataLayer extends DataLayer{
 	Map<Skill, Integer> getSkillsByTask(Task task);	
 
 	Map<Utente, Integer> getUtentiByTask(Task task);
+        
+        Discussione getDiscussione(int discussione_key);
+        
+        List<Task> getTasksByProgetto(Progetto progetto);
 	
+        Map<Discussione, Integer> getDiscussioneByProgetto(Progetto progetto);
+        
+        List<Messaggio> getMessaggioByDiscussione(Discussione discussione);
+
 }
