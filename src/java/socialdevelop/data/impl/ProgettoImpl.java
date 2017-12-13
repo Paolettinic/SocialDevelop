@@ -7,54 +7,45 @@ package socialdevelop.data.impl;
 
 import it.univaq.f4i.iw.framework.data.DataLayerException;
 import socialdevelop.data.model.SocialDevelopDataLayer;
-
 import socialdevelop.data.model.Progetto;
 import socialdevelop.data.model.Utente;
 import socialdevelop.data.model.Task;
-import socialdevelop.data.model.Discussione;
-
 import java.util.List;
-import java.util.Map;
 
 /**
- *
  * @author Davide De Marco
  */
 public class ProgettoImpl implements Progetto{
     
-    private int id;
+    private int key;
     private String nome;
     private String descrizione;
     
     private Utente utente;
-    private int userID;
-    private List<Task> task;
-    private Map<Discussione, Integer> discussione;
+    private int utente_key;
+    private List<Task> tasks;
     
     protected SocialDevelopDataLayer ownerdatalayer;
     protected boolean dirty;
     
     public ProgettoImpl(SocialDevelopDataLayer ownerdatalayer) {
         this.ownerdatalayer = ownerdatalayer;
-        id = 0;
+        key = 0;
         nome = "";
         descrizione = "";
-        
         utente = null;
-        userID = 0;
-        task = null;
-        discussione = null;
-        
+        utente_key = 0;
+        tasks = null;
         dirty = false;
     }
     
     @Override
     public int getKey() {
-        return id;
+        return key;
     }
     
     @Override
-    public void setNome() {
+    public void setNome(String nome) {
         this.nome = nome;
         this.dirty = true;
     }
@@ -65,7 +56,7 @@ public class ProgettoImpl implements Progetto{
     }
     
     @Override
-    public void setDescrizione() {
+    public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
         this.dirty = true;
     }
@@ -78,54 +69,38 @@ public class ProgettoImpl implements Progetto{
     @Override
     public void setUtente(Utente utente) {
         this.utente = utente;
-        this.userID = utente.getKey();
+        this.utente_key = utente.getKey();
         this.dirty = true;
     }
     
     @Override
     public Utente getUtente() throws DataLayerException {
-        if (utente == null && userID > 0) {
-            utente = ownerdatalayer.getUser(userID);
+        if (utente == null && utente_key > 0) {
+            utente = ownerdatalayer.getUser(utente_key);
         }
         return utente;
     }
     
     @Override
-    public void setTask(List<Task> task) {
-        this.task = task;
+    public void setTasks(List<Task> task) {
+        this.tasks = task;
         this.dirty = true;
     }
     
     @Override
-    public List<Task> getTask() throws DataLayerException {
-        if(task == null) {
-            task = ownerdatalayer.getTasksByProgetto(this);
+    public List<Task> getTasks() throws DataLayerException {
+        if(tasks == null) {
+            tasks = ownerdatalayer.getTasksByProgetto(this);
         }
-        return task;
-    }
-    
-    @Override
-    public void setDiscussione(Map<Discussione, Integer> discussione) {
-        this.discussione = discussione;
-        this.dirty = true;
-    }
-    
-    @Override
-    public Map<Discussione, Integer> getDiscussione() throws DataLayerException {
-        if(discussione == null) {
-            discussione = ownerdatalayer.getDiscussioneByProgetto(this);
-        }
-        return discussione;
+        return tasks;
     }
     
     @Override
     public void copyFrom(Progetto progetto) throws DataLayerException {
-        id = progetto.getKey();
+        key = progetto.getKey();
         nome = progetto.getNome();
         descrizione = progetto.getDescrizione();
-        
-        userID = progetto.getUtente().getKey();
-        
+        utente_key = progetto.getUtente().getKey();
         this.dirty = true;
     }
     

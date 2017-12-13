@@ -1,37 +1,35 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package socialdevelop.data.model;
+
 import it.univaq.f4i.iw.framework.data.DataLayerException;
-import java.io.File;
+import java.io.InputStream;
 
 /**
- *
  * @author Nicolò Paoletti
  */
 public interface FileSD {
-	int getKey();
-	
-	String getNome();
-	
-	void setNome(String nome);
-	
-	File getPercorso();
-	
-	void setPercorso(File percorso);
-	
-	Utente getUtente() throws DataLayerException;
-	
-	void setUtente(Utente utente);
-	
-	int getUtenteKey();
-	
-	boolean isDirty();
-	
-	void setDirty(boolean dirty);
-	
-	void copyFrom(FileSD file) throws DataLayerException;
-	
+    
+    int getKey();
+    
+    String getTipo();
+
+    void setTipo(String tipo);
+    
+    long getGrandezza();
+
+    public String getNome();
+
+    public void setNome(String nome);
+
+    InputStream getFile() throws DataLayerException;
+
+    void setFile(InputStream is) throws DataLayerException;
+    
+    Utente getUtente() throws DataLayerException;
+
+    void setUtente(Utente utente);
+
+    void setDirty(boolean dirty);
+
+    boolean isDirty();
+    
 }

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Mario
+ * @author Mario Vetrini
  */
 public interface Utente {
     

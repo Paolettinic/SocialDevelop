@@ -1,28 +1,22 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package socialdevelop.data.model;
-import it.univaq.f4i.iw.framework.data.DataLayerException;
 
-import java.util.Calendar;
+import it.univaq.f4i.iw.framework.data.DataLayerException;
+import java.util.GregorianCalendar;
 
 /**
- *
  * @author Davide De Marco
  */
 public interface Messaggio {
     
-    int getId();
+    int getKey();
     
-    void setTesto();
+    void setTesto(String testo);
     
     String getTesto();
     
-    void setData();
+    void setData(GregorianCalendar data);
     
-    Calendar getData();
+    GregorianCalendar getData();
     
     void setUtente(Utente utente);
     

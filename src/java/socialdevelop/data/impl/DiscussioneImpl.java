@@ -1,68 +1,52 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package socialdevelop.data.impl;
-import it.univaq.f4i.iw.framework.data.DataLayerException;
-import socialdevelop.data.model.SocialDevelopDataLayer;
 
-import socialdevelop.data.model.Progetto;
+import it.univaq.f4i.iw.framework.data.DataLayerException;
+import java.util.GregorianCalendar;
+import socialdevelop.data.model.SocialDevelopDataLayer;
 import socialdevelop.data.model.Task;
 import socialdevelop.data.model.Utente;
 import socialdevelop.data.model.Messaggio;
 import socialdevelop.data.model.Discussione;
-
-import java.util.Calendar;
 import java.util.List;
 
 /**
- *
  * @author Davide De Marco
  */
 public class DiscussioneImpl implements Discussione {
     
-    private int id;
+    private int key;
     private String titolo;
-    private int pubblica;
-    private Calendar data;
-    
-    private Progetto progetto;
-    private int progetto_key;
+    private boolean pubblica;
+    private GregorianCalendar data;
     private Task task;
-    private int taskID;
+    private int task_key;
     private Utente utente;
-    private int userID;
-    private List<Messaggio> messaggio;
-    
+    private int utente_key;
+    private List<Messaggio> messaggi;
     protected SocialDevelopDataLayer ownerdatalayer;
     protected boolean dirty;
     
     public DiscussioneImpl(SocialDevelopDataLayer ownerdatalayer) {
         this.ownerdatalayer = ownerdatalayer;
-        id = 0;
+        key = 0;
         titolo = "";
-        pubblica = 0;
+        pubblica = false;
         data = null;
-        
-        progetto = null;
-        progetto_key = 0;
         task = null;
-        taskID = 0;
+        task_key = 0;
         utente = null;
-        userID = 0;
-        messaggio = null;
-      
+        utente_key = 0;
+        messaggi = null;
         dirty = false;
     }
     
     @Override
-    public int getId() {
-        return id;
+    public int getKey() {
+        return key;
     }
     
     @Override
-    public void setTitolo() {
+    public void setTitolo(String titolo) {
         this.titolo = titolo;
         this.dirty = true;
     }
@@ -73,53 +57,38 @@ public class DiscussioneImpl implements Discussione {
     }
     
     @Override
-    public void setPubblica() {
+    public void setPubblica(boolean pubblica) {
         this.pubblica = pubblica;
         this.dirty = true;
     }
     
     @Override
-    public int getPubblica() {
+    public boolean getPubblica() {
         return pubblica;
     }
     
     @Override
-    public void setData() {
+    public void setData(GregorianCalendar data) {
         this.data = data;
         this.dirty = true;
     }
     
     @Override
-    public Calendar getData() {
+    public GregorianCalendar getData() {
         return data;
-    }
-    
-    @Override
-    public void setProgetto(Progetto progetto) {
-        this.progetto = progetto;
-        this.progetto_key = progetto.getKey();
-        this.dirty = true;
-    }
-    
-    @Override
-    public Progetto getProgetto() throws DataLayerException {
-        if (progetto == null && progetto_key > 0) {
-            progetto = ownerdatalayer.getProgetto(progetto_key);
-        }
-        return progetto;
     }
     
     @Override
     public void setTask(Task task) {
         this.task = task;
-        this.taskID = task.getKey();
+        this.task_key = task.getKey();
         this.dirty = true;
     }
     
     @Override
     public Task getTask() throws DataLayerException {
-        if (task == null && taskID > 0) {
-            task = ownerdatalayer.getTask(taskID);
+        if (task == null && task_key > 0) {
+            task = ownerdatalayer.getTask(task_key);
         }
         return task;
     }
@@ -127,42 +96,40 @@ public class DiscussioneImpl implements Discussione {
     @Override
     public void setUtente(Utente utente) {
         this.utente = utente;
-        this.userID = utente.getKey();
+        this.utente_key = utente.getKey();
         this.dirty = true;
     }
     
     @Override
     public Utente getUtente() throws DataLayerException {
-        if (utente == null && userID > 0) {
-            utente = ownerdatalayer.getUser(userID);
+        if (utente == null && utente_key > 0) {
+            utente = ownerdatalayer.getUser(utente_key);
         }
         return utente;
     }
     
     @Override
-    public void setMessaggio(List<Messaggio> messaggio) {
-        this.messaggio = messaggio;
+    public void setMessaggi(List<Messaggio> messaggio) {
+        this.messaggi = messaggio;
         this.dirty = true;
     }
     
     @Override
-    public List<Messaggio> getMessaggio() throws DataLayerException {
-        if(messaggio == null) {
-            messaggio = ownerdatalayer.getMessaggioByDiscussione(this);
+    public List<Messaggio> getMessaggi() throws DataLayerException {
+        if(messaggi == null) {
+            messaggi = ownerdatalayer.getMessaggioByDiscussione(this);
         }
-        return messaggio;
+        return messaggi;
     }
     
     @Override
     public void copyFrom(Discussione discussione) throws DataLayerException {
-        id = discussione.getId();
+        key = discussione.getKey();
         titolo = discussione.getTitolo();
         pubblica = discussione.getPubblica();
         data = discussione.getData();
-        
-        progetto_key = discussione.getProgetto().getKey();
-        taskID = discussione.getTask().getKey();
-        userID = discussione.getUtente().getKey();
+        task_key = discussione.getTask().getKey();
+        utente_key = discussione.getUtente().getKey();
         
         this.dirty = true;
     }

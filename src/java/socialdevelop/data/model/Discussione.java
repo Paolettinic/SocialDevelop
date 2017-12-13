@@ -1,42 +1,31 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package socialdevelop.data.model;
-import it.univaq.f4i.iw.framework.data.DataLayerException;
 
+import it.univaq.f4i.iw.framework.data.DataLayerException;
 import java.util.List;
-import java.util.Map;
-import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
- *
  * @author Davide De Marco
  */
 public interface Discussione {
     
-    int getId();
+    int getKey();
     
-    void setTitolo();
+    void setTitolo(String titolo);
     
     String getTitolo();
     
-    void setPubblica();
+    void setPubblica(boolean pubblica);
     
-    int getPubblica();
+    boolean getPubblica();
     
-    void setData();
+    void setData(GregorianCalendar data);
     
-    Calendar getData();
+    GregorianCalendar getData();
     
-    void setMessaggio(List<Messaggio> messaggio);
+    void setMessaggi(List<Messaggio> messaggi);
     
-    List<Messaggio> getMessaggio() throws DataLayerException;
-    
-    void setProgetto(Progetto progetto);
-    
-    Progetto getProgetto() throws DataLayerException;
+    List<Messaggio> getMessaggi() throws DataLayerException;
     
     void setTask(Task task);
     

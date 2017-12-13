@@ -4,7 +4,7 @@ import it.univaq.f4i.iw.framework.data.DataLayerException;
 import java.util.List;
 
 /**
- * @author Mario
+ * @author Mario Vetrini
  */
 public interface Skill {
     

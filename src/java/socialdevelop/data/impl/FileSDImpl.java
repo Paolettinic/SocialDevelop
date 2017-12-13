@@ -1,109 +1,143 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package socialdevelop.data.impl;
+
 import it.univaq.f4i.iw.framework.data.DataLayerException;
-import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import socialdevelop.data.model.FileSD;
 import socialdevelop.data.model.SocialDevelopDataLayer;
 import socialdevelop.data.model.Utente;
+
 /**
- *
  * @author Nicolò Paoletti
  */
-public class FileSDImpl implements FileSD{
-	
-	private int key;
-	private File percorso;
-	private String nome;
-	private int utente_key;
-	private Utente utente;
-	protected boolean dirty;
-	protected SocialDevelopDataLayer ownerdatalayer;
-
-	
-	public FileSDImpl(SocialDevelopDataLayer ownerdatalayer){
-		this.ownerdatalayer = ownerdatalayer;
-		this.key = 0;
-		this.percorso = null;
-		this.nome = "";
-		this.utente_key = 0;
-		this.utente = null;
-		this.dirty = false;
-	}
-	
-	@Override
-	public int getKey() {
-		return this.key;
-	}
-
-	protected void setKey(int key){
-		this.key = key;
-	}
-	
-	@Override
-	public String getNome() {
-		return this.nome;
-	}
-
-	@Override
-	public void setNome(String nome) {
-		this.nome = nome;
-		this.dirty = true;
-	}
-
-	@Override
-	public File getPercorso() {
-		return this.percorso;
-	}
-
-	@Override
-	public void setPercorso(File percorso) {
-		this.percorso = percorso;
-	}
-
-	@Override
-	public Utente getUtente() throws DataLayerException {
-		if(this.utente == null && this.utente_key > 0)
-			this.utente = ownerdatalayer.getUser(this.utente_key);
-		return this.utente;
-	}
-
-	@Override
-	public void setUtente(Utente utente) {
-		this.utente_key = utente.getKey();
-		this.utente = utente;
-		this.dirty = true;
-	}
-
-	@Override
-	public boolean isDirty() {
-		return this.dirty;
-	}
-
-	@Override
-	public void setDirty(boolean dirty) {
-		this.dirty = dirty;
-	}
-
-	@Override
-	public int getUtenteKey() {
-		return this.utente_key;
-	}
-
-	protected void setUtenteKey(int utente_key) {
-		this.utente_key = utente_key;
-		this.utente = null;
-	}
-
-	@Override
-	public void copyFrom(FileSD file) throws DataLayerException {
-		this.key = file.getKey();
-		this.nome = file.getNome();
-		this.percorso = file.getPercorso();
-		this.utente_key = file.getUtenteKey();
-		this.dirty = true;
-	}
+public class FileSDImpl implements FileSD {
+    
+    private int key;
+    private String nome;
+    private String tipo;
+    private int grandezza;
+    private Utente utente;
+    private int utente_key;
+    protected SocialDevelopDataLayer ownerdatalayer;
+    protected boolean dirty;
+    
+    public FileSDImpl(SocialDevelopDataLayer ownerdatalayer) {
+        this.ownerdatalayer = ownerdatalayer;
+        this.key = 0;
+        this.nome = "";
+        this.tipo = "";
+        this.grandezza = 0;
+        this.utente = null;
+        this.utente_key = 0;
+        this.dirty = false;
+    }
+    
+    @Override
+    public int getKey() {
+        return this.key;
+    }
+    
+    protected void setKey(int key) {
+        this.key = key;
+    }
+    
+    @Override
+    public String getTipo() {
+        return this.tipo;
+    }
+    
+    @Override
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+        this.dirty = true;
+    }
+    
+    @Override
+    public long getGrandezza() {
+        return this.grandezza;
+    }
+    
+    protected void setGrandezza(int grandezza) {
+        this.grandezza = grandezza;
+    }
+    
+    @Override
+    public String getNome() {
+        return this.nome;
+    }
+    
+    @Override
+    public void setNome(String nome) {
+        this.nome = nome;
+        this.dirty = true;
+    }
+    
+    @Override
+    public InputStream getFile() throws DataLayerException {
+        try {
+            return new FileInputStream(nome);
+        } catch (FileNotFoundException ex) {
+            throw new DataLayerException("Errore in fase di apertura dell'immagine", ex);
+        }
+    }
+    
+    @Override
+    public void setFile(InputStream is) throws DataLayerException {
+        OutputStream os = null;
+        try {
+            byte[] buffer = new byte[1024];
+            os = new FileOutputStream(nome);
+            int read;
+            while ((read = is.read(buffer)) > 0) {
+                os.write(buffer, 0, read);
+            }
+            this.dirty = true;
+        } catch (FileNotFoundException ex) {
+            throw new DataLayerException("Erroe in fase di salvataggio dell'immagine", ex);
+        } catch (IOException ex) {
+            throw new DataLayerException("Erroe in fase di salvataggio dell'immagine", ex);
+        } finally {
+            try {
+                os.close();
+            } catch (IOException ex) {
+                Logger.getLogger(ImmagineImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    @Override
+    public Utente getUtente() throws DataLayerException{
+        if(this.utente == null && this.utente_key>0)
+            this.utente = ownerdatalayer.getUser(this.utente_key);
+        return this.utente;
+    }
+    
+    @Override
+    public void setUtente(Utente user){
+        this.utente = user;
+        this.utente_key = user.getKey();
+        this.dirty = true;
+    }
+    
+    protected void setUtenteKey(int utente_key) {
+        this.utente_key = utente_key;
+        this.utente = null;
+    }
+    
+    @Override
+    public void setDirty(boolean dirty) {
+        this.dirty = dirty;
+    }
+    
+    @Override
+    public boolean isDirty() {
+        return dirty;
+    }
+    
 }

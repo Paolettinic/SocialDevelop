@@ -1,29 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package socialdevelop.data.impl;
+
 import it.univaq.f4i.iw.framework.data.DataLayerException;
 import socialdevelop.data.model.SocialDevelopDataLayer;
-
 import socialdevelop.data.model.Messaggio;
 import socialdevelop.data.model.Utente;
 import socialdevelop.data.model.Discussione;
+import java.util.GregorianCalendar;
 
-import java.util.Calendar;
 /**
- *
  * @author Davide De Marco
  */
 public class MessaggioImpl implements Messaggio {
     
-    private int id;
+    private int key;
     private String testo;
-    private Calendar data;
+    private GregorianCalendar data;
     
     private Utente utente;
-    private int userID;
+    private int utente_key;
     private Discussione discussione;
     private int discussione_key;
     
@@ -32,25 +26,23 @@ public class MessaggioImpl implements Messaggio {
 
     public MessaggioImpl(SocialDevelopDataLayer ownerdatalayer) {
         this.ownerdatalayer = ownerdatalayer;
-        id = 0;
+        key = 0;
         testo = "";
         data = null;
-        
         utente = null;
-        userID = 0;
+        utente_key = 0;
         discussione = null;
         discussione_key = 0;
-        
         dirty = false;
     }
     
     @Override
-    public int getId() {
-        return id;
+    public int getKey() {
+        return key;
     }
     
     @Override
-    public void setTesto() {
+    public void setTesto(String testo) {
         this.testo = testo;
         this.dirty = true;
     }
@@ -61,27 +53,27 @@ public class MessaggioImpl implements Messaggio {
     }
     
     @Override
-    public void setData() {
+    public void setData(GregorianCalendar data) {
         this.data = data;
         this.dirty = true;
     }
     
     @Override
-    public Calendar getData() {
+    public GregorianCalendar getData() {
         return data;
     }
     
     @Override
     public void setUtente(Utente utente) {
         this.utente = utente;
-        this.userID = utente.getKey();
+        this.utente_key = utente.getKey();
         this.dirty = true;
     }
     
     @Override
     public Utente getUtente() throws DataLayerException {
-        if (utente == null && userID > 0) {
-            utente = ownerdatalayer.getUser(userID);
+        if (utente == null && utente_key > 0) {
+            utente = ownerdatalayer.getUser(utente_key);
         }
         return utente;
     }
@@ -89,7 +81,7 @@ public class MessaggioImpl implements Messaggio {
     @Override
     public void setDiscussione(Discussione discussione) {
         this.discussione = discussione;
-        this.discussione_key = discussione.getId();
+        this.discussione_key = discussione.getKey();
         this.dirty = true;
     }
     
@@ -103,13 +95,11 @@ public class MessaggioImpl implements Messaggio {
     
     @Override
     public void copyFrom(Messaggio messaggio) throws DataLayerException {
-        id = messaggio.getId();
+        key = messaggio.getKey();
         testo = messaggio.getTesto();
         data = messaggio.getData();
-        
-        userID = messaggio.getUtente().getKey();
-        discussione_key = messaggio.getDiscussione().getId();
-        
+        utente_key = messaggio.getUtente().getKey();
+        discussione_key = messaggio.getDiscussione().getKey();
         this.dirty = true;
     }
     
