@@ -114,7 +114,7 @@ public class FileSDImpl implements FileSD {
     @Override
     public Utente getUtente() throws DataLayerException{
         if(this.utente == null && this.utente_key>0)
-            this.utente = ownerdatalayer.getUser(this.utente_key);
+            this.utente = ownerdatalayer.getUtente(this.utente_key);
         return this.utente;
     }
     

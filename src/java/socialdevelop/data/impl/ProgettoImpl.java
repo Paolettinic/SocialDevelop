@@ -76,7 +76,7 @@ public class ProgettoImpl implements Progetto{
     @Override
     public Utente getUtente() throws DataLayerException {
         if (utente == null && utente_key > 0) {
-            utente = ownerdatalayer.getUser(utente_key);
+            utente = ownerdatalayer.getUtente(utente_key);
         }
         return utente;
     }
@@ -90,7 +90,7 @@ public class ProgettoImpl implements Progetto{
     @Override
     public List<Task> getTasks() throws DataLayerException {
         if(tasks == null) {
-            tasks = ownerdatalayer.getTasksByProgetto(this);
+            tasks = ownerdatalayer.getTasksByProgetto(this.key);
         }
         return tasks;
     }

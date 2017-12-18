@@ -49,7 +49,7 @@ public class InvitoImpl implements Invito {
     @Override
     public Utente getUtente() throws DataLayerException{
         if(this.utente == null && utente_key > 0)
-            this.utente = ownerdatalayer.getUser(utente_key);
+            this.utente = ownerdatalayer.getUtente(utente_key);
         return this.utente;
     }
     

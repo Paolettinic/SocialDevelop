@@ -47,7 +47,7 @@ public class TipoImpl implements Tipo {
     @Override
     public List<Skill> getSkills() throws DataLayerException{
         if(this.skills == null)
-                skills = ownerdatalayer.getSkillsByType(this);
+                skills = ownerdatalayer.getSkillsByTipo(this.key);
         return this.skills;
     }
 

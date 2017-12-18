@@ -103,7 +103,7 @@ public class DiscussioneImpl implements Discussione {
     @Override
     public Utente getUtente() throws DataLayerException {
         if (utente == null && utente_key > 0) {
-            utente = ownerdatalayer.getUser(utente_key);
+            utente = ownerdatalayer.getUtente(utente_key);
         }
         return utente;
     }

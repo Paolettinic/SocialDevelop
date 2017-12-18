@@ -190,7 +190,7 @@ public class UtenteImpl implements Utente {
     @Override
     public Map<Skill, Integer> getSkills() throws DataLayerException {
         if(skills == null) {
-            skills = ownerdatalayer.getSkillsByUtente(this);
+            skills = ownerdatalayer.getSkillsByUtente(this.key);
         }
         return skills;
     }
@@ -204,7 +204,7 @@ public class UtenteImpl implements Utente {
     @Override
     public Map<Task, Integer> getTasks() throws DataLayerException {
         if(tasks == null) {
-            tasks = ownerdatalayer.getTasksByUtente(this);
+            tasks = ownerdatalayer.getTasksByUtente(this.key);
         }
         return tasks;
     }
@@ -218,7 +218,7 @@ public class UtenteImpl implements Utente {
     @Override
     public List<Progetto> getProgetti() throws DataLayerException {
         if(progetti == null) {
-            progetti = ownerdatalayer.getProgettiByUtente(this);
+            progetti = ownerdatalayer.getProgettiByUtente(this.key);
         }
         return progetti;
     }
