@@ -90,7 +90,7 @@ public class ProgettoImpl implements Progetto{
     @Override
     public List<Task> getTasks() throws DataLayerException {
         if(tasks == null) {
-            tasks = ownerdatalayer.getTasksByProgetto(this.key);
+            tasks = ownerdatalayer.getTasks(this);
         }
         return tasks;
     }

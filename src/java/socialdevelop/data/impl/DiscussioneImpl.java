@@ -117,7 +117,7 @@ public class DiscussioneImpl implements Discussione {
     @Override
     public List<Messaggio> getMessaggi() throws DataLayerException {
         if(messaggi == null) {
-            messaggi = ownerdatalayer.getMessaggioByDiscussione(this);
+            messaggi = ownerdatalayer.getMessaggi(this);
         }
         return messaggi;
     }

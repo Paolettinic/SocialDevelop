@@ -79,7 +79,7 @@ public class SkillImpl implements Skill {
     @Override
     public List<Tipo> getTipi() throws DataLayerException {
         if(tipi == null) {
-            tipi = ownerdatalayer.getTipiBySkill(this);
+            tipi = ownerdatalayer.getTipi(this);
         }
         return tipi;
     }

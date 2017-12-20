@@ -164,7 +164,7 @@ public class TaskImpl implements Task {
     @Override
     public Map<Skill, Integer> getSkills() throws DataLayerException {
         if(skills == null) {
-            skills = ownerdatalayer.getSkillsByTask(this.key);
+            skills = ownerdatalayer.getSkills(this);
         }
         return skills;
     }
@@ -178,7 +178,7 @@ public class TaskImpl implements Task {
     @Override
     public Map<Utente, Integer> getUtenti() throws DataLayerException {
         if(utenti == null) {
-            utenti = ownerdatalayer.getUtentiByTask(this.key);
+            utenti = ownerdatalayer.getUtenti(this);
         }
         return utenti;
     }

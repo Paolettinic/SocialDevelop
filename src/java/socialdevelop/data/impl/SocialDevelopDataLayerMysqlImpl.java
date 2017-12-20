@@ -195,7 +195,7 @@ public class SocialDevelopDataLayerMysqlImpl implements SocialDevelopDataLayer {
     }
 
     @Override
-    public Map<Discussione, Integer> getDiscussioniByTask(Task task) throws DataLayerException {
+    public Map<Discussione, Integer> getDiscussioni(Task task) throws DataLayerException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -205,7 +205,7 @@ public class SocialDevelopDataLayerMysqlImpl implements SocialDevelopDataLayer {
     }
 
     @Override
-    public List<FileSD> getFilesByUtente(int utente_key) throws DataLayerException {
+    public List<FileSD> getFiles(Utente utente) throws DataLayerException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -220,12 +220,12 @@ public class SocialDevelopDataLayerMysqlImpl implements SocialDevelopDataLayer {
     }
 
     @Override
-    public List<Invito> getInvitiByUtente(int utente_key) throws DataLayerException {
+    public List<Invito> getInviti(Utente utente) throws DataLayerException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<Invito> getInvitiByTask(int task_key) throws DataLayerException {
+    public List<Invito> getInviti(Task task) throws DataLayerException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -235,7 +235,7 @@ public class SocialDevelopDataLayerMysqlImpl implements SocialDevelopDataLayer {
     }
 
     @Override
-    public List<Messaggio> getMessaggioByDiscussione(Discussione discussione) {
+    public List<Messaggio> getMessaggi(Discussione discussione) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -245,7 +245,7 @@ public class SocialDevelopDataLayerMysqlImpl implements SocialDevelopDataLayer {
     }
 
     @Override
-    public List<Progetto> getProgettiByUtente(int utente_key) {
+    public List<Progetto> getProgetti(Utente utente) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -255,17 +255,17 @@ public class SocialDevelopDataLayerMysqlImpl implements SocialDevelopDataLayer {
     }
 
     @Override
-    public List<Skill> getSkillsByTipo(int tipo_key) throws DataLayerException {
+    public List<Skill> getSkills(Tipo tipo) throws DataLayerException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Map<Skill, Integer> getSkillsByUtente(int utente_key) {
+    public Map<Skill, Integer> getSkills(Utente utente) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Map<Skill, Integer> getSkillsByTask(int task_key) {
+    public Map<Skill, Integer> getSkills(Task task) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -280,22 +280,22 @@ public class SocialDevelopDataLayerMysqlImpl implements SocialDevelopDataLayer {
     }
 
     @Override
-    public Map<Task, Integer> getTasksByUtente(int utente_key) {
+    public Map<Task, Integer> getTasks(Utente utente) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<Task> getTasksByProgetto(int progetto_key) {
+    public List<Task> getTasks(Progetto progetto) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<Task> getTasksByTipo(int tipo_key) {
+    public List<Task> getTasks(Tipo tipo) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Map<Task, Integer> getTasksBySkill(int skill_key) {
+    public Map<Task, Integer> getTasks(Skill skill) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -305,7 +305,7 @@ public class SocialDevelopDataLayerMysqlImpl implements SocialDevelopDataLayer {
     }
 
     @Override
-    public List<Tipo> getTipiBySkill(Skill skill) {
+    public List<Tipo> getTipi(Skill skill) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -315,12 +315,12 @@ public class SocialDevelopDataLayerMysqlImpl implements SocialDevelopDataLayer {
     }
 
     @Override
-    public Map<Utente, Integer> getUtentiByTask(int task_key) {
+    public Map<Utente, Integer> getUtenti(Task task) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Map<Utente, Integer> getUtentiBySkill(int skill_key) {
+    public Map<Utente, Integer> getUtenti(Skill skill) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

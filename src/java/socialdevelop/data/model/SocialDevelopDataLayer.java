@@ -86,56 +86,56 @@ public interface SocialDevelopDataLayer extends DataLayer {
     
     Discussione getDiscussione(int discussione_key) throws DataLayerException;
     
-    Map<Discussione, Integer> getDiscussioniByTask(Task task) throws DataLayerException;
+    Map<Discussione, Integer> getDiscussioni(Task task) throws DataLayerException;
     
     FileSD getFile(int file_key) throws DataLayerException;
     
-    List<FileSD> getFilesByUtente(int utente_key) throws DataLayerException;
+    List<FileSD> getFiles(Utente utente) throws DataLayerException;
     
     FileSD getImmagine(int immagine_key) throws DataLayerException;
     
     Invito getInvito(int invito_key) throws DataLayerException;
     
-    List<Invito> getInvitiByUtente(int utente_key) throws DataLayerException;
+    List<Invito> getInviti(Utente utente) throws DataLayerException;
     
-    List<Invito> getInvitiByTask(int task_key) throws DataLayerException;
+    List<Invito> getInviti(Task task) throws DataLayerException;
     
     Messaggio getMessaggio(int messaggio_key) throws DataLayerException;
     
-    List<Messaggio> getMessaggioByDiscussione(Discussione discussione);
+    List<Messaggio> getMessaggi(Discussione discussione);
     
     Progetto getProgetto(int progetto_key) throws DataLayerException;
     
-    List<Progetto> getProgettiByUtente(int utente_key);
+    List<Progetto> getProgetti(Utente utente);
 
     Skill getSkill(int skill_key) throws DataLayerException;
     
-    List<Skill> getSkillsByTipo(int tipo_key) throws DataLayerException;
+    List<Skill> getSkills(Tipo tipo) throws DataLayerException;
     
-    Map<Skill, Integer> getSkillsByUtente(int utente_key);
+    Map<Skill, Integer> getSkills(Utente utente);
     
-    Map<Skill, Integer> getSkillsByTask(int task_key);
+    Map<Skill, Integer> getSkills(Task task);
     
     List<Skill> getSkillsfiglie(int skill_key);
     
     Task getTask(int task_key) throws DataLayerException;
     
-    Map<Task, Integer> getTasksByUtente(int utente_key);
+    Map<Task, Integer> getTasks(Utente utente);
     
-    List<Task> getTasksByProgetto(int  progetto_key);
+    List<Task> getTasks(Progetto  progetto);
     
-    List<Task> getTasksByTipo(int tipo_key);
+    List<Task> getTasks(Tipo tipo);
     
-    Map<Task, Integer> getTasksBySkill(int skill_key);
+    Map<Task, Integer> getTasks(Skill skill);
     
     Tipo getTipo(int tipo_key) throws DataLayerException;
     
-    List<Tipo> getTipiBySkill(Skill skill);
+    List<Tipo> getTipi(Skill skill);
     
     Utente getUtente(int utente_key) throws DataLayerException;
     
-    Map<Utente, Integer> getUtentiByTask(int task_key);
+    Map<Utente, Integer> getUtenti(Task task);
     
-    Map<Utente, Integer> getUtentiBySkill(int skill_key);
+    Map<Utente, Integer> getUtenti(Skill skill);
     
 }
