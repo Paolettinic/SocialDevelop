@@ -162,7 +162,7 @@ public class UtenteImpl implements Utente {
         this.dirty = true;
     }
     
-    protected void seturriculumKey(int curriculum_key) {
+    protected void setCurriculumKey(int curriculum_key) {
         this.curriculum_key = curriculum_key;
         this.curriculum = null;
     }

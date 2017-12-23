@@ -19,6 +19,10 @@ public interface Task {
     
     void setDescrizione(String descrizione);
     
+    boolean getChiuso();
+    
+    void setChiuso(boolean chiuso);
+    
     int getNumeroCorrenteCollaboratori();
     
     void setNumeroCorrenteCollaboratori(int numero_corrente_collaboratori);

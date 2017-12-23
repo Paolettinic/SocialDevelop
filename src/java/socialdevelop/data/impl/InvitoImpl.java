@@ -16,7 +16,7 @@ public class InvitoImpl implements Invito {
     private String messaggio;
     private GregorianCalendar data;
     private boolean offerta;
-    private boolean stato;
+    private String stato;
     private Utente utente;
     private int utente_key;
     private Task task;
@@ -30,7 +30,7 @@ public class InvitoImpl implements Invito {
         this.messaggio = "";
         this.data = null;
         this.offerta = false;
-        this.stato = false;
+        this.stato = "";
         this.utente_key = 0;
         this.utente = null;
         this.task = null;
@@ -72,13 +72,13 @@ public class InvitoImpl implements Invito {
     }
     
     @Override
-    public boolean getStato() {
+    public String getStato() {
         return this.stato;
     }
     
     @Override
-    public void setStato(boolean status) {
-        this.stato = status;
+    public void setStato(String stato) {
+        this.stato = stato;
         this.dirty = true;
     }
     

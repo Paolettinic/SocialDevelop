@@ -18,6 +18,7 @@ public class TaskImpl implements Task {
     private int key;
     private String nome;
     private String descrizione;
+    private boolean chiuso;
     private int numero_corrente_collaboratori;
     private int numero_massimo_collaboratori;
     private GregorianCalendar data_inizio;
@@ -39,6 +40,7 @@ public class TaskImpl implements Task {
         key = 0;
         nome = "";
         descrizione = "";
+        chiuso = false;
         numero_corrente_collaboratori = 0;
         numero_massimo_collaboratori = 0;
         data_inizio = null;
@@ -82,6 +84,17 @@ public class TaskImpl implements Task {
     @Override
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
+        this.dirty = true;
+    }
+    
+    @Override
+    public boolean getChiuso() {
+        return chiuso;
+    }
+
+    @Override
+    public void setChiuso(boolean chiuso) {
+        this.chiuso = chiuso;
         this.dirty = true;
     }
 
@@ -145,6 +158,11 @@ public class TaskImpl implements Task {
         this.progetto_key = progetto.getKey();
         this.dirty = true;
     }
+    
+    protected void setProgettoKey(int progetto_key) {
+        this.progetto_key = progetto_key;
+        this.progetto = null;
+    }
 
     @Override
     public Tipo getTipo() throws DataLayerException{
@@ -159,6 +177,11 @@ public class TaskImpl implements Task {
         this.tipo = tipo;
         this.tipo_key = tipo.getKey();
         this.dirty = true;
+    }
+    
+    protected void setTipoKey(int tipo_key) {
+        this.tipo_key = tipo_key;
+        this.tipo = null;
     }
     
     @Override

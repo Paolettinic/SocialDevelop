@@ -138,7 +138,7 @@ public interface SocialDevelopDataLayer extends DataLayer {
     
     Map<Utente, Integer> getUtenti(Task task);
     
-    Map<Utente, Integer> getUtenti(String filtro);
+    List<Utente> getUtenti(String filtro);
     
     Map<Utente, Integer> getUtenti(Map<Skill, Integer> skills);
     

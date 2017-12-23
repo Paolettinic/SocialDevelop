@@ -18,9 +18,9 @@ public interface Invito {
 
     void setData(GregorianCalendar date);
     
-    boolean getStato();
+    String getStato();
 
-    void setStato(boolean status);
+    void setStato(String stato);
     
     boolean getOfferta();
 
