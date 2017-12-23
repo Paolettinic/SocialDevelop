@@ -107,6 +107,8 @@ public interface SocialDevelopDataLayer extends DataLayer {
     Progetto getProgetto(int progetto_key) throws DataLayerException;
     
     List<Progetto> getProgetti(Utente utente);
+    
+    List<Progetto> getProgetti(String filtro);
 
     Skill getSkill(int skill_key) throws DataLayerException;
     
@@ -136,6 +138,8 @@ public interface SocialDevelopDataLayer extends DataLayer {
     
     Map<Utente, Integer> getUtenti(Task task);
     
-    Map<Utente, Integer> getUtenti(Skill skill);
+    Map<Utente, Integer> getUtenti(String filtro);
+    
+    Map<Utente, Integer> getUtenti(Map<Skill, Integer> skills);
     
 }
