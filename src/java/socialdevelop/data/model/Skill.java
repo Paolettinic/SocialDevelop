@@ -16,9 +16,9 @@ public interface Skill {
     
     // ----------
     
-    Skill getSkillPadre() throws DataLayerException;
+    Skill getPadre() throws DataLayerException;
 
-    void setSkillPadre(Skill skill_padre);
+    void setPadre(Skill skill_padre);
     
     List<Tipo> getTipi() throws DataLayerException;
     

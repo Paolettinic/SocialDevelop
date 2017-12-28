@@ -57,7 +57,7 @@ public class SkillImpl implements Skill {
     // ----------
 
     @Override
-    public Skill getSkillPadre() throws DataLayerException {
+    public Skill getPadre() throws DataLayerException {
         if (skill_padre == null && skill_padre_key > 0) {
             skill_padre = ownerdatalayer.getSkill(skill_padre_key);
         }
@@ -65,7 +65,7 @@ public class SkillImpl implements Skill {
     }
 
     @Override
-    public void setSkillPadre(Skill skill_padre) {
+    public void setPadre(Skill skill_padre) {
         this.skill_padre = skill_padre;
         this.skill_padre_key = skill_padre.getKey();
         this.dirty = true;
@@ -95,7 +95,7 @@ public class SkillImpl implements Skill {
         key = skill.getKey();
         nome = skill.getNome();
         // ----------
-        skill_padre_key = skill.getSkillPadre().getKey();
+        skill_padre_key = skill.getPadre().getKey();
         // ----------
         this.dirty = true;
     }

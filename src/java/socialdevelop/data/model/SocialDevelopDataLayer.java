@@ -17,7 +17,7 @@ public interface SocialDevelopDataLayer extends DataLayer {
     FileSD creaFile();
     
     FileSD creaImmagine();
-	
+    
     Invito creaInvito();
     
     Messaggio creaMessaggio();
@@ -27,34 +27,42 @@ public interface SocialDevelopDataLayer extends DataLayer {
     Skill creaSkill();
     
     Task creaTask();
-
+    
     Tipo creaTipo();
     
     Utente creaUtente();
     
     // ----------
     
-    int salvaCurriculum(FileSD curriculum) throws DataLayerException;
+    void salvaCurriculum(FileSD curriculum) throws DataLayerException;
     
-    int salvaDiscussione(Discussione discussione) throws DataLayerException;
+    void salvaDiscussione(Discussione discussione) throws DataLayerException;
     
-    int salvaFileSD(FileSD filesd) throws DataLayerException;
+    void salvaFileSD(FileSD filesd) throws DataLayerException;
     
-    int salvaImmagine(FileSD immagine) throws DataLayerException;
+    void salvaImmagine(FileSD immagine) throws DataLayerException;
     
-    int salvaInvito(Invito invito) throws DataLayerException;
+    void salvaInvito(Invito invito) throws DataLayerException;
     
-    int salvaMessaggio(Messaggio messaggio) throws DataLayerException;
+    void salvaMessaggio(Messaggio messaggio) throws DataLayerException;
     
-    int salvaProgetto(Progetto progetto) throws DataLayerException;
+    void salvaProgetto(Progetto progetto) throws DataLayerException;
     
-    int salvaSkill(Skill skill) throws DataLayerException;
+    void salvaSkill(Skill skill) throws DataLayerException;
     
-    int salvaTask(Task task) throws DataLayerException;
+    void salvaTask(Task task) throws DataLayerException;
     
-    int salvaTipo(Tipo tipo) throws DataLayerException;
+    void salvaTipo(Tipo tipo) throws DataLayerException;
     
-    int salvaUtente(Utente utente) throws DataLayerException;
+    void salvaUtente(Utente utente) throws DataLayerException;
+    
+    void salvaAppartenenti(int ext_skill, int ext_tipo) throws DataLayerException;
+    
+    void salvaCoprenti(int ext_utente, int task, int voto) throws DataLayerException;
+    
+    void salvaPreparazioni(int ext_utente, int ext_skill, int livello) throws DataLayerException;
+    
+    void salvaRequisiti(int ext_skill, int ext_task, int livello) throws DataLayerException;
     
     // ----------
     
@@ -79,6 +87,12 @@ public interface SocialDevelopDataLayer extends DataLayer {
     void eliminaTipo(Tipo tipo) throws DataLayerException;
     
     void eliminaUtente(Utente utente) throws DataLayerException;
+    
+    void eliminaCoprenti(int ext_utente, int task) throws DataLayerException;
+    
+    void eliminaPreparazioni(int ext_utente, int ext_skill) throws DataLayerException;
+    
+    void eliminaRequisiti(int ext_skill, int ext_task) throws DataLayerException;
     
     // ----------
     
@@ -109,37 +123,41 @@ public interface SocialDevelopDataLayer extends DataLayer {
     List<Progetto> getProgetti(Utente utente);
     
     List<Progetto> getProgetti(String filtro);
-
+    
     Skill getSkill(int skill_key) throws DataLayerException;
+    
+    List<Skill> getSkills() throws DataLayerException;
     
     List<Skill> getSkills(Tipo tipo) throws DataLayerException;
     
-    Map<Skill, Integer> getSkills(Utente utente);
+    Map<Skill, Integer> getSkills(Utente utente) throws DataLayerException;
     
-    Map<Skill, Integer> getSkills(Task task);
+    Map<Skill, Integer> getSkills(Task task) throws DataLayerException;
     
-    List<Skill> getSkillsfiglie(int skill_key);
+    List<Skill> getSkillsfiglie(Skill skill) throws DataLayerException;
     
     Task getTask(int task_key) throws DataLayerException;
     
-    Map<Task, Integer> getTasks(Utente utente);
+    Map<Task, Integer> getTasks(Utente utente) throws DataLayerException;
     
-    List<Task> getTasks(Progetto  progetto);
+    List<Task> getTasks(Progetto  progetto) throws DataLayerException;
     
-    List<Task> getTasks(Tipo tipo);
+    List<Task> getTasks(Tipo tipo) throws DataLayerException;
     
-    Map<Task, Integer> getTasks(Skill skill);
+    Map<Task, Integer> getTasks(Skill skill) throws DataLayerException;
     
     Tipo getTipo(int tipo_key) throws DataLayerException;
     
-    List<Tipo> getTipi(Skill skill);
+    List<Tipo> getTipi() throws DataLayerException;
+    
+    List<Tipo> getTipi(Skill skill) throws DataLayerException;
     
     Utente getUtente(int utente_key) throws DataLayerException;
     
-    Map<Utente, Integer> getUtenti(Task task);
+    Map<Utente, Integer> getUtenti(Task task) throws DataLayerException;
     
-    List<Utente> getUtenti(String filtro);
+    List<Utente> getUtenti(String filtro) throws DataLayerException;
     
-    Map<Utente, Integer> getUtenti(Map<Skill, Integer> skills);
+    Map<Utente, Integer> getUtenti(Map<Skill, Integer> skills) throws DataLayerException;
     
 }
