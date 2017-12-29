@@ -39,6 +39,10 @@ public class ProgettoImpl implements Progetto{
         dirty = false;
     }
     
+    protected void setKey(int key) {
+        this.key = key;
+    }
+    
     @Override
     public int getKey() {
         return key;
@@ -71,6 +75,11 @@ public class ProgettoImpl implements Progetto{
         this.utente = utente;
         this.utente_key = utente.getKey();
         this.dirty = true;
+    }
+    
+    protected void setUtenteKey(int utente_key) {
+        this.utente_key = utente_key;
+        this.utente = null;
     }
     
     @Override

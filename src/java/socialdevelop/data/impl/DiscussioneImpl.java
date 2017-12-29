@@ -40,6 +40,10 @@ public class DiscussioneImpl implements Discussione {
         dirty = false;
     }
     
+    protected void setKey(int key) {
+        this.key = key;
+    }
+    
     @Override
     public int getKey() {
         return key;
@@ -85,6 +89,11 @@ public class DiscussioneImpl implements Discussione {
         this.dirty = true;
     }
     
+    protected void setTaskKey(int task_key) {
+        this.task_key = task_key;
+        this.task = null;
+    }
+    
     @Override
     public Task getTask() throws DataLayerException {
         if (task == null && task_key > 0) {
@@ -98,6 +107,11 @@ public class DiscussioneImpl implements Discussione {
         this.utente = utente;
         this.utente_key = utente.getKey();
         this.dirty = true;
+    }
+    
+    protected void setUtenteKey(int utente_key) {
+        this.utente_key = utente_key;
+        this.utente = null;
     }
     
     @Override

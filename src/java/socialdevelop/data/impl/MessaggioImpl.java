@@ -36,6 +36,10 @@ public class MessaggioImpl implements Messaggio {
         dirty = false;
     }
     
+    protected void setKey(int key) {
+        this.key = key;
+    }
+    
     @Override
     public int getKey() {
         return key;
@@ -70,6 +74,11 @@ public class MessaggioImpl implements Messaggio {
         this.dirty = true;
     }
     
+    protected void setUtenteKey(int utente_key) {
+        this.utente_key = utente_key;
+        this.utente = null;
+    }
+    
     @Override
     public Utente getUtente() throws DataLayerException {
         if (utente == null && utente_key > 0) {
@@ -83,6 +92,11 @@ public class MessaggioImpl implements Messaggio {
         this.discussione = discussione;
         this.discussione_key = discussione.getKey();
         this.dirty = true;
+    }
+    
+    protected void setDiscussioneKey(int discussione_key) {
+        this.discussione_key = discussione_key;
+        this.discussione = null;
     }
     
     @Override

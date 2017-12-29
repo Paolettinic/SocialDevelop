@@ -163,7 +163,29 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     
     @Override
     public Discussione creaDiscussione() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new DiscussioneImpl(this);
+    }
+    
+    public Discussione creaDiscussione(ResultSet rs) throws DataLayerException {
+        try {
+            Date data_creazione_sql;
+            DiscussioneImpl discussione = new DiscussioneImpl(this);
+            
+            discussione.setKey(rs.getInt("id"));
+            discussione.setTitolo(rs.getString("titolo"));
+            discussione.setPubblica(rs.getBoolean("pubblica"));
+            discussione.setTaskKey(rs.getInt("ext_task"));
+            discussione.setUtenteKey(rs.getInt("ext_utente"));
+            
+            data_creazione_sql = rs.getDate("data_creazione");
+            GregorianCalendar data_creazione = new GregorianCalendar();
+            data_creazione.setTime(data_creazione_sql);
+            discussione.setData(data_creazione);
+            
+            return discussione;
+        } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile creare la discussione dal ResultSet", ex);
+        }
     }
     
     @Override
@@ -183,12 +205,48 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     
     @Override
     public Messaggio creaMessaggio() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new MessaggioImpl(this);
+    }
+    
+    public Messaggio creaMessaggio(ResultSet rs) throws DataLayerException {
+        try {
+            Date data_pubblicazione_sql;
+            MessaggioImpl messaggio = new MessaggioImpl(this);
+            
+            messaggio.setKey(rs.getInt("id"));
+            messaggio.setTesto(rs.getString("testo"));
+            messaggio.setUtenteKey(rs.getInt("ext_utente"));
+            messaggio.setDiscussioneKey(rs.getInt("ext_discussione"));
+            
+            data_pubblicazione_sql = rs.getDate("data_pubblicazione");
+            GregorianCalendar data_pubblicazione = new GregorianCalendar();
+            data_pubblicazione.setTime(data_pubblicazione_sql);
+            messaggio.setData(data_pubblicazione);
+            
+            return messaggio;
+        } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile creare la discussione dal ResultSet", ex);
+        }
     }
     
     @Override
     public Progetto creaProgetto() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new ProgettoImpl(this);
+    }
+    
+    public Progetto creaProgetto(ResultSet rs) throws DataLayerException {
+        try {
+            ProgettoImpl progetto = new ProgettoImpl(this);
+            
+            progetto.setKey(rs.getInt("id"));
+            progetto.setNome(rs.getString("nome"));
+            progetto.setDescrizione(rs.getString("descrizione"));
+            progetto.setUtenteKey(rs.getInt("ext_coordinatore"));
+            
+            return progetto;
+        } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile creare il progetto dal ResultSet", ex);
+        }
     }
     
     @Override
@@ -290,7 +348,62 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     
     @Override
     public void salvaDiscussione(Discussione discussione) throws DataLayerException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int key = discussione.getKey();
+        try {
+            if (discussione.getKey() > 0) { //update
+                //non facciamo nulla se l'oggetto non ha subito modifiche
+                //do not store the object if it was not modified
+                if (!discussione.isDirty()) {
+                    return;
+                }
+                uDiscussione.setString(1, discussione.getTitolo());
+                uDiscussione.setBoolean(2, discussione.getPubblica());
+                Date data_creazione = new Date(discussione.getData().getTimeInMillis());
+                uDiscussione.setDate(3, data_creazione);
+                if(discussione.getUtente()!=null){
+                    uDiscussione.setInt(4, discussione.getUtente().getKey());
+                }else{
+                    uDiscussione.setNull(4, java.sql.Types.INTEGER);
+                }
+                if(discussione.getTask()!=null){
+                    uDiscussione.setInt(5, discussione.getTask().getKey());
+                }else{
+                    uDiscussione.setNull(5, java.sql.Types.INTEGER);
+                }
+                uDiscussione.setInt(5, discussione.getKey());
+
+                uMessaggio.executeUpdate();
+            } else { //insert
+                iDiscussione.setString(1, discussione.getTitolo());
+                iDiscussione.setBoolean(2, discussione.getPubblica());
+                Date data_creazione = new Date(discussione.getData().getTimeInMillis());
+                iDiscussione.setDate(3, data_creazione);
+                if(discussione.getUtente()!=null){
+                    iDiscussione.setInt(4, discussione.getUtente().getKey());
+                }else{
+                    iDiscussione.setNull(4, java.sql.Types.INTEGER);
+                }
+                 if(discussione.getTask()!=null){
+                    iDiscussione.setInt(5, discussione.getTask().getKey());
+                }else{
+                    iDiscussione.setNull(5, java.sql.Types.INTEGER);
+                }
+                if (iDiscussione.executeUpdate() == 1) {
+                    try (ResultSet keys = iDiscussione.getGeneratedKeys()) {
+                        if (keys.next()) {
+                           key = keys.getInt(1);
+                        }
+                    }
+                }
+            }
+           
+            if (key > 0) {
+                discussione.copyFrom(getDiscussione(key));
+            }
+            discussione.setDirty(false);
+        } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile salvare la discussione", ex);
+        }
     }
     
     @Override
@@ -310,12 +423,102 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     
     @Override
     public void salvaMessaggio(Messaggio messaggio) throws DataLayerException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int key = messaggio.getKey();
+        try {
+            if (messaggio.getKey() > 0) { //update
+                //non facciamo nulla se l'oggetto non ha subito modifiche
+                //do not store the object if it was not modified
+                if (!messaggio.isDirty()) {
+                    return;
+                }
+                uMessaggio.setString(1, messaggio.getTesto());
+                Date data_pubblicazione = new Date(messaggio.getData().getTimeInMillis());
+                uMessaggio.setDate(2, data_pubblicazione);
+                if(messaggio.getUtente()!=null){
+                    uMessaggio.setInt(3, messaggio.getUtente().getKey());
+                }else{
+                    uMessaggio.setNull(3, java.sql.Types.INTEGER);
+                }
+                if(messaggio.getDiscussione()!=null){
+                    uMessaggio.setInt(4, messaggio.getDiscussione().getKey());
+                }else{
+                    uMessaggio.setNull(4, java.sql.Types.INTEGER);
+                }
+                uMessaggio.setInt(5, messaggio.getKey());
+
+                uMessaggio.executeUpdate();
+            } else { //insert
+                iMessaggio.setString(1, messaggio.getTesto());
+                Date data_pubblicazione = new Date(messaggio.getData().getTimeInMillis());
+                iMessaggio.setDate(2, data_pubblicazione);
+                if(messaggio.getUtente()!=null){
+                    iMessaggio.setInt(3, messaggio.getUtente().getKey());
+                }else{
+                    iMessaggio.setNull(3, java.sql.Types.INTEGER);
+                }
+                 if(messaggio.getDiscussione()!=null){
+                    iMessaggio.setInt(4, messaggio.getDiscussione().getKey());
+                }else{
+                    iMessaggio.setNull(4, java.sql.Types.INTEGER);
+                }
+                if (iMessaggio.executeUpdate() == 1) {
+                    try (ResultSet keys = iMessaggio.getGeneratedKeys()) {
+                        if (keys.next()) {
+                           key = keys.getInt(1);
+                        }
+                    }
+                }
+            }
+           
+            if (key > 0) {
+                messaggio.copyFrom(getMessaggio(key));
+            }
+            messaggio.setDirty(false);
+        } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile salvare il messaggio", ex);
+        }
     }
     
     @Override
     public void salvaProgetto(Progetto progetto) throws DataLayerException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int key = progetto.getKey();
+        try {
+            if (progetto.getKey() > 0) { // update
+                if (!progetto.isDirty()) { // non facciamo nulla se l'oggetto non ha subito modifiche
+                    return;
+                }
+                uProgetto.setString(1, progetto.getNome());
+                uProgetto.setString(2, progetto.getDescrizione());
+                if(progetto.getUtente() != null){
+                    uProgetto.setInt(3, progetto.getUtente().getKey());
+                }else{
+                    uProgetto.setNull(3, java.sql.Types.INTEGER);
+                }
+                uProgetto.setInt(4, progetto.getKey());
+                uProgetto.executeUpdate();
+            } else { // insert
+                iProgetto.setString(1, progetto.getNome());
+                iProgetto.setString(2, progetto.getDescrizione());
+                if(progetto.getUtente() != null){
+                    iProgetto.setInt(3, progetto.getUtente().getKey());
+                } else {
+                    iProgetto.setNull(3, java.sql.Types.INTEGER);
+                }
+                if (iProgetto.executeUpdate() == 1) {
+                    try (ResultSet keys = iProgetto.getGeneratedKeys()) {
+                        if (keys.next()) {
+                            key = keys.getInt(1);
+                        }
+                    }
+                }
+            }
+            if (key > 0) {
+                progetto.copyFrom(getProgetto(progetto.getKey()));
+            }
+            progetto.setDirty(false);
+        } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile salvare il progetto", ex);
+        }
     }
     
     @Override
@@ -528,7 +731,13 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     
     @Override
     public void eliminaDiscussione(Discussione discussione) throws DataLayerException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int key = discussione.getKey();
+        try {
+            dDiscussione.setInt(1, key);
+            dDiscussione.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile cancellare la discussione", ex);
+        }
     }
     
     @Override
@@ -548,12 +757,24 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     
     @Override
     public void eliminaMessaggio(Messaggio messaggio) throws DataLayerException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int key = messaggio.getKey();
+        try {
+            dMessaggio.setInt(1, key);
+            dMessaggio.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile cancellare il messaggio", ex);
+        }
     }
     
     @Override
     public void eliminaProgetto(Progetto progetto) throws DataLayerException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int key = progetto.getKey();
+        try {
+            dProgetto.setInt(1, key);
+            dProgetto.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile cancellare il progetto", ex);
+        }
     }
     
     @Override
@@ -590,7 +811,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             dUtente.setInt(1, key);
             dUtente.executeUpdate();
         } catch (SQLException ex) {
-            throw new DataLayerException("Impossibile cancellare il task", ex);
+            throw new DataLayerException("Impossibile cancellare l'utente", ex);
         }
     }
     
@@ -616,12 +837,33 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     
     @Override
     public Discussione getDiscussione(int discussione_key) throws DataLayerException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            sDiscussioneByID.setInt(1, discussione_key);
+            try (ResultSet rs = sDiscussioneByID.executeQuery()) {
+                if (rs.next()) {
+                    return creaDiscussione(rs);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile caricare la discussione", ex);
+        }
+        return null;
     }
     
     @Override
     public Map<Discussione, Integer> getDiscussioni(Task task) throws DataLayerException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Map<Discussione, Integer> result = new HashMap<>();
+        try {
+            sDiscussioniByTask.setInt(1, task.getKey());
+            try (ResultSet rs = sDiscussioniByTask.executeQuery()) {
+                while (rs.next()) {
+                    result.put(creaDiscussione(rs), rs.getInt("")); //da rivedere
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile caricare le discussioni", ex);
+        }
+        return result;
     }
     
     @Override
@@ -656,27 +898,80 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     
     @Override
     public Messaggio getMessaggio(int messaggio_key) throws DataLayerException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            sMessaggioByID.setInt(1, messaggio_key);
+            try (ResultSet rs = sMessaggioByID.executeQuery()) {
+                if (rs.next()) {
+                    return creaMessaggio(rs);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile caricare il messaggio", ex);
+        }
+        return null;
     }
     
     @Override
-    public List<Messaggio> getMessaggi(Discussione discussione) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Messaggio> getMessaggi(Discussione discussione) throws DataLayerException{
+        List<Messaggio> result = new ArrayList();
+        try {
+            sMessaggiByDiscussione.setInt(1, discussione.getKey());
+            try (ResultSet rs = sMessaggiByDiscussione.executeQuery()) {
+                while (rs.next()) {
+                    result.add(creaMessaggio(rs));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile caricare i messaggi", ex);
+        }
+        return result;
     }
     
     @Override
     public Progetto getProgetto(int progetto_key) throws DataLayerException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            sProgettoByID.setInt(1, progetto_key);
+            try (ResultSet rs = sProgettoByID.executeQuery()) {
+                if (rs.next()) {
+                    return creaProgetto(rs);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile caricare il progetto", ex);
+        }
+        return null;
     }
     
     @Override
-    public List<Progetto> getProgetti(Utente utente) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Progetto> getProgetti(Utente utente) throws DataLayerException {
+        List<Progetto> result = new ArrayList();
+        try {
+            sProgettiByUtente.setInt(1, utente.getKey());
+            try (ResultSet rs = sProgettiByUtente.executeQuery()) {
+                while (rs.next()) {
+                    result.add(creaProgetto(rs));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile caricare i progetti", ex);
+        }
+        return result;
     }
     
     @Override
-    public List<Progetto> getProgetti(String filtro) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Progetto> getProgetti(String filtro) throws DataLayerException {
+        List<Progetto> result = new ArrayList();
+        try {
+            sProgettiByFiltro.setString(1, filtro);
+            try (ResultSet rs = sProgettiByFiltro.executeQuery()) {
+                while (rs.next()) {
+                    result.add(creaProgetto(rs));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile caricare i progetti", ex);
+        }
+        return result;
     }
     
     @Override

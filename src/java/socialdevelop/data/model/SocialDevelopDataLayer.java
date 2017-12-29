@@ -116,13 +116,13 @@ public interface SocialDevelopDataLayer extends DataLayer {
     
     Messaggio getMessaggio(int messaggio_key) throws DataLayerException;
     
-    List<Messaggio> getMessaggi(Discussione discussione);
+    List<Messaggio> getMessaggi(Discussione discussione) throws DataLayerException;
     
     Progetto getProgetto(int progetto_key) throws DataLayerException;
     
-    List<Progetto> getProgetti(Utente utente);
+    List<Progetto> getProgetti(Utente utente) throws DataLayerException;
     
-    List<Progetto> getProgetti(String filtro);
+    List<Progetto> getProgetti(String filtro) throws DataLayerException;
     
     Skill getSkill(int skill_key) throws DataLayerException;
     
