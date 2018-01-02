@@ -29,7 +29,8 @@ public interface FileSD {
     void setUtente(Utente utente);
 
     void setDirty(boolean dirty);
-
-    boolean isDirty();
     
+    void copyFrom(FileSD file) throws DataLayerException;
+
+    boolean isDirty();    
 }

@@ -60,6 +60,11 @@ public class InvitoImpl implements Invito {
         this.dirty = true;
     }
     
+    protected void setUtenteKey(int utente_key) {
+      this.utente_key = utente_key;
+      this.utente = null;
+    }
+    
     @Override
     public String getMessaggio() {
         return this.messaggio;

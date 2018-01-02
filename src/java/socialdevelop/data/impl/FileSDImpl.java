@@ -21,7 +21,7 @@ public class FileSDImpl implements FileSD {
     private int key;
     private String nome;
     private String tipo;
-    private int grandezza;
+    private long grandezza;
     private Utente utente;
     private int utente_key;
     protected SocialDevelopDataLayer ownerdatalayer;
@@ -139,5 +139,17 @@ public class FileSDImpl implements FileSD {
     public boolean isDirty() {
         return dirty;
     }
-    
+
+  @Override
+  public void copyFrom(FileSD file) throws DataLayerException {
+    try{
+      this.key = file.getKey();
+      this.nome = file.getNome();
+      this.grandezza = file.getGrandezza();
+      this.tipo = file.getTipo();
+      this.utente_key = file.getUtente().getKey();
+    } catch(DataLayerException ex){
+      throw new DataLayerException("Impossibile copiare il file",ex);
+    }
+  }
 }
