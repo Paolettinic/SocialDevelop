@@ -58,11 +58,11 @@ public interface SocialDevelopDataLayer extends DataLayer {
     
     void salvaAppartenenti(int ext_skill, int ext_tipo) throws DataLayerException;
     
-    void salvaCoprenti(int ext_utente, int task, int voto) throws DataLayerException;
+    void salvaCoprenti(int voto, int ext_utente, int ext_task) throws DataLayerException;
     
-    void salvaPreparazioni(int ext_utente, int ext_skill, int livello) throws DataLayerException;
+    void salvaPreparazioni(int livello, int ext_utente, int ext_skill) throws DataLayerException;
     
-    void salvaRequisiti(int ext_skill, int ext_task, int livello) throws DataLayerException;
+    void salvaRequisiti(int livello, int ext_skill, int ext_task) throws DataLayerException;
     
     // ----------
     
@@ -88,7 +88,9 @@ public interface SocialDevelopDataLayer extends DataLayer {
     
     void eliminaUtente(Utente utente) throws DataLayerException;
     
-    void eliminaCoprenti(int ext_utente, int task) throws DataLayerException;
+    void eliminaAppartenenti(int ext_skill, int ext_tipo) throws DataLayerException;
+    
+    void eliminaCoprenti(int ext_utente, int ext_task) throws DataLayerException;
     
     void eliminaPreparazioni(int ext_utente, int ext_skill) throws DataLayerException;
     
