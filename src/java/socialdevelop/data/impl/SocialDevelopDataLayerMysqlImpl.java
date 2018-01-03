@@ -62,11 +62,11 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
       uCurriculum = connection.prepareStatement("UPDATE 'curriculum' SET 'nome' = ?, 'percorso' = ?, 'ext_utente' = ? WHERE 'id' = ?");
       dCurriculum = connection.prepareStatement("DELETE FROM 'curriculum' WHERE 'id' = ?");
       
-      sDiscussioneByID = connection.prepareStatement("SELECT * FROM discussioni WHERE ID=?");
-      sDiscussioniByTask = connection.prepareStatement("");
-      iDiscussione = connection.prepareStatement("INSERT INTO discussioni", Statement.RETURN_GENERATED_KEYS);
-      uDiscussione = connection.prepareStatement("UPDATE discussioni SET WHERE ID=?");
-      dDiscussione = connection.prepareStatement("DELETE FROM discussioni WHERE ID=?");
+      sDiscussioneByID = connection.prepareStatement("SELECT * FROM discussioni WHERE id = ?");
+      sDiscussioniByTask = connection.prepareStatement("SELECT * FROM discussioni WHERE ext_task = ?");
+      iDiscussione = connection.prepareStatement("INSERT INTO discussioni (titolo, pubblica, data_creazione, ext_utente, ext_task) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+      uDiscussione = connection.prepareStatement("UPDATE discussioni SET titolo = ?, pubblica = ?, data_creazione = ?, ext_utente = ?, ext_task = ? WHERE id = ?");
+      dDiscussione = connection.prepareStatement("DELETE FROM discussioni WHERE id = ?");
       
       sFileByID = connection.prepareStatement("SELECT * FROM files WHERE id = ?");
       sFilesByUtente = connection.prepareStatement("SELECT * FROM files WHERE ext_utente = ?");
@@ -86,18 +86,18 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
       uInvito = connection.prepareStatement("UPDATE 'inviti' SET 'status' = ? WHERE 'id' = ?");
       dInvito = connection.prepareStatement("DELETE FROM inviti WHERE ID=?");
       
-      sMessaggioByID = connection.prepareStatement("SELECT * FROM messaggi WHERE ID=?");
-      sMessaggiByDiscussione = connection.prepareStatement("");
-      iMessaggio = connection.prepareStatement("INSERT INTO messaggi", Statement.RETURN_GENERATED_KEYS);
-      uMessaggio = connection.prepareStatement("UPDATE messaggi SET WHERE ID=?");
-      dMessaggio = connection.prepareStatement("DELETE FROM messaggi WHERE ID=?");
+      sMessaggioByID = connection.prepareStatement("SELECT * FROM messaggi WHERE id = ?");
+      sMessaggiByDiscussione = connection.prepareStatement("SELECT * FROM messaggi WHERE 'ext_discussione' = ?");
+      iMessaggio = connection.prepareStatement("INSERT INTO messaggi (testo, data_pubblicazione, ext_utente, ext_discussione) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+      uMessaggio = connection.prepareStatement("UPDATE messaggi SET testo = ?, data_pubblicazione = ?, ext_utente = ?, ext_discussione = ? WHERE id = ?");
+      dMessaggio = connection.prepareStatement("DELETE FROM messaggi WHERE id = ?");
       
-      sProgettoByID = connection.prepareStatement("SELECT * FROM progetti WHERE ID=?");
-      sProgettiByUtente = connection.prepareStatement("");
-      sProgettiByFiltro = connection.prepareStatement("");
-      iProgetto = connection.prepareStatement("INSERT INTO progetti", Statement.RETURN_GENERATED_KEYS);
-      uProgetto = connection.prepareStatement("UPDATE progetti SET WHERE ID=?");
-      dProgetto = connection.prepareStatement("DELETE FROM progetti WHERE ID=?");
+      sProgettoByID = connection.prepareStatement("SELECT * FROM progetti WHERE id = ?");
+      sProgettiByUtente = connection.prepareStatement("SELECT * FROM progetti WHERE ext_coordinatore = ?");
+      sProgettiByFiltro = connection.prepareStatement("SELECT * FROM progetti WHERE nome LIKE ? OR descrizione LIKE ?");
+      iProgetto = connection.prepareStatement("INSERT INTO progetti (nome, descrizione, ext_coordinatore) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
+      uProgetto = connection.prepareStatement("UPDATE progetti SET nome = ?, descrizione = ?, ext_coordinatore = ? WHERE id = ?");
+      dProgetto = connection.prepareStatement("DELETE FROM progetti WHERE id = ?");
       
       sSkillByID = connection.prepareStatement("SELECT * FROM skills WHERE id =?");
       sSkills = connection.prepareStatement("SELECT * FROM skills");
