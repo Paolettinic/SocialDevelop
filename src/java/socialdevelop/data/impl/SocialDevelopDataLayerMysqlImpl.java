@@ -26,7 +26,9 @@ import socialdevelop.data.model.Tipo;
 import socialdevelop.data.model.Utente;
 
 /**
- * @authors Mario Vetrini, Nicolò Paoletti, Davide De Marco
+ * @author Mario Vetrini
+ * @author Nicolò Paoletti
+ * @author Davide De Marco
  */
 public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implements SocialDevelopDataLayer {
   // select, insert, update, delete, generiche funzionalità del sito, ecc...
@@ -67,7 +69,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
       dDiscussione = connection.prepareStatement("DELETE FROM discussioni WHERE ID=?");
       
       sFileByID = connection.prepareStatement("SELECT * FROM files WHERE id = ?");
-      sFilesByUtente = connection.prepareStatement("");
+      sFilesByUtente = connection.prepareStatement("SELECT * FROM files WHERE ext_utente = ?");
       iFile = connection.prepareStatement("INSERT INTO files ('nome','percorso','ext_utente') VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
       uFile = connection.prepareStatement("UPDATE 'files' SET 'nome' = ?, 'percorso' = ?,'ext_utente' = ? WHERE 'id' = ?");
       dFile = connection.prepareStatement("DELETE FROM files WHERE ID=?");
@@ -1406,7 +1408,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     return result;
   }
   
- @Override
+  @Override
   public Tipo getTipo(int tipo_key) throws DataLayerException {
     try{
       this.sTipoByID.setInt(1, tipo_key);
@@ -1416,7 +1418,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
       }
     }catch(SQLException ex){
       throw new DataLayerException("Impossibile reperire il tipo",ex);
-    }   
+    }
     return null;
   }
   

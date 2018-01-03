@@ -99,7 +99,7 @@ public class TemplateResult {
             }
         }
 
-        //impostiamo il gestore degli oggetti - trasformer� in hash i Java beans
+        //impostiamo il gestore degli oggetti - trasformerà in hash i Java beans
         //set the object handler that allows us to "view" Java beans as hashes
         DefaultObjectWrapperBuilder owb = new DefaultObjectWrapperBuilder(Configuration.VERSION_2_3_26);
         owb.setForceLegacyNonListCollections(false);
@@ -155,7 +155,7 @@ public class TemplateResult {
     }
 
     //questo metodo principale si occupa di chiamare Freemarker e compilare il template
-    //se � stato specificato un template di outline, quello richiesto viene inserito
+    //se è stato specificato un template di outline, quello richiesto viene inserito
     //all'interno dell'outline
     //this main method calls Freemarker and compiles the template
     //if an outline template has been specified, the requested template is
@@ -179,7 +179,7 @@ public class TemplateResult {
                 //if an outline has not been set, load the specified template
                 t = cfg.getTemplate(tplname);
             } else {
-                //un template di outline � stato specificato: il template da caricare � quindi sempre l'outline...
+                //un template di outline � stato specificato: il template da caricare è quindi sempre l'outline...
                 //if an outline template has been specified, load the outline...
                 t = cfg.getTemplate(outline_name);
                 //...e il template specifico per questa pagina viene indicato all'outline tramite una variabile content_tpl
@@ -209,7 +209,7 @@ public class TemplateResult {
         }
         response.setContentType(contentType);
 
-        //impostiamo il tipo di output: in questo modo freemarker abiliter� il necessario escaping
+        //impostiamo il tipo di output: in questo modo freemarker abiliterà il necessario escaping
         //set the output format, so that freemarker will enable the correspondoing escaping
         switch (contentType) {
             case "text/html":
