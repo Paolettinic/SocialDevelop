@@ -57,10 +57,10 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
         try {
             super.init();
             
-            sCurriculumByID = connection.prepareStatement("SELECT * FROM curriculum WHERE id = ?");
-            iCurriculum = connection.prepareStatement("INSERT INTO 'curriculum' ('nome','percorso','ext_utente') VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
-            uCurriculum = connection.prepareStatement("UPDATE 'curriculum' SET 'nome' = ?, 'percorso' = ?, 'ext_utente' = ? WHERE 'id' = ?");
-            dCurriculum = connection.prepareStatement("DELETE FROM 'curriculum' WHERE 'id' = ?");
+            sCurriculumByID = connection.prepareStatement("SELECT * FROM files WHERE id = ?");
+            iCurriculum = connection.prepareStatement("INSERT INTO 'files' ('nome','percorso','ext_utente') VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            uCurriculum = connection.prepareStatement("UPDATE 'files' SET 'nome' = ?, 'percorso' = ?, 'ext_utente' = ? WHERE 'id' = ?");
+            dCurriculum = connection.prepareStatement("DELETE FROM 'files' WHERE 'id' = ?");
             
             sDiscussioneByID = connection.prepareStatement("SELECT * FROM discussioni WHERE id = ?");
             sDiscussioniByTask = connection.prepareStatement("SELECT * FROM discussioni WHERE ext_task = ?");
@@ -74,10 +74,10 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             uFile = connection.prepareStatement("UPDATE 'files' SET 'nome' = ?, 'percorso' = ?,'ext_utente' = ? WHERE 'id' = ?");
             dFile = connection.prepareStatement("DELETE FROM files WHERE id = ?");
             
-            sImmagineByID = connection.prepareStatement("SELECT * FROM immagini WHERE id = ?");
-            iImmagine = connection.prepareStatement("INSERT INTO immagini ('nome','percorso','ext_utente') VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
-            uImmagine = connection.prepareStatement("UPDATE 'immagini' SET 'nome' = ?, 'percorso' = ?,'ext_utente' = ? WHERE 'id' = ?");
-            dImmagine = connection.prepareStatement("DELETE FROM immagini WHERE id = ?");
+            sImmagineByID = connection.prepareStatement("SELECT * FROM files WHERE id = ?");
+            iImmagine = connection.prepareStatement("INSERT INTO files ('nome','percorso','ext_utente') VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            uImmagine = connection.prepareStatement("UPDATE 'files' SET 'nome' = ?, 'percorso' = ?,'ext_utente' = ? WHERE 'id' = ?");
+            dImmagine = connection.prepareStatement("DELETE FROM files WHERE id = ?");
             
             sInvitoByID = connection.prepareStatement("SELECT * FROM inviti WHERE id= ?");
             sInvitiByUtente = connection.prepareStatement("SELECT * FROM 'inviti' WHERE 'ext_utente' = ?");
@@ -121,14 +121,14 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             sTipoByID = connection.prepareStatement("SELECT * FROM tipi WHERE id = ?");
             sTipi = connection.prepareStatement("SELECT * FROM tipi");
             sTipiBySkill = connection.prepareStatement("SELECT tipi.* FROM tipi JOIN appartenenti ON appartenenti.ext_tipo = tipi.id WHERE appartenenti.ext_skill = ?");
-            iTipo = connection.prepareStatement("INSERT INTO tipi ('nome') VALUES (?)", Statement.RETURN_GENERATED_KEYS);
+            iTipo = connection.prepareStatement("INSERT INTO tipi (nome) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
             uTipo = connection.prepareStatement("UPDATE 'tipi' SET 'nome' = ? WHERE 'id' = ?");
             dTipo = connection.prepareStatement("DELETE FROM tipi WHERE id = ?");
             
             sUtenteByID = connection.prepareStatement("SELECT * FROM utenti WHERE id = ?");
-            sUtentiByTask = connection.prepareStatement("SELECT utenti.*, coprenti.voto FROM utenti INNER JOIN coprenti ON utente.id = coprenti.ext_utente WHERE coprenti.ext_task = ?");
+            sUtentiByTask = connection.prepareStatement("SELECT utenti.*, coprenti.voto FROM utenti INNER JOIN coprenti ON utenti.id = coprenti.ext_utente WHERE coprenti.ext_task = ?");
             sUtentiByFiltro = connection.prepareStatement("SELECT * FROM utenti WHERE name LIKE ? OR cognome LIKE ? OR username = ?");
-            sUtentiBySkill = connection.prepareStatement("SELECT utenti.*, preparazioni.livello FROM utenti INNER JOIN preparazioni ON utente.id = preparazioni.ext_utente WHERE preparazioni.ext_skill = ? AND preparazioni.livello >= ?");
+            sUtentiBySkill = connection.prepareStatement("SELECT utenti.*, preparazioni.livello FROM utenti INNER JOIN preparazioni ON utenti.id = preparazioni.ext_utente WHERE preparazioni.ext_skill = ? AND preparazioni.livello >= ?");
             iUtente = connection.prepareStatement("INSERT INTO utenti (nome, cognome, username, email, data_nascita, password, biografia, ext_curriculum, ext_immagine) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             uUtente = connection.prepareStatement("UPDATE utenti SET nome = ?, cognome = ?, username = ?, email = ?, data_nascita = ?, password = ?, biografia = ?, ext_curriculum = ?, ext_immagine = ? WHERE id = ?");
             dUtente = connection.prepareStatement("DELETE FROM utenti WHERE id = ?");
@@ -212,7 +212,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     public FileSD creaFile(ResultSet rs) throws DataLayerException{
         FileSDImpl file = new FileSDImpl(this);
         try {
-            file.setKey(0);
+            file.setKey(rs.getInt("id"));
             file.setNome(rs.getString("nome"));
             file.setGrandezza(rs.getInt("dimensione"));
             file.setTipo(rs.getString("tipo"));
@@ -231,12 +231,10 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     public FileSD creaImmagine(ResultSet rs) throws DataLayerException{
         ImmagineImpl img = new ImmagineImpl(this);
         try {
-            img.setKey(0);
+            img.setKey(rs.getInt("id"));
             img.setNome(rs.getString("nome"));
-            img.setGrandezza(rs.getInt("dimensione"));
-            img.setTipo(rs.getString("tipo"));
+            img.setTipo(rs.getString("percorso"));
             img.setUtenteKey(rs.getInt("ext_utente"));
-            img.setDescrizione(rs.getString("descrizione"));
             return img;
         } catch (SQLException ex) {
             throw new DataLayerException("Impossibile creare l'istanza dell'immagine dal ResultSet", ex);
@@ -405,7 +403,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             utente.setCurriculumKey(rs.getInt("ext_curriculum"));
             utente.setImmagineKey(rs.getInt("ext_immagine"));
             
-            data_nascita_sql = rs.getDate("birthdate");
+            data_nascita_sql = rs.getDate("data_nascita");
             GregorianCalendar data_nascita = new GregorianCalendar();
             data_nascita.setTime(data_nascita_sql);
             utente.setDataNascita(data_nascita);
@@ -788,7 +786,28 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     
     @Override
     public void salvaTipo(Tipo tipo) throws DataLayerException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int key = tipo.getKey();
+        try{
+            if(tipo.getKey() > 0){//update
+                if(!tipo.isDirty())
+                    return;
+                this.uTipo.setString(1, tipo.getNome());
+            }else{//inserimento
+                this.iTipo.setString(1, tipo.getNome());
+                if(this.iTipo.executeUpdate() == 1){
+                    try(ResultSet keys = this.iTipo.getGeneratedKeys()){
+                        if(keys.next())
+                            key = keys.getInt(1);
+                    }
+                }
+            }
+            if(key > 0){
+                tipo.copyFrom(getTipo(key));
+            }
+            tipo.setDirty(false);
+        }catch(SQLException ex){
+            throw new DataLayerException("Impossibile salvare il tipo",ex);
+        }
     }
     
     @Override
@@ -1148,13 +1167,13 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     }
     
     @Override
-    public Map<Discussione, Integer> getDiscussioni(Task task) throws DataLayerException {
-        Map<Discussione, Integer> result = new HashMap<>();
+    public List<Discussione> getDiscussioni(Task task) throws DataLayerException {
+        List<Discussione> result = new ArrayList<>();
         try {
             sDiscussioniByTask.setInt(1, task.getKey());
             try (ResultSet rs = sDiscussioniByTask.executeQuery()) {
                 while (rs.next()) {
-                    result.put(creaDiscussione(rs), rs.getInt("")); //da rivedere
+                    result.add((Discussione) getDiscussione(rs.getInt("id")));
                 }
             }
         } catch (SQLException ex) {
@@ -1552,7 +1571,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     public Utente getUtente(int utente_key) throws DataLayerException {
         try {
             sUtenteByID.setInt(1, utente_key);
-            try (ResultSet rs = sTaskByID.executeQuery()) {
+            try (ResultSet rs = sUtenteByID.executeQuery()) {
                 if (rs.next()) {
                     return creaUtente(rs);
                 }
@@ -1570,7 +1589,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             sUtentiByTask.setInt(1, task.getKey());
             try (ResultSet rs = sUtentiByTask.executeQuery()) {
                 while (rs.next()) {
-                    result.put(creaUtente(rs), rs.getInt("livello"));
+                    result.put(creaUtente(rs), rs.getInt("coprenti.voto"));
                 }
             }
         } catch (SQLException ex) {

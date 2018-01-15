@@ -1,18 +1,29 @@
 .logo-social{
-	font-family: Arial;
+    font-family: Arial;
 }
 .logo-develop{
-	font-family: Consolas;
-	color: black;
+    font-family: Consolas;
+    color: black;
 }
 
 .logo{
-	font-size: 2em;
-	position: absolute;
-	top: 40%;
+    font-size: 2em;
+    position: absolute;
+    top: 40%;
 }
 
 .navbar-brand{
-	background-color: white !important;
-	padding: 0px !important;
+    background-color: white !important;
+    padding: 0px !important;
+}
+.header--search.style--2.open .form-control{
+    width: 400px !important;
+}
+
+.topics--list tbody tr td:first-child{
+    width: 70% !important; 
+}
+
+.max-width{
+    width: 100% !important;
 }

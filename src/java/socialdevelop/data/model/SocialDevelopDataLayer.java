@@ -102,7 +102,7 @@ public interface SocialDevelopDataLayer extends DataLayer {
     
     Discussione getDiscussione(int discussione_key) throws DataLayerException;
     
-    Map<Discussione, Integer> getDiscussioni(Task task) throws DataLayerException;
+    List<Discussione> getDiscussioni(Task task) throws DataLayerException;
     
     FileSD getFile(int file_key) throws DataLayerException;
     
