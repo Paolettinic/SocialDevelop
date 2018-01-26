@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author Giuseppe Della Penna
  */
 public class GetImage extends SocialDevelopBaseController {
-
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -45,7 +45,7 @@ public class GetImage extends SocialDevelopBaseController {
             }
         }
     }
-
+    
     private void action_download(HttpServletRequest request, HttpServletResponse response, int imgid) throws IOException, DataLayerException {
         StreamResult result = new StreamResult(getServletContext());
         FileSD image = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getImmagine(imgid);
@@ -58,12 +58,21 @@ public class GetImage extends SocialDevelopBaseController {
             request.setAttribute("contentDisposition", "inline");
             //prendiamo il file dal filesystem, anche se la classe Image supporterebbe anche la lettura dal DB
             //get the image from the filesystem, even if the Image class supports also reading image data from the DB
-            result.activate(new File(getServletContext().getRealPath("/")+"\\img\\members-img\\"+image.getNome()), request, response);
+            result.activate(
+                new File(
+                    getServletContext().getRealPath("/")+
+                    getServletContext().getInitParameter("images.directory")+
+                    image.getTipo()+
+                    image.getNome()
+                ), 
+                request, 
+                response
+            );
         } else {
             throw new DataLayerException("Image not available");
         }
     }
-
+    
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException {
@@ -77,9 +86,9 @@ public class GetImage extends SocialDevelopBaseController {
         } catch (DataLayerException ex) {
             action_error(request, response);
         }
-
+        
     }
-
+    
     /**
      * Returns a short description of the servlet.
      *

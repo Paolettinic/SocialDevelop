@@ -3,15 +3,11 @@
 <div class="page--header pt--60 pb--60 text-center" data-bg-img="img/page-header-img/bg.jpg" data-overlay="0.85">
     <div class="container">
         <div class="title">
-            <h2 class="h1 text-white">CSS (Cascading Style Sheets)</h2>
-        </div>
-        
-        <ul class="breadcrumb text-gray ff--primary">
-            <li><a href="home-1.html" class="btn-link">Home</a></li>
-            <li><a href="forums.html" class="btn-link">Forum</a></li>
-            <li><a href="sub-forums.html" class="btn-link">Front-End Engineering</a></li>
-            <li class="active"><span class="text-primary">CSS</span></li>
-        </ul>
+            <h2 class="h1 text-white">Valuta i tuoi collaboratori</h2>
+        </div>             
+        <p class="text-gray ff--default mt--10">
+            Esprimi dei giudizi sul lavoro svolto da ogni sviluppatore su una scala da 1 a 5, dove 1 esprime insoddisfazione e 5 esprime piena soddisfazione
+        </p>
     </div>
 </div>
 <!-- Page Header End -->
@@ -47,23 +43,36 @@
                                     
                                     <div class="body clearfix">
                                         <div class="author mr--20 float--left text-center">
-                                            <div class="avatar" data-overlay="0.3" data-overlay-color="primary">
+                                            <div class="avatar" >
                                                 <a href="member-activity-personal.html">
                                                     <img src="image?imgid=${user.immagine.key}" alt="">
                                                 </a>
                                             </div>
                                             
                                             <div class="name text-darkest">
-                                                <p><a href="member-activity-personal.html">${user.nome} ${user.cognome}</a></p>
+                                                <p class=""><a href="member-activity-personal.html">${user.nome} ${user.cognome}</a></p>
                                             </div>
                                             
                                             <div class="role text-uppercase">
                                                 <p class="text-white bg-primary">Keymaster</p>
                                             </div>
                                         </div>
-                                        
-                                        <div class="content pt--20 fs--14 ov--h">
-                                            <input id="valut" type="text" />
+                                        <div class="product--quantity-wrapper">
+                                            <!-- Product Quantity Start -->
+                                            <div class="product--quantity" data-trigger="spinner">
+                                                <div class="input-group">
+                                                    <div class="input-group-addon text-default">
+                                                        <i class="fa fa-minus-circle" data-spin="down"></i>
+                                                    </div>
+                                                    
+                                                    <input type="text" name="quantity" value="3" data-min="1" data-max="5" data-step="1" class="form-control" data-rule="quantity">
+                                                    
+                                                    <div class="input-group-addon text-default">
+                                                        <i class="fa fa-plus-circle" data-spin="up"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Product Quantity End -->
                                         </div>
                                     </div>
                                 </div>
@@ -76,14 +85,8 @@
                     
                 </div>
                 </#list>
-                <div class="alert mt--30">
-                    <div class="alert--inner ff--primary text-white bg-primary">
-                        <p>You must be logged in to create new topics.</p>
-                    </div>
-                </div>
             </div>
             <!-- Main Content End -->
-            
         </div>
     </div>
 </section>

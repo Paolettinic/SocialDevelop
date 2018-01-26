@@ -6,8 +6,7 @@
     </context-param>
     <context-param>
         <param-name>images.directory</param-name>
-        <!-- Tomcat must have write permissions on this folder -->
-        <param-value>web/img/members-img/</param-value>
+        <param-value>\img\</param-value>
     </context-param>
     <servlet>
         <servlet-name>Index</servlet-name>
