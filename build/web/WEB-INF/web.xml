@@ -24,6 +24,14 @@
         <servlet-name>Rate</servlet-name>
         <servlet-class>socialdevelop.controller.Rate</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SetVote</servlet-name>
+        <servlet-class>socialdevelop.controller.SetVote</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Search</servlet-name>
+        <servlet-class>socialdevelop.controller.Search</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Index</servlet-name>
         <url-pattern>/Index</url-pattern>
@@ -39,6 +47,14 @@
     <servlet-mapping>
         <servlet-name>Rate</servlet-name>
         <url-pattern>/Rate</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SetVote</servlet-name>
+        <url-pattern>/setVote</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Search</servlet-name>
+        <url-pattern>/search</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

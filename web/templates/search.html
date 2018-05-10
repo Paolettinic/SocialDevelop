@@ -1,0 +1,132 @@
+<section class="page--wrapper pt--80 pb--20">
+    <div class="container">
+        <div class="row">
+            <!-- Main Content Start -->
+            <div class="main--content col-md-12 pb--60">
+                <div class="main--content-inner">
+                    <!-- Filter Nav Start -->
+                    <div class="filter--nav pb--30 clearfix">
+                        <div class="filter--link float--left">
+                            <h2 class="h4"><#if type = "projects">Progetti<#else>Sviluppatori</#if> trovati : ${total}</h2>
+                        </div>
+                            
+                        <form class="filter--options float--right">
+                            <span class="fs--14 ff--primary fw--500 text-darker">Ordina per:</span>
+                            <select name="membersfilter" class="form-control form-sm" onselect="" data-trigger="selectmenu">
+                                <option value="last-created" selected>Data di creazione</option>
+                                <option value="most-members">Numero </option>
+                                <option value="newly-created">Newly Created</option>
+                                <option value="alphabetical">Alphabetical</option>
+                            </select>
+                            <noscript>
+                            <button type="Submit" class="btn btn-default">Cerca</button>
+                            </noscript>
+                        </form>
+                    </div>
+                    <!-- Filter Nav End -->
+                    <div id="updatable_content">
+                        <!-- Box Items Start -->
+                        <div class="box--items">
+                            <div class="row gutter--15 AdjustRow">
+                                <#if type = "projects">
+                                <#list result as project>
+                                <div class="col-md-3 col-xs-6 col-xxs-12">
+                                    <!-- Box Item Start -->
+                                    <div class="box--item text-center">
+                                        
+                                        
+                                        <div class="info project_info">
+                                            <div class="icon fs--18 text-lightest bg-primary">
+                                                <i class="fa fa-code"></i>
+                                            </div>
+                                                
+                                            <div class="title">
+                                                <h2 class="h6"><a href="#">${project.nome}</a></h2>
+                                            </div>
+                                            <div class="desc text-darker line-clamp-3">
+                                                <p>${project.descrizione}</p>
+                                            </div>
+                                            <div class="meta">
+                                                <p><i class="fa mr--8 fa-user-o"></i>Collaboratori: ${count_collaboratori[project?index]}</p>
+                                            </div>
+                                            <div class="action">
+                                                <a href="#">Group Details<i class="fa ml--10 fa-caret-right"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Box Item End -->
+                                </div>
+                                </#list>
+                                <#elseif type="developers">
+                                <#list result as user>
+                                <div class="col-md-3 col-xs-6 col-xxs-12">
+                                    <!-- Box Item Start -->
+                                    <div class="box--item text-center">
+                                        <a href="#" class="img dev_img" data-overlay="0.1">
+                                            <img src="image?imgid=${user.immagine.key}" alt="">
+                                        </a>
+                                        <div class="info">
+                                            <div class="icon fs--18 text-lightest bg-primary">
+                                                <i class="fa fa-user"></i>
+                                            </div>
+                                            <div class="title">
+                                                <h2 class="h6"><a href="#">${user.nome} ${user.cognome}</a></h2>
+                                            </div>
+                                            <div class="meta">
+                                                <p><i class="fa mr--8 fa-code"></i>Public Group / 2500 Members</p>
+                                            </div>
+                                            <div class="desc text-darker">
+                                                <p>${user.biografia}</p>
+                                            </div>
+                                            <div class="action">
+                                                <a href="group-home.html">Group Details<i class="fa ml--10 fa-caret-right"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Box Item End -->
+                                </div>
+                                </#list>
+                                <#else>
+                                    
+                                </#if>
+                            </div>
+                        </div>
+                        <!-- Box Items End -->
+                        <!-- Page Count Start -->
+                        <div class="page--count pt--30 script_enabled display_none">
+                            <label class="ff--primary fs--14 fw--500 text-darker ">
+                                <span>Viewing</span>
+                                    
+                                <button id="prevpage" onclick="goToSearchPage('${filter}','${page - 1}','8')" class="btn-link <#if page lte 1> display_none</#if>"><i class="fa fa-caret-left"></i></button>
+                                <input type="hidden" name="filter" value="${filter}"/>
+                                <input type="number" id="currentSearchPage" name="page" value="${page}" class="form-control form-sm">
+                                <button id="nextpage" onclick="goToSearchPage('${filter}','${page + 1}','8')" class="btn-link <#if page gte totalPages> display_none </#if>"><i class="fa fa-caret-right"></i></button>
+                                    
+                                <span>of ${totalPages}</span>
+                            </label>
+                        </div>
+                        <noscript>
+                        <div class="page--count pt--30 ">
+                            <label class="ff--primary fs--14 fw--500 text-darker">
+                                <span>Viewing</span>
+                                    
+                                <a id="prevpage" href="search?page=${page -1}&filter=${filter}" class="btn-link <#if page lte 1> display_none</#if>"><i class="fa fa-caret-left"></i></a>
+                                <form action="search" method="POST" class="display_inline_block">
+                                    <input type="hidden" name="filter" value="${filter}"/>
+                                    <input type="number" id="currentSearchPage" name="page" value="${page}" class="form-control form-sm">
+                                </form>
+                                <a id="nextpage" href="search?page=${page +1}&filter=${filter}" class="btn-link <#if page gte totalPages> display_none </#if>"><i class="fa fa-caret-right"></i></a>
+                                    
+                                <span>of ${totalPages}</span>
+                            </label>
+                        </div>
+                        </noscript>
+                        <!-- Page Count End -->
+                    </div>
+                </div>
+            </div>
+            <!-- Main Content End -->
+        </div>
+    </div>
+</section>
+    

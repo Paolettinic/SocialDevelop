@@ -4,8 +4,14 @@ import it.univaq.f4i.iw.framework.data.DataLayerException;
 import it.univaq.f4i.iw.framework.result.TemplateManagerException;
 import it.univaq.f4i.iw.framework.result.TemplateResult;
 import it.univaq.f4i.iw.framework.security.SecurityLayer;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,43 +35,78 @@ public class TaskForum extends SocialDevelopBaseController{
         return; //body for action_error
     }
     
-    private void action_default(HttpServletRequest request, HttpServletResponse response,int task_id)throws IOException, ServletException, TemplateManagerException{
+    private void action_default(HttpServletRequest request, HttpServletResponse response,int task_id, int page, int perPage, boolean async)throws IOException, ServletException, TemplateManagerException{
         try {
+            SocialDevelopDataLayer datalayer = ((SocialDevelopDataLayer)request.getAttribute("datalayer"));
             
-            Task task = ((SocialDevelopDataLayer)request.getAttribute("datalayer")).getTask(task_id);
-            List<Discussione> discussioni = ((SocialDevelopDataLayer)request.getAttribute("datalayer")).getDiscussioni(task);
+            int firstResult = (page-1)*perPage; //numero del primo risultato della paginazione
+            
+            Task task = datalayer.getTask(task_id);
+            int total = datalayer.getCountDiscussioni(task);
+            
+            int totalPages = total/perPage + (total % perPage == 0 ? 0 : 1);
+            
+            List<Discussione> discussioni = datalayer.getDiscussioni(task,firstResult,perPage);
+            
             Progetto proj = task.getProgetto();
             List<Utente> utenti = new ArrayList();
             List<Date> date_creazione = new ArrayList();
-            int[] n_posts = new int[discussioni.size()];
-            //String[] imgs = new String[discussioni.size()];
-            int[] imgs_id = new int[discussioni.size()];
+            List<Integer> n_posts = new ArrayList(); //numero di post per ogni topic
             
-            //Map<Discussione, Utente> discussioni_utenti = new HashMap();
-            
-            /* for (Iterator<Discussione> it = discussioni.iterator(); it.hasNext();) {
-                Discussione d = it.next();
-            }*/
-            int i = 0;
             for(Discussione d : discussioni){
                 utenti.add(d.getUtente());
                 date_creazione.add(d.getData().getTime());
-                n_posts[i] = d.getMessaggi().size();
-                i++;
+                n_posts.add(d.getMessaggi().size());
             }
             
-            request.setAttribute("task_name", task.getNome());
-            request.setAttribute("project_id", proj.getKey());
-            request.setAttribute("project_name",proj.getNome());
-            request.setAttribute("topics",discussioni);
-            request.setAttribute("posts",n_posts);
-            request.setAttribute("date",date_creazione);
-            request.setAttribute("users",utenti);
-            
-            TemplateResult res = new TemplateResult(getServletContext());
-            res.activate("task_forum.html", request, response);
-            
-        } catch (DataLayerException ex) {
+            /*
+                Se la richiesta avviene tramite una normale GET o POST, viene caricato
+                il template normalmente; se invece avviene tramite una chiamata Ajax
+                (variabile async = true) si utilizza il metodo activate per 
+                scrivere su un file, in modo da poter caricare solo una parte del template
+                con i dati aggiornati. 
+            */
+            if(!async){
+                
+                request.setAttribute("task_name", task.getNome());
+                request.setAttribute("task_id", task.getKey());
+                request.setAttribute("project_id", proj.getKey());
+                request.setAttribute("project_name",proj.getNome());
+                request.setAttribute("topics",discussioni);
+                request.setAttribute("posts",n_posts);
+                request.setAttribute("date",date_creazione);
+                request.setAttribute("users",utenti);
+
+                request.setAttribute("currentpage",page);
+                request.setAttribute("perPage",perPage);
+                request.setAttribute("totalResults",total);
+                request.setAttribute("totalPages",totalPages);
+                TemplateResult res = new TemplateResult(getServletContext());
+                res.activate("task_forum.html", request, response);
+            }
+            else{
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                Map datamodel = new HashMap();
+                datamodel.put("topics",discussioni);
+                datamodel.put("task_id", task.getKey());
+                datamodel.put("posts",n_posts);
+                datamodel.put("date",date_creazione);
+                datamodel.put("users",utenti);
+                datamodel.put("outline_tpl", null);
+                datamodel.put("encoding","UTF-8");
+                datamodel.put("currentpage",page);
+                datamodel.put("perPage",perPage);
+                datamodel.put("totalResults",total);
+                datamodel.put("totalPages",totalPages);
+                TemplateResult res = new TemplateResult(getServletContext());
+                res.activate("task_discussions.ftl.html", datamodel, bos);
+                
+                try (PrintWriter out = response.getWriter()) {
+                    out.print(bos.toString());
+                }
+            }
+        } 
+        catch (DataLayerException ex) {
             request.setAttribute("message", "Data access exception: " + ex.getMessage());
             action_error(request, response);
         }
@@ -74,14 +115,21 @@ public class TaskForum extends SocialDevelopBaseController{
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         int task_id;
+        int page;
+        int perPage;
+        boolean async;
         try{
+            page = request.getParameter("page") == null ? 1 : SecurityLayer.checkNumeric(request.getParameter("page"));
+            perPage = request.getParameter("perpage") == null ? 10 : SecurityLayer.checkNumeric(request.getParameter("perpage"));
+            async = request.getParameter("async") == null ?  false : SecurityLayer.checkNumeric(request.getParameter("async")) == 1 ;
             task_id = SecurityLayer.checkNumeric(request.getParameter("task_id"));
-            action_default(request,response,task_id);
-        } catch (IOException ex) {
+            action_default(request,response,task_id,page,perPage,async);
+        } 
+        catch (IOException ex) {
             request.setAttribute("exception", ex);
-            action_error(request, response);
-            
-        } catch (TemplateManagerException ex) {
+            action_error(request, response);   
+        } 
+        catch (TemplateManagerException ex) {
             request.setAttribute("exception", ex);
             action_error(request, response);
             

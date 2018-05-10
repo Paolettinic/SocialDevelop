@@ -63,8 +63,8 @@
                 
             <!-- Header Search Start -->
             <div class="header--search style--2 float--right" data-form="validate">
-                <form action="#">
-                    <input type="text" name="search" placeholder="I'm looking for..." class="form-control" autocomplete="off" required>   
+                <form action="search">
+                    <input type="text" name="filter" placeholder="Sto cercando ..." class="form-control" autocomplete="off" required>   
                     <button type="submit" class="btn-link"><i class="fa fa-search"></i></button>
                 </form>
             </div>
@@ -74,12 +74,13 @@
                 <!-- Header Nav Links Start -->
                 <ul class="header--nav-links style--3 nav ff--primary">
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <a href="search" class="dropdown-toggle" data-toggle="dropdown">
                             <span>Progetti</span>
                             <i class="fa fa-caret-down"></i>
                         </a>
                             
                         <ul class="dropdown-menu">
+                            <li><a href="search"><span>Cerca progetti</span></a></li>
                             <li><a href=""><span>Crea un progetto</span></a></li>
                             <li><a href=""><span>I miei progetti</span></a></li>
                             <li><a href=""><span>Avanzamento progetti</span></a></li>

@@ -11,9 +11,9 @@ import it.univaq.f4i.iw.framework.result.TemplateResult;
 import it.univaq.f4i.iw.framework.security.SecurityLayer;
 import it.univaq.f4i.iw.framework.data.DataLayerException;
 import it.univaq.f4i.iw.framework.result.TemplateManagerException;
-import it.univaq.f4i.iw.framework.security.SecurityLayer;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,10 +31,11 @@ public class Rate extends SocialDevelopBaseController {
         System.out.print(request.getAttribute("message")+"\n");
         return; //body for action_error
     }
-       
+
     private void action_default(HttpServletRequest request, HttpServletResponse response,int project_id)throws IOException, ServletException, TemplateManagerException{
         try{
             Progetto proj = ((SocialDevelopDataLayer)request.getAttribute("datalayer")).getProgetto(project_id);
+            request.setAttribute("project_id", project_id);
             request.setAttribute("project", proj);
             TemplateResult res = new TemplateResult(getServletContext());
             res.activate("rate.html", request, response);

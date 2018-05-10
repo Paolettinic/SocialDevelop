@@ -64,6 +64,20 @@ public class UtenteImpl implements Utente {
         return key;
     }
     
+    @Override
+    public boolean equals(Object obj){
+        if(!(obj instanceof UtenteImpl) )
+            return false;
+        else{
+            return ((UtenteImpl)obj).getKey() == this.key;
+        }
+    }
+    
+    @Override
+    public int hashCode(){
+        return this.key;
+    }
+    
     protected void setKey(int key) {
         this.key = key;
     }

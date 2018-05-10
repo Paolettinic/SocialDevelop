@@ -16,7 +16,7 @@
 
 <!-- Page Wrapper Start -->
 <section class="page--wrapper pt--80 pb--20">
-    <div class="container">
+    <div class="container" id="updatable_content">
         <div class="row">
             <!-- Main Content Start -->
             <div class="main--content col-md-12 pb--60" data-trigger="stickyScroll">
@@ -31,7 +31,7 @@
                                     <th><h4>Risposte</h4></th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="task_table_body">
                                 <#list topics as topic>
                                 <#assign i = topic?index>
                                 <tr>
@@ -58,6 +58,36 @@
                 </div>
             </div>
             <!-- Main Content End -->
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <!-- Page Count Start -->
+                <div class="page--count pt--30 script_enabled display_none">
+                    <label class="ff--primary fs--14 fw--500 text-darker">
+                        <span>${topics?size}</span> topics di <span>${totalResults}</span> pagina: 
+                        <button id="prevpage" onclick="goToTaskPage('${task_id}','${currentpage - 1}','10')" class="btn-link <#if currentpage lte 1> display_none</#if>"><i class="fa fa-caret-left"></i></button>
+                        <input type="hidden" name="task_id" value="${task_id}"/>
+                        <input type="number"id="currentTaskPage" name="page" value="${currentpage}" class="form-control form-sm">
+                        <button id="nextpage" onclick="goToTaskPage('${task_id}','${currentpage + 1}','10')" class="btn-link <#if currentpage gte totalPages> display_none </#if>"><i class="fa fa-caret-right"></i></button>
+                        <span>di ${totalPages}</span>
+                    </label>
+                </div>
+                <noscript>
+                <div class="page--count pt--30">
+                    <label class="ff--primary fs--14 fw--500 text-darker">
+                        <span>${topics?size}</span> topics di <span>${totalResults}</span> pagina: 
+                        <a href="TaskForum?task_id=${task_id}&page=${currentpage - 1}" class="btn-link <#if currentpage lte 1> display_none</#if>"><i class="fa fa-caret-left"></i></a>
+                        <form name="change_page" class="display_inline_block" action="TaskForum" method="GET">
+                            <input type="hidden" name="task_id" value="${task_id}">
+                            <input type="number" name="page" value="${currentpage}" class="form-control form-sm">
+                        </form>
+                        <a href="TaskForum?task_id=${task_id}&page=${currentpage + 1}" class="btn-link <#if currentpage gte totalPages> display_none </#if>"><i class="fa fa-caret-right"></i></a>
+                        <span>di ${totalPages}</span>
+                    </label>
+                </div>
+                </noscript>
+                <!-- Page Count End -->
+            </div>
         </div>
         <div class="row">
             <div class="col-md-9"></div>

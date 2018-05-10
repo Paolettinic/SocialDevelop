@@ -33,16 +33,16 @@ import socialdevelop.data.model.Utente;
 public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implements SocialDevelopDataLayer {
     // select, insert, update, delete, generiche funzionalità del sito, ecc...
     private PreparedStatement sCurriculumByID, iCurriculum, uCurriculum, dCurriculum;
-    private PreparedStatement sDiscussioneByID, sDiscussioniByTask, iDiscussione, uDiscussione, dDiscussione;
+    private PreparedStatement sDiscussioneByID, sDiscussioniByTask, iDiscussione, uDiscussione, dDiscussione,countDiscussioniByTask;
     private PreparedStatement sFileByID, sFilesByUtente, iFile, uFile, dFile;
     private PreparedStatement sImmagineByID, iImmagine, uImmagine, dImmagine;
     private PreparedStatement sInvitoByID, sInvitiByUtente, sInvitiByTask, iInvito, uInvito, dInvito;
     private PreparedStatement sMessaggioByID, sMessaggiByDiscussione, iMessaggio, uMessaggio, dMessaggio;
-    private PreparedStatement sProgettoByID, sProgettiByUtente, sProgettiByFiltro, iProgetto, uProgetto, dProgetto;
+    private PreparedStatement sProgettoByID, sProgettiByUtente, sProgettiByFiltro, iProgetto, uProgetto, dProgetto,countProgettiByFiltro;
     private PreparedStatement sSkillByID, sSkills, sSkillsByTipo, sSkillsByUtente, sSkillsByTask, sSkillsFiglie, iSkill, uSkill, dSkill;
     private PreparedStatement sTaskByID, sTasksByUtente, sTasksByProgetto, sTasksByTipo, sTasksBySkill, iTask, uTask, dTask;
     private PreparedStatement sTipoByID, sTipi, sTipiBySkill, iTipo, uTipo, dTipo;
-    private PreparedStatement sUtenteByID, sUtentiByTask, sUtentiByFiltro, sUtentiBySkill, iUtente, uUtente, dUtente;
+    private PreparedStatement sUtenteByID, sUtentiByTask, sUtentiByFiltro, sUtentiBySkill, iUtente, uUtente, dUtente,countUtentiByFiltro;
     private PreparedStatement sAppartenenti, iAppartenenti, uAppartenenti, dAppartenenti;
     private PreparedStatement sCoprenti, iCoprenti, uCoprenti, dCoprenti;
     private PreparedStatement sPreparazioni, iPreparazioni, uPreparazioni, dPreparazioni;
@@ -63,7 +63,8 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             dCurriculum = connection.prepareStatement("DELETE FROM 'files' WHERE 'id' = ?");
             
             sDiscussioneByID = connection.prepareStatement("SELECT * FROM discussioni WHERE id = ?");
-            sDiscussioniByTask = connection.prepareStatement("SELECT * FROM discussioni WHERE ext_task = ?");
+            sDiscussioniByTask = connection.prepareStatement("SELECT * FROM discussioni WHERE ext_task = ? LIMIT ?, ?");
+            countDiscussioniByTask = connection.prepareStatement("SELECT COUNT(id) as total FROM discussioni WHERE ext_task = ?");
             iDiscussione = connection.prepareStatement("INSERT INTO discussioni (titolo, pubblica, data_creazione, ext_utente, ext_task) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             uDiscussione = connection.prepareStatement("UPDATE discussioni SET titolo = ?, pubblica = ?, data_creazione = ?, ext_utente = ?, ext_task = ? WHERE id = ?");
             dDiscussione = connection.prepareStatement("DELETE FROM discussioni WHERE id = ?");
@@ -87,14 +88,15 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             dInvito = connection.prepareStatement("DELETE FROM inviti WHERE id = ?");
             
             sMessaggioByID = connection.prepareStatement("SELECT * FROM messaggi WHERE id = ?");
-            sMessaggiByDiscussione = connection.prepareStatement("SELECT * FROM messaggi WHERE 'ext_discussione' = ?");
+            sMessaggiByDiscussione = connection.prepareStatement("SELECT * FROM messaggi WHERE ext_discussione = ?");
             iMessaggio = connection.prepareStatement("INSERT INTO messaggi (testo, data_pubblicazione, ext_utente, ext_discussione) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             uMessaggio = connection.prepareStatement("UPDATE messaggi SET testo = ?, data_pubblicazione = ?, ext_utente = ?, ext_discussione = ? WHERE id = ?");
             dMessaggio = connection.prepareStatement("DELETE FROM messaggi WHERE id = ?");
             
             sProgettoByID = connection.prepareStatement("SELECT * FROM progetti WHERE id = ?");
             sProgettiByUtente = connection.prepareStatement("SELECT * FROM progetti WHERE ext_coordinatore = ?");
-            sProgettiByFiltro = connection.prepareStatement("SELECT * FROM progetti WHERE nome LIKE ? OR descrizione LIKE ?");
+            sProgettiByFiltro = connection.prepareStatement("SELECT * FROM progetti WHERE nome LIKE ? OR descrizione LIKE ? LIMIT ?, ?");
+            countProgettiByFiltro = connection.prepareStatement("SELECT COUNT(id) as total FROM progetti WHERE nome LIKE ? OR descrizione LIKE ?");
             iProgetto = connection.prepareStatement("INSERT INTO progetti (nome, descrizione, ext_coordinatore) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
             uProgetto = connection.prepareStatement("UPDATE progetti SET nome = ?, descrizione = ?, ext_coordinatore = ? WHERE id = ?");
             dProgetto = connection.prepareStatement("DELETE FROM progetti WHERE id = ?");
@@ -103,7 +105,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             sSkills = connection.prepareStatement("SELECT * FROM skills");
             sSkillsByTipo = connection.prepareStatement("SELECT skills.* FROM skills INNER JOIN appartenenti ON skills.id = appartenenti.ext_skill WHERE appartenenti.ext_tipo = ?");
             sSkillsByUtente = connection.prepareStatement("SELECT skills.* FROM skills INNER JOIN preparazioni ON skills.id = preparazioni.ext_skill WHERE preparazioni.ext_utente = ?");
-            sSkillsByTask = connection.prepareStatement("SELECT skills.* FROM skills INNER JOIN requisiti ON skills.id = requisiti.ext_skill WHERE requisiti.ext_task = ?");
+            sSkillsByTask = connection.prepareStatement("SELECT skills.*,requisiti.livello FROM skills INNER JOIN requisiti ON skills.id = requisiti.ext_skill WHERE requisiti.ext_task = ?");
             sSkillsFiglie = connection.prepareStatement("SELECT * FROM skills WHERE ext_padre = ?");
             iSkill = connection.prepareStatement("INSERT INTO skills (nome, ext_padre) VALUES(?, ?)", Statement.RETURN_GENERATED_KEYS);
             uSkill = connection.prepareStatement("UPDATE skills SET nome = ?, ext_padre = ? WHERE id = ?");
@@ -127,7 +129,8 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             
             sUtenteByID = connection.prepareStatement("SELECT * FROM utenti WHERE id = ?");
             sUtentiByTask = connection.prepareStatement("SELECT utenti.*, coprenti.voto FROM utenti INNER JOIN coprenti ON utenti.id = coprenti.ext_utente WHERE coprenti.ext_task = ?");
-            sUtentiByFiltro = connection.prepareStatement("SELECT * FROM utenti WHERE name LIKE ? OR cognome LIKE ? OR username = ?");
+            sUtentiByFiltro = connection.prepareStatement("SELECT * FROM utenti WHERE nome LIKE ? OR cognome LIKE ? OR username = ? LIMIT ?,?");
+            countUtentiByFiltro = connection.prepareStatement("SELECT COUNT(id) as total FROM utenti WHERE nome LIKE ? OR cognome LIKE ? OR username = ?");
             sUtentiBySkill = connection.prepareStatement("SELECT utenti.*, preparazioni.livello FROM utenti INNER JOIN preparazioni ON utenti.id = preparazioni.ext_utente WHERE preparazioni.ext_skill = ? AND preparazioni.livello >= ?");
             iUtente = connection.prepareStatement("INSERT INTO utenti (nome, cognome, username, email, data_nascita, password, biografia, ext_curriculum, ext_immagine) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             uUtente = connection.prepareStatement("UPDATE utenti SET nome = ?, cognome = ?, username = ?, email = ?, data_nascita = ?, password = ?, biografia = ?, ext_curriculum = ?, ext_immagine = ? WHERE id = ?");
@@ -907,15 +910,22 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     public void salvaCoprenti(int voto, int ext_utente, int ext_task) throws DataLayerException {
         boolean update = false;
         try {
-            uCoprenti.setInt(1, voto);
-            uCoprenti.setInt(2, ext_utente);
-            uCoprenti.setInt(3, ext_task);
-            try (ResultSet rs = uCoprenti.executeQuery()) {
+            sCoprenti.setInt(1, ext_utente);
+            sCoprenti.setInt(2, ext_task);
+            try (ResultSet rs = sCoprenti.executeQuery()) {
                 if (rs.next()) {
                     update = true;
                 }
             }
-            if (!update) {
+            if (update) {
+                uCoprenti.setInt(1, voto);
+                uCoprenti.setInt(2, ext_utente);
+                uCoprenti.setInt(3, ext_task);
+                uCoprenti.setInt(4, ext_utente);
+                uCoprenti.setInt(5, ext_task);
+                uCoprenti.executeUpdate();
+            }
+            else{
                 iCoprenti.setInt(1, voto);
                 iCoprenti.setInt(2, ext_utente);
                 iCoprenti.setInt(3, ext_task);
@@ -1167,10 +1177,27 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     }
     
     @Override
-    public List<Discussione> getDiscussioni(Task task) throws DataLayerException {
+    public int getCountDiscussioni(Task task) throws DataLayerException{
+       int count = -1;
+       try{
+        countDiscussioniByTask.setInt(1,task.getKey());
+        try (ResultSet rs = countDiscussioniByTask.executeQuery()) {
+            if(rs.next())
+                count = rs.getInt("total");
+        }
+       } catch(SQLException ex){
+           throw new DataLayerException("Impossibile caricare il numero totale di discussioni", ex);
+       }
+       return count;
+    }
+    
+    @Override
+    public List<Discussione> getDiscussioni(Task task, int first, int perPage) throws DataLayerException {
         List<Discussione> result = new ArrayList<>();
         try {
             sDiscussioniByTask.setInt(1, task.getKey());
+            sDiscussioniByTask.setInt(2, first);
+            sDiscussioniByTask.setInt(3, perPage);
             try (ResultSet rs = sDiscussioniByTask.executeQuery()) {
                 while (rs.next()) {
                     result.add((Discussione) getDiscussione(rs.getInt("id")));
@@ -1335,10 +1362,13 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     }
     
     @Override
-    public List<Progetto> getProgetti(String filtro) throws DataLayerException {
+    public List<Progetto> getProgetti(String filtro, int first, int perPage) throws DataLayerException {
         List<Progetto> result = new ArrayList();
         try {
-            sProgettiByFiltro.setString(1, filtro);
+            sProgettiByFiltro.setString(1, "%"+filtro+"%");
+            sProgettiByFiltro.setString(2, "%"+filtro+"%");
+            sProgettiByFiltro.setInt(3, first);
+            sProgettiByFiltro.setInt(4, perPage);
             try (ResultSet rs = sProgettiByFiltro.executeQuery()) {
                 while (rs.next()) {
                     result.add(creaProgetto(rs));
@@ -1346,6 +1376,22 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             }
         } catch (SQLException ex) {
             throw new DataLayerException("Impossibile caricare i progetti", ex);
+        }
+        return result;
+    }
+    
+    public int getCountProgetti(String filtro) throws DataLayerException{
+        int result = 0;
+        try{
+            countProgettiByFiltro.setString(1, "%"+filtro+"%");
+            countProgettiByFiltro.setString(2, "%"+filtro+"%");
+            try(ResultSet rs = countProgettiByFiltro.executeQuery()){
+                if(rs.next()){
+                    result = rs.getInt("total");
+                }
+            }
+        }catch(SQLException ex){
+            throw new DataLayerException("Impossibile contare i progetti", ex);
         }
         return result;
     }
@@ -1597,18 +1643,41 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
         }
         return result;
     }
-    
+
     @Override
-    public List<Utente> getUtenti(String filtro) throws DataLayerException {
+    public List<Utente> getUtenti(String filtro, int first, int perPage) throws DataLayerException {
         List<Utente> result = new ArrayList();
         try {
-            sUtentiByFiltro.setString(1, filtro);
+            sUtentiByFiltro.setString(1, "%"+filtro+"%");
+            sUtentiByFiltro.setString(2, "%"+filtro+"%");
+            sUtentiByFiltro.setString(3, "%"+filtro+"%");
+            sUtentiByFiltro.setInt(4, first);
+            sUtentiByFiltro.setInt(5, perPage);
             try (ResultSet rs = sUtentiByFiltro.executeQuery()) {
                 while (rs.next()) {
                     result.add(creaUtente(rs));
                 }
             }
         } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile caricare gli utenti", ex);
+        }
+        return result;
+    }
+    
+    @Override
+    public int getCountUtenti(String filtro) throws DataLayerException {
+        int result = 0;
+        
+        try{
+            countUtentiByFiltro.setString(1, "%"+filtro+"%");
+            countUtentiByFiltro.setString(2, "%"+filtro+"%");
+            countUtentiByFiltro.setString(3, "%"+filtro+"%");
+            try (ResultSet rs = countUtentiByFiltro.executeQuery()) {
+                if (rs.next()) {
+                   result = rs.getInt("total");
+                }
+            }
+        }catch(SQLException ex){
             throw new DataLayerException("Impossibile caricare gli utenti", ex);
         }
         return result;
@@ -1723,4 +1792,6 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
         }
         super.destroy();
     }
+
+    
 }

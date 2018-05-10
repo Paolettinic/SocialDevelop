@@ -102,7 +102,9 @@ public interface SocialDevelopDataLayer extends DataLayer {
     
     Discussione getDiscussione(int discussione_key) throws DataLayerException;
     
-    List<Discussione> getDiscussioni(Task task) throws DataLayerException;
+    int getCountDiscussioni(Task task) throws DataLayerException;
+    
+    List<Discussione> getDiscussioni(Task task, int first, int perPage) throws DataLayerException;
     
     FileSD getFile(int file_key) throws DataLayerException;
     
@@ -124,7 +126,9 @@ public interface SocialDevelopDataLayer extends DataLayer {
     
     List<Progetto> getProgetti(Utente utente) throws DataLayerException;
     
-    List<Progetto> getProgetti(String filtro) throws DataLayerException;
+    List<Progetto> getProgetti(String filtro ,int first, int perPage) throws DataLayerException;
+    
+    int getCountProgetti(String filtro) throws DataLayerException;
     
     Skill getSkill(int skill_key) throws DataLayerException;
     
@@ -158,7 +162,9 @@ public interface SocialDevelopDataLayer extends DataLayer {
     
     Map<Utente, Integer> getUtenti(Task task) throws DataLayerException;
     
-    List<Utente> getUtenti(String filtro) throws DataLayerException;
+    List<Utente> getUtenti(String filtro, int first, int perPage) throws DataLayerException;
+    
+    int getCountUtenti(String filtro) throws DataLayerException;
     
     Map<Utente, Integer> getUtenti(Map<Skill, Integer> skills) throws DataLayerException;
     

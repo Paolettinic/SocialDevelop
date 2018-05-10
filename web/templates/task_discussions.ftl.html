@@ -1,0 +1,64 @@
+<div class="row">
+    <!-- Main Content Start -->
+    <div class="main--content col-md-12 pb--60" data-trigger="stickyScroll">
+        <div class="main--content-inner drop--shadow">
+            <!-- Topics List Start -->
+            <div class="topics--list">
+                <table class="table">
+                    <thead class="ff--primary fs--14 text-darkest">
+                        <tr>
+                            <th><h4>Discussione</h4></th>
+                            <th><h4>Autore</h4></th>
+                            <th><h4>Risposte</h4></th>
+                        </tr>
+                    </thead>
+                    <tbody id="task_table_body">
+                        <#list topics as topic>
+                        <#assign i = topic?index>
+                        <tr>
+                            <td>
+                                <h4 class="h6 fw--500 text-darkest"><a href="#" class="btn-link">${topic.titolo}</a></h4>
+                            </td>
+                            <td>
+                                <p>${topic.data.time?string["dd MMMM yyyy"]}</p>
+                                    
+                                <a href="member-activity-personal.html" class="topic--author">
+                                    <span class="name">${topic.utente.nome} ${topic.utente.cognome}</span>
+                                    <span class="avatar"><img src="image?imgid=${topic.utente.immagine.key}" alt=""></span>
+                                </a>
+                            </td>
+                            <td>
+                                <p class="ff--primary fw--500 fs--14 text-darkest">${posts[i]}</p>
+                            </td>
+                        </tr>
+                        </#list>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Topics List End -->
+        </div>
+    </div>
+    <!-- Main Content End -->
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <!-- Page Count Start -->
+        <div class="page--count pt--30 script_enabled">
+            <label class="ff--primary fs--14 fw--500 text-darker">
+                <span>${topics?size}</span> topics di <span>${totalResults}</span> pagina: 
+                <button id="prevpage" onclick="goToTaskPage('${task_id}','${currentpage - 1}','10')" class="btn-link <#if currentpage lte 1> display_none</#if>"><i class="fa fa-caret-left"></i></button>
+                <input type="hidden" value="${task_id}"/>
+                <input type="number" id="currentTaskPage" name="page" value="${currentpage}" class="form-control form-sm">
+                <button id="nextpage" onclick="goToTaskPage('${task_id}','${currentpage + 1}','10')" class="btn-link <#if currentpage gte totalPages> display_none </#if>"><i class="fa fa-caret-right"></i></button>
+                <span>di ${totalPages}</span>
+            </label>
+        </div>
+        <!-- Page Count End -->
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-9"></div>
+    <div class="col-md-3 col-xs-12  float--left main--content">
+        <a class="btn btn-primary max-width" href="#">Nuova discussione</a>
+    </div>
+</div>

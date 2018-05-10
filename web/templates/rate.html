@@ -1,4 +1,4 @@
-
+    
 <!-- Page Header Start -->
 <div class="page--header pt--60 pb--60 text-center" data-bg-img="img/page-header-img/bg.jpg" data-overlay="0.85">
     <div class="container">
@@ -11,83 +11,80 @@
     </div>
 </div>
 <!-- Page Header End -->
-
-<!-- Page Wrapper Start -->
 <section class="page--wrapper pt--80 pb--20">
     <div class="container">
         <div class="row">
             <!-- Main Content Start -->
             <div class="main--content col-md-12 pb--60" data-trigger="stickyScroll">
-                <#list project.tasks as task>
-                <div class="main--content-inner drop--shadow mb--30">
-                    
-                    <!-- Forum Header Start -->
-                    <div class="forum--header pb--50">
-                        <div class="forum--subtitle ff--primary fs--14 text-darker">
-                            <p><h4>${task.nome}</h4></p>
+                <div class="main--content-inner">
+                    <#list project.tasks as task>
+                    <hr>
+                    <!-- Filter Nav Start -->
+                    <div class="filter--nav pb--30 clearfix">
+                        <div class="filter--link float--left">
+                            <h2 class="h4">${task.nome}</h2>
                         </div>
                     </div>
-                    <!-- Forum Header End -->
                     
-                    <!-- Topic Replies Start -->
-                    <div class="topic--replies">
-                        <ul class="nav">
-                            <#list task.utenti?keys as user>
-                            <li>
-                                <!-- Topic Reply Start -->
-                                <div class="topic--reply">
-                                    <div class="header clearfix">
-                                        <p class="date float--left">19th January 2017 at 9:20 pm</p>
-                                        <p class="link float--right"><a href="topic-replies.html#575">#575</a></p>
+                    <div class="member--items">
+                        <div class="row gutter--15 AdjustRow">
+                            <#list task.utenti as user, vote>
+                            <div class="col-md-3 col-xs-6 col-xxs-12">
+                                <!-- Member Item Start -->
+                                <div class="member--item online">
+                                    <div class="img img-circle">
+                                        <a href="member-activity-personal.html" class="btn-link">
+                                            <img src="image?imgid=${user.immagine.key}" alt="">
+                                        </a>
                                     </div>
-                                    
-                                    <div class="body clearfix">
-                                        <div class="author mr--20 float--left text-center">
-                                            <div class="avatar" >
-                                                <a href="member-activity-personal.html">
-                                                    <img src="image?imgid=${user.immagine.key}" alt="">
-                                                </a>
+                                    <div class="name">
+                                        <h3 class="h6 fs--12">
+                                            <a href="member-activity-personal.html" class="btn-link">${user.nome} ${user.cognome}</a>
+                                        </h3>
+                                    </div>
+                                    <div class="activity">
+                                        <p><i class="fa mr--8 fa-clock-o"></i>Active 5 monts ago</p>
+                                    </div>
+                                    <div class="actions">
+                                        <form action ="<#if vote==0>setVote?proj_id=${project.key}<#else>setVote?proj_id=${project.key}&edit=1</#if>" method="POST">
+                                            <input type="hidden" name="user_id" value="${user.key}"/>
+                                            <input type="hidden" name="task_id" value="${task.key}"/>
+                                            <div class="slider_box" ><#if vote==0><input type="range" name="vote" min="1" max="5" value=${vote} step="1" class="vote_slider" /></#if></div>
+                                            <div class="max-width mt--4 mb--4">
+                                                <div class="range-val <#if vote == 1>selected_val</#if>">1</div>
+                                                <div class="range-val <#if vote == 2>selected_val</#if>">2</div>
+                                                <div class="range-val <#if vote == 3>selected_val</#if>">3</div>
+                                                <div class="range-val <#if vote == 4>selected_val</#if>">4</div>
+                                                <div class="range-val <#if vote == 5>selected_val</#if>">5</div>
                                             </div>
-                                            
-                                            <div class="name text-darkest">
-                                                <p class=""><a href="member-activity-personal.html">${user.nome} ${user.cognome}</a></p>
+                                            <div class="mt--10 max-width" >
+                                                <script>
+                                                   <#if vote == 0>
+                                                    document.write('<button type="button" onclick="setVote($(this).closest(\'form\'))" class="btn btn-default max-width">Conferma</button>');
+                                                   <#else>
+                                                    document.write('<button type="button" onclick="editVote($(this).closest(\'form\'))" class="btn btn-default max-width">Modifica</button>');
+                                                   </#if>
+                                                </script>
+                                                <noscript>
+                                                <#if vote == 0>
+                                                    <button type="submit" class="btn btn-default max-width">Conferma</button>
+                                                <#else>
+                                                    <button type="submit" class="btn btn-default max-width">Modifica</button>
+                                                </#if>
+                                                </noscript>
                                             </div>
-                                            
-                                            <div class="role text-uppercase">
-                                                <p class="text-white bg-primary">Keymaster</p>
-                                            </div>
-                                        </div>
-                                        <div class="product--quantity-wrapper">
-                                            <!-- Product Quantity Start -->
-                                            <div class="product--quantity" data-trigger="spinner">
-                                                <div class="input-group">
-                                                    <div class="input-group-addon text-default">
-                                                        <i class="fa fa-minus-circle" data-spin="down"></i>
-                                                    </div>
-                                                    
-                                                    <input type="text" name="quantity" value="3" data-min="1" data-max="5" data-step="1" class="form-control" data-rule="quantity">
-                                                    
-                                                    <div class="input-group-addon text-default">
-                                                        <i class="fa fa-plus-circle" data-spin="up"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- Product Quantity End -->
-                                        </div>
+                                        </form>
                                     </div>
                                 </div>
-                                <!-- Topic Reply End -->
-                            </li>
+                                <!-- Member Item End -->
+                            </div>
                             </#list>
-                        </ul>
+                        </div>
                     </div>
-                    <!-- Topic Replies End -->
-                    
+                    </#list>
                 </div>
-                </#list>
             </div>
-            <!-- Main Content End -->
         </div>
     </div>
 </section>
-<!-- Page Wrapper End -->
+<center></center>

@@ -1,0 +1,80 @@
+<div class="box--items">
+    <div class="row gutter--15 AdjustRow">
+        <#if type = "projects">
+        <#list result as project>
+        <div class="col-md-3 col-xs-6 col-xxs-12">
+            <!-- Box Item Start -->
+            <div class="box--item text-center">
+                
+                
+                <div class="info project_info">
+                    <div class="icon fs--18 text-lightest bg-primary">
+                        <i class="fa fa-code"></i>
+                    </div>
+                    
+                    <div class="title">
+                        <h2 class="h6"><a href="#">${project.nome}</a></h2>
+                    </div>
+                    <div class="desc text-darker line-clamp-3">
+                        <p>${project.descrizione}</p>
+                    </div>
+                    <div class="meta">
+                        <p><i class="fa mr--8 fa-user-o"></i>Collaboratori: ${count_collaboratori[project?index]}</p>
+                    </div>
+                    <div class="action">
+                        <a href="#">Group Details<i class="fa ml--10 fa-caret-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- Box Item End -->
+        </div>
+        </#list>
+        <#elseif type="user">
+        <#list result as user>
+        <div class="col-md-3 col-xs-6 col-xxs-12">
+            <!-- Box Item Start -->
+            <div class="box--item text-center">
+                <a href="#" class="img" data-overlay="0.1">
+                    <img src="image?img_id=${images[user?index].key}" alt="">
+                </a>
+                <div class="info">
+                    <div class="icon fs--18 text-lightest bg-primary">
+                        <i class="fa fa-user"></i>
+                    </div>
+                    <div class="title">
+                        <h2 class="h6"><a href="#">${user.nome} ${user.cognome}</a></h2>
+                    </div>
+                    <div class="meta">
+                        <p><i class="fa mr--8 fa-code"></i>Public Group / 2500 Members</p>
+                    </div>
+                    <div class="desc text-darker">
+                        <p>${user.biografia}</p>
+                    </div>
+                    <div class="action">
+                        <a href="group-home.html">Group Details<i class="fa ml--10 fa-caret-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- Box Item End -->
+        </div>
+        </#list>
+        <#else>
+        
+        </#if>
+    </div>
+</div>
+<!-- Box Items End -->
+<!-- Page Count Start -->
+<div class="page--count pt--30">
+    <label class="ff--primary fs--14 fw--500 text-darker">
+        <span>Viewing</span>
+        
+        <button id="prevpage" onclick="goToSearchPage('${filter}','${page - 1}','8')" class="btn-link <#if page lte 1> display_none</#if>"><i class="fa fa-caret-left"></i></button>
+        <input type="hidden" name="filter" value="${filter}"/>
+        <input type="number" id="currentSearchPage" name="page" value="${page}" class="form-control form-sm">
+        <button id="nextpage" onclick="goToSearchPage('${filter}','${page + 1}','8')" class="btn-link <#if page gte totalPages> display_none </#if>"><i class="fa fa-caret-right"></i></button>
+        
+        <span>of ${totalPages}</span>
+    </label>
+</div>
+<!-- Page Count End -->
