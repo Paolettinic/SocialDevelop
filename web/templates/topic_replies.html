@@ -1,0 +1,109 @@
+
+<!-- Page Header Start -->
+<div class="page--header pt--60 pb--60 text-center" data-bg-img="img/page-header-img/bg.jpg" data-overlay="0.85">
+    <div class="container">
+        <div class="title">
+            <h2 class="h1 text-white">${task.nome}</h2>
+        </div>
+
+        <ul class="breadcrumb text-gray ff--primary">
+            <li><a href="home-1.html" class="btn-link">${task.progetto.nome}</a></li>
+            <li><a href="forums.html" class="btn-link">${task.nome}</a></li>
+            <li class="active"><span class="text-primary">${discussione.titolo}</span></li>
+        </ul>
+    </div>
+</div>
+<!-- Page Header End -->
+
+<!-- Page Wrapper Start -->
+<section class="page--wrapper pt--80 pb--20">
+    <div class="container">
+        <div class="row">
+            <!-- Main Content Start -->
+            <div class="main--content col-md-12 pb--60" data-trigger="stickyScroll">
+                <div class="main--content-inner drop--shadow">
+                    <!-- Forum Header Start -->
+                    <div class="forum--header pb--50">
+                        <div class="forum--subtitle ff--primary fs--14 text-darker">
+                            <#assign count = 0>
+                            <#list messaggi as messaggio>
+                            <#assign count++>
+                            </#list>
+                            <p>Viewing 5 topics - 1 through 5 (of ${count} total)</p>
+                        </div>
+                    </div>
+                    <!-- Forum Header End -->
+
+                    <!-- Topic Replies Start -->
+                    <div class="topic--replies">
+                        <ul class="nav">
+                            <#assign i = 1>
+                            <#list messaggi?sort_by("data") as messaggio>
+                            <li>
+                                <!-- Topic Reply Start -->
+                                
+                                <div class="topic--reply">
+                                    <div class="header clearfix">
+                                        <p class="date float--left">${messaggio.data.time?string["dd MMMM yyyy"]}</p>
+                                        <p class="link float--right"><a href="topic-replies.html#575">#${i}</a></p>
+                                        <#assign i++>
+                                    </div>
+
+                                    <div class="body clearfix">
+                                        <div class="author mr--20 float--left text-center">
+                                            <div class="avatar" data-overlay="0.3" data-overlay-color="primary">
+                                                <a href="member-activity-personal.html">
+                                                    <img src="image?imgid=${messaggio.utente.immagine.key}" alt="">
+                                                </a>
+                                            </div>
+
+                                            <div class="name text-darkest">
+                                                <p><a href="member-activity-personal.html">${messaggio.utente.nome} ${messaggio.utente.cognome}</a></p>
+                                            </div>
+                                            <#if messaggio.utente.key == messaggio.discussione.task.progetto.key>
+                                            <div class="role text-uppercase">
+                                                <p class="text-white bg-primary">Coordinatore</p>
+                                            </div>
+                                            </#if>
+                                        </div>
+
+                                        <div class="content pt--20 fs--14 ov--h">
+                                            <p>${messaggio.testo}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Topic Reply End -->
+                            </li>
+                            </#list>
+                        </ul>
+                    </div>
+                    
+                    <!-- Topic Replies End -->
+
+                </div>
+                <form action ="<#if true>setMessage?utente_id=${utente.key}&task_id=${task.key}&discussione_id=${discussione.key}</#if>" method="POST">
+                    <input type="hidden" name="user_id" value="${utente.key}"/>
+                    <input type="hidden" name="taskerino_id" value="${task.key}"/>
+                    <input type="hidden" name="discussion_id" value="${discussione.key}"/>
+                
+                    <div class="alert mt--30">
+                        <span>Rispondi a questa discussione</span>
+                        <div>
+                            <textarea class="max-width" id="reply" name="reply" rows="4"></textarea>
+                        </div>
+                        <!-- <div class="alert--inner ff--primary text-white bg-primary">
+                            <p>You must be logged in to create new topics.</p>
+                        </div> -->
+                        <button type="submit" class="btn btn-default">Conferma</button>
+                    </div>
+                </form>
+            </div>
+            <!-- Main Content End -->
+
+            <!-- Main Sidebar Start -->
+            <!-- Main Sidebar End -->
+        </div>
+    </div>
+</section>
+<!-- Page Wrapper End -->
+

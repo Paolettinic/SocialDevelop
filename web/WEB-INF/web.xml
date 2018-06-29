@@ -29,9 +29,50 @@
         <servlet-class>socialdevelop.controller.SetVote</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>SetMessage</servlet-name>
+        <servlet-class>socialdevelop.controller.SetMessage</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>Search</servlet-name>
         <servlet-class>socialdevelop.controller.Search</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>NotFound</servlet-name>
+        <servlet-class>socialdevelop.controller.NotFound</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TaskPage</servlet-name>
+        <servlet-class>socialdevelop.controller.TaskPage</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Messages</servlet-name>
+        <servlet-class>socialdevelop.controller.Messages</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Project</servlet-name>
+        <servlet-class>socialdevelop.controller.Project</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>Project</servlet-name>
+        <url-pattern>/Project</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TaskPage</servlet-name>
+        <url-pattern>/TaskPage</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NotFound</servlet-name>
+        <url-pattern>/NotFound</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Messages</servlet-name>
+        <url-pattern>/Messages</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SetMessage</servlet-name>
+        <url-pattern>/setMessage</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Index</servlet-name>
         <url-pattern>/Index</url-pattern>

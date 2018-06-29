@@ -106,6 +106,8 @@ public interface SocialDevelopDataLayer extends DataLayer {
     
     List<Discussione> getDiscussioni(Task task, int first, int perPage) throws DataLayerException;
     
+    List<Discussione> getDiscussioni(Progetto progetto, int first, int perPage) throws DataLayerException;
+    
     FileSD getFile(int file_key) throws DataLayerException;
     
     List<FileSD> getFiles(Utente utente) throws DataLayerException;

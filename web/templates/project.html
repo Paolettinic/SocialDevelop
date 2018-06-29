@@ -1,0 +1,155 @@
+
+<!-- Cover Header Start -->
+<div class="page--header pt--60 pb--60 text-center" data-bg-img="img/page-header-img/bg.jpg" data-overlay="0.85">
+    <div class="container">
+        
+
+        <div class="title">
+            <h2 class="h1 text-white">${progetto.nome}</h2>
+        </div>
+
+        <div class="cover--avatars">
+            <ul class="nav">
+                <li>
+                    <a href="member-activity-personal.html" data-overlay="0.3" data-overlay-color="primary">
+                        <img src="image?imgid=${progetto.utente.immagine.key}" alt="">
+                    </a>
+                </li>
+            </ul>
+
+            <p>Amministratore progetto</p>
+        </div>
+
+        <div class="cover--user-desc fw--400 fs--18 fstyle--i text-white">
+            <p>${progetto.descrizione}</p>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Cover Header End -->
+
+<!-- Page Wrapper Start -->
+<section class="page--wrapper pt--80 pb--20">
+    <div class="container">
+        <div class="row">
+            <!-- Main Content Start -->
+            <div class="main--content col-md-12 pb--60" data-trigger="stickyScroll">
+                <div class="main--content-inner drop--shadow">
+                    <!-- Content Nav Start -->
+                    <div class="content--nav pb--30">
+                        <ul class="nav ff--primary fs--14 fw--500 bg-lighter">
+                            <li class="active"><a data-toggle="tab" href="#discussioni">Discussioni</a></li>
+                            <li><a data-toggle="tab" href="#tasks">Tasks</a></li>
+                        </ul>
+                    </div>
+                    <!-- Content Nav End -->
+
+                    <!-- Filter Nav Start -->
+                    <div class="tab-content">
+                        <div id="discussioni" class="tab-pane fade in active">
+                            
+                            <div class="forum--title">
+                                    <h3 class="h3 fw--500 text-default">Ultime discussioni</h3>
+                            </div>
+                            <br>
+                            <div class="activity--list">
+                                <!-- Activity Items Start -->
+                                <ul class="activity--items nav">
+                                    <#list topicss?sort_by("data")?reverse as topicc>
+                                    <#if topicc.pubblica == true>
+                                    <li>
+                                        <!-- Activity Item Start -->
+                                        <div class="activity--item">
+                                            <div class="activity--avatar">
+                                                <a href="member-activity-personal.html">
+                                                    <img src="image?imgid=${topicc.utente.immagine.key}" alt="">
+                                                </a>
+                                            </div>
+
+                                            <div class="activity--info fs--14">
+                                                <div class="activity--header">
+                                                    <p><a href="member-activity-personal.html">${topicc.utente.nome} ${topicc.utente.cognome}</a> ha postato un messaggio su <a href="group-home.html">${topicc.task.nome}</a></p>
+                                                </div>
+
+                                                <div class="activity--meta fs--12">
+                                                    <p><i class="fa mr--8 fa-clock-o"></i>${topicc.data.time?string["dd MMMM yyyy"]}</p>
+                                                </div>
+                                                
+                                                <div class="activity--content">
+                                                    <p>${topicc.titolo}</p>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                        <!-- Activity Item End -->
+                                    </li>
+                                    </#if>
+                                    </#list>
+                                </ul>
+                                <!-- Activity Items End -->
+                            </div>
+                        </div>
+                        
+                        <div id="tasks" class="tab-pane fade">
+                            <div class="forum--header pb--30">
+                                <div class="forum--title">
+                                    <h3 class="h3 fw--500 text-default">Tasks</h3>
+                                </div>
+                                <br>
+                                <div class="topics--list">
+                                    <table class="table">
+                                        <thead class="ff--primary fs--14 text-darkest">
+                                            <tr>
+                                                <th>Task</th>
+                                                <th>Collaboratori</th>
+                                                <th>Deadline</th>
+                                                <th>Tipo</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <#list tasks as task>
+                                            <#assign pippo = task?index>
+                                            <tr>
+                                                <td>
+                                                    <h4 class="h6 fw--500 text-darkest"><a href="sub-forums.html" class="btn-link"><strong>${task.nome}</strong></a></h4>
+                                                </td>
+                                                <td>
+                                                    <#assign numCol = 0>
+                                                    <#list task.utenti as user, vote>
+                                                    <#assign numCol++>
+                                                    </#list>
+                                                    <p class="ff--primary fw--500 fs--14 text-darkest">${numCol}</p>
+                                                </td>
+                                                <td>
+                                                    <p class="ff--primary fw--500 fs--14 text-darkest">${deadline[pippo]?substring(0, 11)}</p>
+                                                </td>
+                                                <td>
+                                                    <h4 class="h6 fw--500 text-darkest">${task.tipo.nome}</h4>
+                                                </td>
+                                            </tr>
+                                            </#list>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Page Count End -->
+                </div>
+            </div>
+            <!-- Main Content End -->
+
+            <!-- Main Sidebar Start -->
+            
+            <!-- Main Sidebar End -->
+        </div>
+    </div>
+</section>
+<!-- Page Wrapper End -->
+
+       

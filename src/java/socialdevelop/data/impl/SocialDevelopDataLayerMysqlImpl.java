@@ -33,7 +33,7 @@ import socialdevelop.data.model.Utente;
 public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implements SocialDevelopDataLayer {
     // select, insert, update, delete, generiche funzionalità del sito, ecc...
     private PreparedStatement sCurriculumByID, iCurriculum, uCurriculum, dCurriculum;
-    private PreparedStatement sDiscussioneByID, sDiscussioniByTask, iDiscussione, uDiscussione, dDiscussione,countDiscussioniByTask;
+    private PreparedStatement sDiscussioneByID, sDiscussioniByTask, iDiscussione, uDiscussione, dDiscussione,countDiscussioniByTask,sDiscussioniByProgetto;
     private PreparedStatement sFileByID, sFilesByUtente, iFile, uFile, dFile;
     private PreparedStatement sImmagineByID, iImmagine, uImmagine, dImmagine;
     private PreparedStatement sInvitoByID, sInvitiByUtente, sInvitiByTask, iInvito, uInvito, dInvito;
@@ -63,6 +63,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             dCurriculum = connection.prepareStatement("DELETE FROM 'files' WHERE 'id' = ?");
             
             sDiscussioneByID = connection.prepareStatement("SELECT * FROM discussioni WHERE id = ?");
+            sDiscussioniByProgetto = connection.prepareStatement("SELECT * FROM discussioni LEFT JOIN tasks ON tasks.id = discussioni.ext_task LEFT JOIN progetti ON progetti.id = tasks.ext_progetto WHERE progetti.id = ? LIMIT ?, ?");
             sDiscussioniByTask = connection.prepareStatement("SELECT * FROM discussioni WHERE ext_task = ? LIMIT ?, ?");
             countDiscussioniByTask = connection.prepareStatement("SELECT COUNT(id) as total FROM discussioni WHERE ext_task = ?");
             iDiscussione = connection.prepareStatement("INSERT INTO discussioni (titolo, pubblica, data_creazione, ext_utente, ext_task) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
@@ -1174,6 +1175,24 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             throw new DataLayerException("Impossibile caricare la discussione", ex);
         }
         return null;
+    }
+    
+    @Override
+    public List<Discussione> getDiscussioni(Progetto progetto, int first, int perPage) throws DataLayerException {
+        List<Discussione> result = new ArrayList<>();
+        try {
+            sDiscussioniByProgetto.setInt(1, progetto.getKey());
+            sDiscussioniByProgetto.setInt(2, first);
+            sDiscussioniByProgetto.setInt(3, perPage);
+            try (ResultSet rs = sDiscussioniByProgetto.executeQuery()) {
+                while (rs.next()) {
+                    result.add((Discussione) getDiscussione(rs.getInt("id")));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile caricare le discussioni", ex);
+        }
+        return result;
     }
     
     @Override
