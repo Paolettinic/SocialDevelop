@@ -28,6 +28,8 @@ import socialdevelop.data.model.Utente;
  *
  * @author Nicolò Paoletti
  */
+
+
 public class Search extends SocialDevelopBaseController {
     
     private void action_error(HttpServletRequest request, HttpServletResponse response) {
@@ -40,12 +42,17 @@ public class Search extends SocialDevelopBaseController {
         boolean async;
         String filtro;
         String type;
-        List<Map<Skill,Integer>> skills = new ArrayList();
+        //List<Map<Skill,Integer>> skills = new ArrayList();
         List<Task> tasks;
         Map<Utente,Integer> collaboratori ;
         Map<Integer,String> test = new HashMap();
         List<Integer> k_collaboratori = new ArrayList();
-        Map<Skill,Integer> temp_skill;
+        List<Skill> skills = new ArrayList();
+        List<String> skill_filter = new ArrayList();
+        List<String> skill_values = new ArrayList();
+        Map skill_map = new HashMap();
+        
+        
         Map datamodel = new HashMap();
         
         try{
@@ -57,10 +64,17 @@ public class Search extends SocialDevelopBaseController {
             page = parameters.containsKey("page") ? SecurityLayer.checkNumeric(parameters.get("page")[0]) : 1;
             perPage = parameters.containsKey("perpage") ? SecurityLayer.checkNumeric(parameters.get("perpage")[0]) : 8;
             async = parameters.containsKey("async") ? SecurityLayer.checkNumeric(parameters.get("async")[0]) == 1 : false;
-            
+            int i=1;
+            System.out.println(parameters.containsKey("skills_1"));
+            while(parameters.containsKey("skills_"+i) && parameters.containsKey("skill_level_"+i)){
+                System.out.println(i+"--"+"skills_"+i+"--"+SecurityLayer.stripSlashes("skills_"+i));
+                skill_map.put(SecurityLayer.checkNumeric(parameters.get("skills_"+i)[0]),SecurityLayer.checkNumeric(parameters.get("skill_level_"+i)[0]));
+                i++;
+            }
+            System.out.println(skill_map);
             first = (page-1)*perPage;
             
-            
+            skills = datalayer.getSkills();
             /*
                 Ricerca dei progetti
             */
@@ -90,10 +104,15 @@ public class Search extends SocialDevelopBaseController {
                 Ricerca degli sviluppatori
             */
             else{
-                List<Utente> utenti = datalayer.getUtenti(filtro,first,perPage);
-                totalResults = datalayer.getCountUtenti(filtro);
+                Utente u = datalayer.getUtente(1); //Da sostutuire con l'utente della sessione
+                List<Progetto> user_projects = datalayer.getProgetti(u);
+                List<Utente> utenti = datalayer.getUtenti(filtro, skill_map, first, perPage);
+                totalResults = datalayer.getCountUtenti(filtro,skill_map);
                 request.setAttribute("result", utenti);
+                request.setAttribute("projects", user_projects);
+                datamodel.put("skill_map",skill_map);
                 datamodel.put("result", utenti);
+                datamodel.put("projects", user_projects);
             }
             
             int totalPages = totalResults/perPage + (totalResults % perPage == 0 ? 0 : 1);
@@ -114,6 +133,8 @@ public class Search extends SocialDevelopBaseController {
                 request.setAttribute("count_collaboratori",k_collaboratori);
                 request.setAttribute("total",totalResults);
                 request.setAttribute("totalPages",totalPages);
+                request.setAttribute("list_skill",skills);
+                request.setAttribute("skill_map",skill_map);
                 TemplateResult res = new TemplateResult(getServletContext());
                 res.activate("search.html", request, response);
             } else {
@@ -145,7 +166,6 @@ public class Search extends SocialDevelopBaseController {
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         Map parameters = request.getParameterMap();
-        
         try{
             action_default(request, response, parameters);
         } catch (IOException ex) {

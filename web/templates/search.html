@@ -2,14 +2,14 @@
     <div class="container">
         <div class="row">
             <!-- Main Content Start -->
-            <div class="main--content col-md-12 pb--60">
+            <div class="main--content col-md-8 pb--60">
                 <div class="main--content-inner">
                     <!-- Filter Nav Start -->
                     <div class="filter--nav pb--30 clearfix">
                         <div class="filter--link float--left">
                             <h2 class="h4"><#if type = "projects">Progetti<#else>Sviluppatori</#if> trovati : ${total}</h2>
                         </div>
-                            
+                        
                         <form class="filter--options float--right">
                             <span class="fs--14 ff--primary fw--500 text-darker">Ordina per:</span>
                             <select name="membersfilter" class="form-control form-sm" onselect="" data-trigger="selectmenu">
@@ -30,7 +30,7 @@
                             <div class="row gutter--15 AdjustRow">
                                 <#if type = "projects">
                                 <#list result as project>
-                                <div class="col-md-3 col-xs-6 col-xxs-12">
+                                <div class="col-md-4 col-xs-6 col-xxs-12">
                                     <!-- Box Item Start -->
                                     <div class="box--item text-center">
                                         
@@ -39,7 +39,7 @@
                                             <div class="icon fs--18 text-lightest bg-primary">
                                                 <i class="fa fa-code"></i>
                                             </div>
-                                                
+                                            
                                             <div class="title">
                                                 <h2 class="h6"><a href="#">${project.nome}</a></h2>
                                             </div>
@@ -59,7 +59,7 @@
                                 </#list>
                                 <#elseif type="developers">
                                 <#list result as user>
-                                <div class="col-md-3 col-xs-6 col-xxs-12">
+                                <div class="col-md-4 col-xs-4 col-xxs-12">
                                     <!-- Box Item Start -->
                                     <div class="box--item text-center">
                                         <a href="#" class="img dev_img" data-overlay="0.1">
@@ -75,7 +75,7 @@
                                             <div class="meta">
                                                 <p><i class="fa mr--8 fa-code"></i>Public Group / 2500 Members</p>
                                             </div>
-                                            <div class="desc text-darker">
+                                            <div class="desc text-darker line-clamp-2">
                                                 <p>${user.biografia}</p>
                                             </div>
                                             <div class="action">
@@ -87,7 +87,7 @@
                                 </div>
                                 </#list>
                                 <#else>
-                                    
+                                
                                 </#if>
                             </div>
                         </div>
@@ -96,12 +96,12 @@
                         <div class="page--count pt--30 script_enabled display_none">
                             <label class="ff--primary fs--14 fw--500 text-darker ">
                                 <span>Viewing</span>
-                                    
+                                
                                 <button id="prevpage" onclick="goToSearchPage('${filter}','${page - 1}','8')" class="btn-link <#if page lte 1> display_none</#if>"><i class="fa fa-caret-left"></i></button>
                                 <input type="hidden" name="filter" value="${filter}"/>
                                 <input type="number" id="currentSearchPage" name="page" value="${page}" class="form-control form-sm">
                                 <button id="nextpage" onclick="goToSearchPage('${filter}','${page + 1}','8')" class="btn-link <#if page gte totalPages> display_none </#if>"><i class="fa fa-caret-right"></i></button>
-                                    
+                                
                                 <span>of ${totalPages}</span>
                             </label>
                         </div>
@@ -109,14 +109,14 @@
                         <div class="page--count pt--30 ">
                             <label class="ff--primary fs--14 fw--500 text-darker">
                                 <span>Viewing</span>
-                                    
+                                
                                 <a id="prevpage" href="search?page=${page -1}&filter=${filter}" class="btn-link <#if page lte 1> display_none</#if>"><i class="fa fa-caret-left"></i></a>
                                 <form action="search" method="POST" class="display_inline_block">
                                     <input type="hidden" name="filter" value="${filter}"/>
                                     <input type="number" id="currentSearchPage" name="page" value="${page}" class="form-control form-sm">
                                 </form>
                                 <a id="nextpage" href="search?page=${page +1}&filter=${filter}" class="btn-link <#if page gte totalPages> display_none </#if>"><i class="fa fa-caret-right"></i></a>
-                                    
+                                
                                 <span>of ${totalPages}</span>
                             </label>
                         </div>
@@ -126,7 +126,131 @@
                 </div>
             </div>
             <!-- Main Content End -->
+            <!-- Main Sidebar Start -->
+            <div class="main--sidebar col-md-4 pb--60" data-trigger="stickyScroll">
+                <!-- Widget Start -->
+                <div class="widget">
+                    <h2 class="h4 fw--700 widget--title">Cerca</h2>
+                    
+                    <!-- Buddy Finder Widget Start -->
+                    
+                    <div class="buddy-finder--widget">
+                        <form action="#">
+                            <div class="row">                                
+                                <div class="col-xs-12 col-xxs-12">
+                                    <div class="form-group">
+                                        <label>
+                                            <span class="text-darker ff--primary fw--500">Sto cercando</span>
+                                            
+                                            <select name="type" class="form-control form-sm" data-trigger="selectmenu">
+                                                <option <#if type = "developers">selected</#if>  value="developers">Sviluppatori</option>
+                                                <option <#if type = "projects">selected</#if> value="projects">Progetti</option>
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
+                                <#if type = "developers">
+                                <div class="col-xs-12 col-xxs-12">                                    
+                                    <h2 class="h4 fw--700 widget--title">Requisiti minimi</h2>
+                                    <div class="form-group" id="skill_filter">
+                                        
+                                        <#list skill_map>
+                                        <!-- Filter item start -->
+                                        <#items as skill_key,level_value>
+                                        <div class="filter-item">
+                                            <div class="row">
+                                                <div class="col-xs-9 col-xxs-9">
+                                                    <label class="mt--30">
+                                                        <span class="text-darker ff--primary fw--500">Skill</span>
+                                                        <select name="skills_${skill_key?index + 1}" class="form-control form-sm" data-trigger="selectmenu">
+                                                            <#list list_skill as skill>
+                                                            <#if skill?index = 0><option disabled hidden value="-1">Seleziona una skill</option></#if>
+                                                            <option <#if skill.key == skill_key>selected</#if> value="${skill.key}">${skill.nome}</option>
+                                                            </#list>
+                                                        </select>
+                                                    </label>
+                                                </div>
+                                                <div class="col-xs-3 col-xxs-3">
+                                                    <label class="mt--30">
+                                                        <span class="text-darker ff--primary fw--500">Livello</span> 
+                                                        <input type="number" class="form-control" value="${level_value}" min="1" max="10" step="1" name="skill_level_1"/>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                        </#items>
+                                        <!-- Filter item end -->
+                                        <#else>
+                                        <div class="filter-item">
+                                            <div class="row">
+                                                <div class="col-xs-9 col-xxs-9">
+                                                    <label class="mt--30">
+                                                        <span class="text-darker ff--primary fw--500">Skill</span>
+                                                        <select name="skills_1" class="form-control form-sm" data-trigger="selectmenu">
+                                                            <#list list_skill as skill>
+                                                            <#if skill?index = 0><option disabled selected hidden value="-1">Seleziona una skill</option></#if>
+                                                            <option value="${skill.key}">${skill.nome}</option>
+                                                            </#list>
+                                                        </select>
+                                                    </label>
+                                                </div>
+                                                <div class="col-xs-3 col-xxs-3">
+                                                    <label class="mt--30">
+                                                        <span class="text-darker ff--primary fw--500">Livello</span> 
+                                                        <input type="number" class="form-control" min="1" max="10" step="1" name="skill_level_1"/>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                        </#list>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-xxs-12">
+                                            <button type="button" id="btn_filter_addskill" onclick="add_filter_skill()" class="btn btn-default max-width mb--15"><i class="fa fa-plus"></i> Aggiungi una skill</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-xxs-12">                                    
+                                    <h2 class="h4 fw--700 widget--title">Ricerca per progetti</h2>
+                                    <div class="form-group">
+                                        <!-- Filter item start -->
+                                        <div class="filter-item">
+                                            <div class="row">
+                                                <div class="col-xs-12 col-xxs-12">
+                                                    <label>
+                                                        <span class="text-darker ff--primary fw--500">Progetto</span>
+                                                        <select name="project_submit" class="form-control form-sm" data-trigger="selectmenu">
+                                                            <#list projects as project>
+                                                            <#if project?index = 0><option disabled selected hidden value="-1">Seleziona un progetto</option></#if>
+                                                            <option value="${project.key}">${project.nome}</option>
+                                                            </#list>
+                                                        </select>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                        <!-- Filter item end -->
+                                    </div>
+                                </div>
+                                </#if>   
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <button type="submit" class="btn btn-primary">Cerca</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- Buddy Finder Widget End -->
+                </div>
+                <!-- Widget End -->
+                
+            </div>
+            <!-- Main Sidebar End -->
         </div>
     </div>
 </section>
-    
+

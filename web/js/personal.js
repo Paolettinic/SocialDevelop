@@ -8,6 +8,11 @@
 
 $(document).ready(reloadContent);
 
+$("skill_filter").ready(function(){
+    skills = $("#skill_filter").children(".filter-item").length + 1;
+    console.log(skills);
+    console.log($("#skill_filter").children(".filter-item"));
+});
 function reloadContent(){
     $('.script_enabled').removeClass('display_none'); 
    
@@ -24,7 +29,29 @@ function reloadContent(){
             goToSearchPage(urlParams.get('filter'),this.value,8);
         }
     });  
+    
+    
 }
+var skills = 2;
+function add_filter_skill(){
+    var skill_container = $("#skill_filter");
+    let new_skill = document.createElement("div");
+    new_skill.setAttribute("class","filter-item skill_filter");
+    new_skill.innerHTML = "<div class=\"row\"> <div class=\"col-xs-9 col-xxs-9\"> <label class=\"mt--30\"> <span class=\"text-darker ff--primary fw--500\">Skill</span> <select name=\"skills_"+skills+"\" class=\"form-control form-sm\" data-trigger=\"selectmenu\"> </select> </label> </div> <div class=\"col-xs-3 col-xxs-3\"> <label class=\"mt--30\"> <span class=\"text-darker ff--primary fw--500\">Livello</span> <input type=\"number\" class=\"form-control\" min=\"1\" max=\"10\" name=\"skill_level_"+skills+"\"/> </label> </div> </div> <button class=\"btn btn-red btn-delete\" onclick=\"remove_filter_skill(this)\"><i class=\"fa fa-trash \"></i></button>";
+    var options = $('.filter-item select').first().children("option").clone();
+    skill_container.append(new_skill);
+    new_skill = $('.skill_filter select').last();
+    new_skill.append(options);
+
+    new_skill.customSelectMenu();
+    skills++;
+}
+
+function remove_filter_skill(element){
+    $(element).parent().remove();
+    skills--;
+}
+
 function setVote(form){
     console.log($(form).children("input[name='vote']").val());
     $.ajax({

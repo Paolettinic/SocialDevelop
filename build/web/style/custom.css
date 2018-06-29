@@ -1,8 +1,9 @@
+
 .logo-social{
     font-family: Arial;
 }
 .logo-develop{
-    font-family: Consolas;
+    font-family: Consolas, monospace;
     color: black;
 }
 
@@ -33,6 +34,14 @@
     display: inline-block !important;
     font-size: 15px !important;
 }
+
+.range-vote{
+    width: 8.5% !important;
+    text-align: center !important;
+    display: inline-block !important;
+    font-size: 15px !important;
+}
+
 .selected_val{
     border: 1px solid #1da1f2;
     border-radius: 15px;
@@ -97,8 +106,9 @@
     height: -webkit-fill-available !important; 
 }
 
+
 .dev_img{
-    height: 240px;
+    height: 220px;
 }
 
 .dev_img img{
@@ -106,6 +116,46 @@
     max-width: unset;
 }
 
+.member--item .img.img-circle img{
+    object-fit: cover !important;
+    height: -webkit-fill-available !important;
+}
+
+#skill_filter input {
+    height: 30px !important;
+}
+
+.btn-red{
+    border: 0px;
+    padding: 4px 10px !important;
+    height: 22px;
+    background: #FFF !important;
+    color: #F00 !important
+}
+.btn-red:hover{
+
+    background: #F00 !important;
+    color: #FFF !important
+}
+
+.filter-item{
+    border: 1px solid #e5e5e5;
+    padding: 10px;
+}
+.btn-delete{
+    margin-top: 0px !important;
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    height: 30px;
+    width: 30px;
+    border-radius: 25px
+}
+
+#skill_filter .filter-item{
+    margin-top: 10px !important;
+    position: relative;
+}
 
 /*
     Slider css cross-browser

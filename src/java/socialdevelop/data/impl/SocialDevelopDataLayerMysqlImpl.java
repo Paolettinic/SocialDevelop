@@ -1379,7 +1379,8 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
         }
         return result;
     }
-    
+   
+    @Override
     public int getCountProgetti(String filtro) throws DataLayerException{
         int result = 0;
         try{
@@ -1645,14 +1646,44 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     }
 
     @Override
-    public List<Utente> getUtenti(String filtro, int first, int perPage) throws DataLayerException {
+    public List<Utente> getUtenti(String filtro, Map<Integer ,Integer> skills, int first, int perPage) throws DataLayerException {
         List<Utente> result = new ArrayList();
+        String filter_skill = "";
+        int skill;
+        int livello;
+        //SELECT * FROM utenti inner join preparazioni on preparazioni.ext_utente = utenti.id WHERE 
+        //(preparazioni.ext_skill=1 AND preparazioni.livello>=1) 
+        //OR (preparazioni.ext_skill=2 AND preparazioni.livello>=1) 
+        //nome LIKE '%%' OR cognome LIKE '%%' OR username = '%%'
+
+        
+        String SQL_string;
         try {
+            SQL_string = "SELECT * FROM utenti ";
+            
+            if(skills.size()>0)
+                SQL_string += "INNER JOIN preparazioni ON preparazioni.ext_utente = utenti.id ";
+            SQL_string+="WHERE ";    
+            for(Map.Entry<Integer, Integer> entry : skills.entrySet()) {
+                SQL_string += "(preparazioni.ext_skill=";
+                skill = entry.getKey();
+                livello = entry.getValue();
+                SQL_string+=skill+" AND preparazioni.livello>="+livello+") AND ";
+            }
+            SQL_string+= "(nome LIKE ? OR cognome LIKE ? OR username LIKE ?) LIMIT ?,?";
+            sUtentiByFiltro = connection.prepareStatement(SQL_string);
             sUtentiByFiltro.setString(1, "%"+filtro+"%");
             sUtentiByFiltro.setString(2, "%"+filtro+"%");
             sUtentiByFiltro.setString(3, "%"+filtro+"%");
             sUtentiByFiltro.setInt(4, first);
             sUtentiByFiltro.setInt(5, perPage);
+            
+            System.out.println("\n\n "+SQL_string+" \n\n");
+            
+            System.out.println("first: "+first);
+            System.out.println("perpage: "+perPage);
+            System.out.println("SKILLS: "+skills.size());
+            
             try (ResultSet rs = sUtentiByFiltro.executeQuery()) {
                 while (rs.next()) {
                     result.add(creaUtente(rs));
@@ -1665,13 +1696,31 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     }
     
     @Override
-    public int getCountUtenti(String filtro) throws DataLayerException {
+    public int getCountUtenti(String filtro,Map<Integer,Integer> skills) throws DataLayerException {
         int result = 0;
-        
+        String filter_skill = "";
+        int skill;
+        int livello;
+        String SQL_string;
         try{
+            SQL_string = "SELECT COUNT(utenti.id) as total FROM utenti ";
+            if(skills.size()>0)
+                SQL_string += "INNER JOIN preparazioni ON preparazioni.ext_utente = utenti.id ";
+            SQL_string+="WHERE ";  
+            for(Map.Entry<Integer, Integer> entry : skills.entrySet()) {
+                SQL_string += "(preparazioni.ext_skill=";
+                skill = entry.getKey();
+                livello = entry.getValue();
+                SQL_string+=skill+" AND preparazioni.livello>="+livello+") AND ";
+            }
+            SQL_string+= "(nome LIKE ? OR cognome LIKE ? OR username LIKE ?)";
+            countUtentiByFiltro = connection.prepareStatement(SQL_string);
+            
             countUtentiByFiltro.setString(1, "%"+filtro+"%");
             countUtentiByFiltro.setString(2, "%"+filtro+"%");
             countUtentiByFiltro.setString(3, "%"+filtro+"%");
+
+            System.out.println("\n\n "+countUtentiByFiltro.toString()+" \n\n");
             try (ResultSet rs = countUtentiByFiltro.executeQuery()) {
                 if (rs.next()) {
                    result = rs.getInt("total");

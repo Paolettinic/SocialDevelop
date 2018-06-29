@@ -162,9 +162,9 @@ public interface SocialDevelopDataLayer extends DataLayer {
     
     Map<Utente, Integer> getUtenti(Task task) throws DataLayerException;
     
-    List<Utente> getUtenti(String filtro, int first, int perPage) throws DataLayerException;
+    List<Utente> getUtenti(String filtro, Map<Integer,Integer> skills, int first, int perPage) throws DataLayerException;
     
-    int getCountUtenti(String filtro) throws DataLayerException;
+    int getCountUtenti(String filtro, Map<Integer,Integer> skills) throws DataLayerException;
     
     Map<Utente, Integer> getUtenti(Map<Skill, Integer> skills) throws DataLayerException;
     

@@ -1,46 +1,46 @@
 <!-- Header Section Start -->
 <header class="header--section style--3"> 
     <!-- Header Topbar Start -->
-            <div class="header--topbar bg-dark">
-                <div class="container">
-                    <!-- Header Topbar Links Start -->
-                    <ul class="header--topbar-links nav ff--primary no--stripes float--left">
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">FAQ</a></li>
-                        <li><a href="#">Contact</a></li>
+    <div class="header--topbar bg-dark">
+        <div class="container">
+            <!-- Header Topbar Links Start -->
+            <ul class="header--topbar-links nav ff--primary no--stripes float--left">
+                <li><a href="#">Blog</a></li>
+                <li><a href="#">FAQ</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <!-- Header Topbar Links End -->
+                        
+            <!-- Header Topbar Links Start -->
+            <ul class="header--topbar-links nav ff--primary float--right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span>En</span>
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                                
+                    <ul class="dropdown-menu">
+                        <li class="active"><a href="#">En</a></li>
+                        <li><a href="#">Bn</a></li>
+                        <li><a href="#">In</a></li>
                     </ul>
-                    <!-- Header Topbar Links End -->
-
-                    <!-- Header Topbar Links Start -->
-                    <ul class="header--topbar-links nav ff--primary float--right">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <span>En</span>
-                                <i class="fa fa-caret-down"></i>
-                            </a>
-
-                            <ul class="dropdown-menu">
-                                <li class="active"><a href="#">En</a></li>
-                                <li><a href="#">Bn</a></li>
-                                <li><a href="#">In</a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="cart.html" title="Cart" data-toggle="tooltip" data-placement="bottom">
-                                <i class="fa fa-shopping-basket"></i>
-                                <span class="badge">3</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="btn-link">
-                                <i class="fa fa-user-o"></i>
-                            </a>
-                        </li>
-                    </ul>
-                    <!-- Header Topbar Links End -->
-                </div>
-            </div>
-            <!-- Header Topbar End -->
+                </li>
+                <li>
+                    <a href="cart.html" title="Cart" data-toggle="tooltip" data-placement="bottom">
+                        <i class="fa fa-shopping-basket"></i>
+                        <span class="badge">3</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="btn-link">
+                        <i class="fa fa-user-o"></i>
+                    </a>
+                </li>
+            </ul>
+            <!-- Header Topbar Links End -->
+        </div>
+    </div>
+    <!-- Header Topbar End -->
     <!-- Header Navbar Start -->
     <div class="header--navbar navbar bg-default" data-trigger="sticky">
         <div class="container">
@@ -51,7 +51,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                    
+                
                 <!-- Header Navbar Logo Start -->
                 <div class="header--navbar-logo navbar-brand">
                     <a  class="logo" href="/SocialDevelop">
@@ -60,16 +60,17 @@
                 </div>
                 <!-- Header Navbar Logo End -->
             </div>
-                
+            
             <!-- Header Search Start -->
             <div class="header--search style--2 float--right" data-form="validate">
                 <form action="search">
-                    <input type="text" name="filter" placeholder="Sto cercando ..." class="form-control" autocomplete="off" required>   
+                    <input type="hidden" name="type" value="${type!'projects'}"/>
+                    <input type="text" name="filter" placeholder="Sto cercando ..." class="form-control" autocomplete="off" required/>   
                     <button type="submit" class="btn-link"><i class="fa fa-search"></i></button>
                 </form>
             </div>
             <!-- Header Search End -->
-                
+            
             <div id="headerNav" class="navbar-collapse collapse float--right">
                 <!-- Header Nav Links Start -->
                 <ul class="header--nav-links style--3 nav ff--primary">
@@ -78,7 +79,7 @@
                             <span>Progetti</span>
                             <i class="fa fa-caret-down"></i>
                         </a>
-                            
+                        
                         <ul class="dropdown-menu">
                             <li><a href="search"><span>Cerca progetti</span></a></li>
                             <li><a href=""><span>Crea un progetto</span></a></li>
@@ -86,11 +87,11 @@
                             <li><a href=""><span>Avanzamento progetti</span></a></li>
                         </ul>
                     </li>
-                    
+                        
                     <li>
-                        <a href="#"><span>Programmatori</span></a>
+                        <a href="search?type=developers"><span>Programmatori</span></a>
                     </li>
-                    
+                        
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-user-o"></i>
