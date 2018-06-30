@@ -30,19 +30,20 @@ import socialdevelop.data.model.Utente;
  * @author Nicolò Paoletti
  * @author Davide De Marco
  */
+
 public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implements SocialDevelopDataLayer {
     // select, insert, update, delete, generiche funzionalità del sito, ecc...
     private PreparedStatement sCurriculumByID, iCurriculum, uCurriculum, dCurriculum;
-    private PreparedStatement sDiscussioneByID, sDiscussioniByTask, iDiscussione, uDiscussione, dDiscussione,countDiscussioniByTask,sDiscussioniByProgetto;
+    private PreparedStatement sDiscussioneByID, sDiscussioniByTask, iDiscussione, uDiscussione, dDiscussione, countDiscussioniByTask, sDiscussioniByProgetto;
     private PreparedStatement sFileByID, sFilesByUtente, iFile, uFile, dFile;
     private PreparedStatement sImmagineByID, iImmagine, uImmagine, dImmagine;
     private PreparedStatement sInvitoByID, sInvitiByUtente, sInvitiByTask, iInvito, uInvito, dInvito;
     private PreparedStatement sMessaggioByID, sMessaggiByDiscussione, iMessaggio, uMessaggio, dMessaggio;
     private PreparedStatement sProgettoByID, sProgettiByUtente, sProgettiByFiltro, iProgetto, uProgetto, dProgetto,countProgettiByFiltro;
-    private PreparedStatement sSkillByID, sSkills, sSkillsByTipo, sSkillsByUtente, sSkillsByTask, sSkillsFiglie, iSkill, uSkill, dSkill;
+    private PreparedStatement sSkillByID, sSkillByNome, sSkills, sSkillsByTipo, sSkillsByUtente, sSkillsByTask, sSkillsFigli, sSkillsNoPadre, iSkill, uSkill, dSkill;
     private PreparedStatement sTaskByID, sTasksByUtente, sTasksByProgetto, sTasksByTipo, sTasksBySkill, iTask, uTask, dTask;
     private PreparedStatement sTipoByID, sTipi, sTipiBySkill, iTipo, uTipo, dTipo;
-    private PreparedStatement sUtenteByID, sUtentiByTask, sUtentiByFiltro, sUtentiBySkill, iUtente, uUtente, dUtente,countUtentiByFiltro;
+    private PreparedStatement sUtenteByID, sUtenteByEmail, sUtenteByUsername, sUtentiByTask, sUtentiByFiltro, sUtentiBySkill, iUtente, uUtente, dUtente,countUtentiByFiltro;
     private PreparedStatement sAppartenenti, iAppartenenti, uAppartenenti, dAppartenenti;
     private PreparedStatement sCoprenti, iCoprenti, uCoprenti, dCoprenti;
     private PreparedStatement sPreparazioni, iPreparazioni, uPreparazioni, dPreparazioni;
@@ -58,9 +59,9 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             super.init();
             
             sCurriculumByID = connection.prepareStatement("SELECT * FROM files WHERE id = ?");
-            iCurriculum = connection.prepareStatement("INSERT INTO 'files' ('nome','percorso','ext_utente') VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
-            uCurriculum = connection.prepareStatement("UPDATE 'files' SET 'nome' = ?, 'percorso' = ?, 'ext_utente' = ? WHERE 'id' = ?");
-            dCurriculum = connection.prepareStatement("DELETE FROM 'files' WHERE 'id' = ?");
+            iCurriculum = connection.prepareStatement("INSERT INTO files (nome, tipo) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+            uCurriculum = connection.prepareStatement("UPDATE files SET nome = ?, tipo = ? WHERE id = ?");
+            dCurriculum = connection.prepareStatement("DELETE FROM files WHERE 'id' = ?");
             
             sDiscussioneByID = connection.prepareStatement("SELECT * FROM discussioni WHERE id = ?");
             sDiscussioniByProgetto = connection.prepareStatement("SELECT * FROM discussioni LEFT JOIN tasks ON tasks.id = discussioni.ext_task LEFT JOIN progetti ON progetti.id = tasks.ext_progetto WHERE progetti.id = ? LIMIT ?, ?");
@@ -70,15 +71,15 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             uDiscussione = connection.prepareStatement("UPDATE discussioni SET titolo = ?, pubblica = ?, data_creazione = ?, ext_utente = ?, ext_task = ? WHERE id = ?");
             dDiscussione = connection.prepareStatement("DELETE FROM discussioni WHERE id = ?");
             
-            sFileByID = connection.prepareStatement("SELECT * FROM files WHERE id = ?");
             sFilesByUtente = connection.prepareStatement("SELECT * FROM files WHERE ext_utente = ?");
-            iFile = connection.prepareStatement("INSERT INTO files ('nome','percorso','ext_utente') VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
-            uFile = connection.prepareStatement("UPDATE 'files' SET 'nome' = ?, 'percorso' = ?,'ext_utente' = ? WHERE 'id' = ?");
+            sFileByID = connection.prepareStatement("SELECT * FROM files WHERE id = ?");
+            iFile = connection.prepareStatement("INSERT INTO files (nome, tipo) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+            uFile = connection.prepareStatement("UPDATE files SET 'nome' = ?, 'tipo' = ? WHERE id = ?");
             dFile = connection.prepareStatement("DELETE FROM files WHERE id = ?");
             
             sImmagineByID = connection.prepareStatement("SELECT * FROM files WHERE id = ?");
-            iImmagine = connection.prepareStatement("INSERT INTO files ('nome','percorso','ext_utente') VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
-            uImmagine = connection.prepareStatement("UPDATE 'files' SET 'nome' = ?, 'percorso' = ?,'ext_utente' = ? WHERE 'id' = ?");
+            iImmagine = connection.prepareStatement("INSERT INTO files (nome, tipo) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+            uImmagine = connection.prepareStatement("UPDATE files SET 'nome' = ?, 'tipo' = ? WHERE id = ?");
             dImmagine = connection.prepareStatement("DELETE FROM files WHERE id = ?");
             
             sInvitoByID = connection.prepareStatement("SELECT * FROM inviti WHERE id= ?");
@@ -103,15 +104,17 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             dProgetto = connection.prepareStatement("DELETE FROM progetti WHERE id = ?");
             
             sSkillByID = connection.prepareStatement("SELECT * FROM skills WHERE id =?");
+            sSkillByNome = connection.prepareStatement("SELECT * FROM skills WHERE nome =?");
             sSkills = connection.prepareStatement("SELECT * FROM skills");
             sSkillsByTipo = connection.prepareStatement("SELECT skills.* FROM skills INNER JOIN appartenenti ON skills.id = appartenenti.ext_skill WHERE appartenenti.ext_tipo = ?");
-            sSkillsByUtente = connection.prepareStatement("SELECT skills.* FROM skills INNER JOIN preparazioni ON skills.id = preparazioni.ext_skill WHERE preparazioni.ext_utente = ?");
-            sSkillsByTask = connection.prepareStatement("SELECT skills.*,requisiti.livello FROM skills INNER JOIN requisiti ON skills.id = requisiti.ext_skill WHERE requisiti.ext_task = ?");
-            sSkillsFiglie = connection.prepareStatement("SELECT * FROM skills WHERE ext_padre = ?");
+            sSkillsByUtente = connection.prepareStatement("SELECT ext_skill, livello FROM preparazioni WHERE preparazioni.ext_utente = ?");
+            sSkillsByTask = connection.prepareStatement("SELECT skills.* FROM skills INNER JOIN requisiti ON skills.id = requisiti.ext_skill WHERE requisiti.ext_task = ?");
+            sSkillsFigli = connection.prepareStatement("SELECT * FROM skills WHERE ext_padre = ?");
+            sSkillsNoPadre = connection.prepareStatement("SELECT * FROM skills WHERE ext_padre IS NULL");
             iSkill = connection.prepareStatement("INSERT INTO skills (nome, ext_padre) VALUES(?, ?)", Statement.RETURN_GENERATED_KEYS);
             uSkill = connection.prepareStatement("UPDATE skills SET nome = ?, ext_padre = ? WHERE id = ?");
             dSkill = connection.prepareStatement("DELETE FROM skills WHERE id = ?");
-            
+
             sTaskByID = connection.prepareStatement("SELECT * FROM tasks WHERE id = ?");
             sTasksByUtente = connection.prepareStatement("SELECT tasks.* FROM tasks INNER JOIN coprenti ON tasks.id = coprenti.ext_task WHERE coprenti.ext_utente = ?");
             sTasksByProgetto = connection.prepareStatement("SELECT * FROM tasks WHERE tasks.ext_progetto = ?");
@@ -129,11 +132,13 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             dTipo = connection.prepareStatement("DELETE FROM tipi WHERE id = ?");
             
             sUtenteByID = connection.prepareStatement("SELECT * FROM utenti WHERE id = ?");
-            sUtentiByTask = connection.prepareStatement("SELECT utenti.*, coprenti.voto FROM utenti INNER JOIN coprenti ON utenti.id = coprenti.ext_utente WHERE coprenti.ext_task = ?");
-            sUtentiByFiltro = connection.prepareStatement("SELECT * FROM utenti WHERE nome LIKE ? OR cognome LIKE ? OR username = ? LIMIT ?,?");
+            sUtenteByEmail = connection.prepareStatement("SELECT * FROM utenti WHERE email = ?");
+            sUtenteByUsername = connection.prepareStatement("SELECT * FROM utenti WHERE username = ?");
+            sUtentiByTask = connection.prepareStatement("SELECT utenti.*, coprenti.voto FROM utenti INNER JOIN coprenti ON utente.id = coprenti.ext_utente WHERE coprenti.ext_task = ?");
+            sUtentiByFiltro = connection.prepareStatement("SELECT * FROM utenti WHERE name LIKE ? OR cognome LIKE ? OR username = ?");
             countUtentiByFiltro = connection.prepareStatement("SELECT COUNT(id) as total FROM utenti WHERE nome LIKE ? OR cognome LIKE ? OR username = ?");
-            sUtentiBySkill = connection.prepareStatement("SELECT utenti.*, preparazioni.livello FROM utenti INNER JOIN preparazioni ON utenti.id = preparazioni.ext_utente WHERE preparazioni.ext_skill = ? AND preparazioni.livello >= ?");
-            iUtente = connection.prepareStatement("INSERT INTO utenti (nome, cognome, username, email, data_nascita, password, biografia, ext_curriculum, ext_immagine) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            sUtentiBySkill = connection.prepareStatement("SELECT utenti.*, preparazioni.livello FROM utenti INNER JOIN preparazioni ON utente.id = preparazioni.ext_utente WHERE preparazioni.ext_skill = ? AND preparazioni.livello >= ?");
+            iUtente = connection.prepareStatement("INSERT INTO utenti (nome, cognome, username, email, data_nascita, password, biografia, ext_curriculum, ext_immagine) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             uUtente = connection.prepareStatement("UPDATE utenti SET nome = ?, cognome = ?, username = ?, email = ?, data_nascita = ?, password = ?, biografia = ?, ext_curriculum = ?, ext_immagine = ? WHERE id = ?");
             dUtente = connection.prepareStatement("DELETE FROM utenti WHERE id = ?");
             
@@ -167,17 +172,15 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
         return new CurriculumImpl(this);
     }
     
-    public FileSD creaCurriculum(ResultSet rs) throws DataLayerException{
+    public FileSD creaCurriculum(ResultSet rs) throws DataLayerException {
         CurriculumImpl cur = new CurriculumImpl(this);
         try {
-            cur.setKey(0);
+            cur.setKey(rs.getInt("id"));
             cur.setNome(rs.getString("nome"));
-            cur.setGrandezza(rs.getInt("dimensione"));
             cur.setTipo(rs.getString("tipo"));
-            cur.setUtenteKey(rs.getInt("ext_utente"));
             return cur;
         } catch (SQLException ex) {
-            throw new DataLayerException("Impossibile creare l'istanza del file dal ResultSet", ex);
+            throw new DataLayerException("Impossibile creare l'istanza del curriculum dal ResultSet", ex);
         }
     }
     
@@ -218,9 +221,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
         try {
             file.setKey(rs.getInt("id"));
             file.setNome(rs.getString("nome"));
-            file.setGrandezza(rs.getInt("dimensione"));
             file.setTipo(rs.getString("tipo"));
-            file.setUtenteKey(rs.getInt("ext_utente"));
             return file;
         } catch (SQLException ex) {
             throw new DataLayerException("Impossibile creare l'istanza del file dal ResultSet", ex);
@@ -237,8 +238,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
         try {
             img.setKey(rs.getInt("id"));
             img.setNome(rs.getString("nome"));
-            img.setTipo(rs.getString("percorso"));
-            img.setUtenteKey(rs.getInt("ext_utente"));
+            img.setTipo(rs.getString("tipo"));
             return img;
         } catch (SQLException ex) {
             throw new DataLayerException("Impossibile creare l'istanza dell'immagine dal ResultSet", ex);
@@ -420,7 +420,32 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     
     @Override
     public void salvaCurriculum(FileSD curriculum) throws DataLayerException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int key = curriculum.getKey();
+        try {
+            if (curriculum.getKey() > 0) { // Update
+                if (!curriculum.isDirty())
+                    return;
+                this.uCurriculum.setString(1, curriculum.getNome());
+                this.uCurriculum.setString(2, curriculum.getTipo());
+                this.uCurriculum.setInt(3, key);
+                this.uCurriculum.executeUpdate();
+            } else { // Insert
+                this.iCurriculum.setString(1, curriculum.getNome());
+                this.iCurriculum.setString(2, curriculum.getTipo());
+                if (this.iCurriculum.executeUpdate() == 1) {
+                    try (ResultSet keys = iCurriculum.getGeneratedKeys()) {
+                        if (keys.next())
+                            key = keys.getInt(1);
+                    }
+                }
+            }
+            if (key > 0) {
+                curriculum.copyFrom(getCurriculum(key));
+            }
+            curriculum.setDirty(false);
+        } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile salvare il curriculum", ex);
+        }
     }
     
     @Override
@@ -485,21 +510,18 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     public void salvaFileSD(FileSD filesd) throws DataLayerException {
         int key = filesd.getKey();
         try{
-            if (filesd.getKey() > 0) { // update
+            if (filesd.getKey() > 0) { // Update
                 if (!filesd.isDirty())
                     return;
                 this.uFile.setString(1, filesd.getNome());
                 this.uFile.setString(2, filesd.getTipo());
-                this.uFile.setInt(3, filesd.getUtente().getKey());
-                this.uFile.setInt(4, key);
+                this.uFile.setInt(3, key);
                 this.uFile.executeUpdate();
             } else { // insert
                 this.iFile.setString(1, filesd.getNome());
                 this.iFile.setString(2, filesd.getTipo());
-                this.iFile.setInt(3, filesd.getUtente().getKey());
-                this.iFile.setInt(4, key);
                 if (this.iFile.executeUpdate() == 1) {
-                    try (ResultSet keys = this.iFile.getGeneratedKeys()) {
+                    try (ResultSet keys = iFile.getGeneratedKeys()) {
                         if (keys.next())
                             key = keys.getInt(1);
                     }
@@ -518,21 +540,18 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     public void salvaImmagine(FileSD immagine) throws DataLayerException {
         int key = immagine.getKey();
         try {
-            if (immagine.getKey() > 0) { // update
+            if (immagine.getKey() > 0) { // Update
                 if (!immagine.isDirty())
                     return;
                 this.uImmagine.setString(1, immagine.getNome());
                 this.uImmagine.setString(2, immagine.getTipo());
-                this.uImmagine.setInt(3, immagine.getUtente().getKey());
-                this.uImmagine.setInt(4, key);
+                this.uImmagine.setInt(3, key);
                 this.uImmagine.executeUpdate();
-            } else { // insert
+            } else { // Insert
                 this.iImmagine.setString(1, immagine.getNome());
                 this.iImmagine.setString(2, immagine.getTipo());
-                this.iImmagine.setInt(3, immagine.getUtente().getKey());
-                this.iImmagine.setInt(4, key);
                 if (this.iImmagine.executeUpdate() == 1) {
-                    try (ResultSet keys = this.iFile.getGeneratedKeys()) {
+                    try (ResultSet keys = iImmagine.getGeneratedKeys()) {
                         if (keys.next())
                             key = keys.getInt(1);
                     }
@@ -543,7 +562,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             }
             immagine.setDirty(false);
         } catch (SQLException ex) {
-            throw new DataLayerException("Impossibile salvare il file", ex);
+            throw new DataLayerException("Impossibile salvare l'immagine", ex);
         }
     }
     
@@ -595,7 +614,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
                 uMessaggio.setString(1, messaggio.getTesto());
                 Date data_pubblicazione = new Date(messaggio.getData().getTimeInMillis());
                 uMessaggio.setDate(2, data_pubblicazione);
-                if (messaggio.getUtente()!=null) {
+                if (messaggio.getUtente() != null) {
                     uMessaggio.setInt(3, messaggio.getUtente().getKey());
                 } else {
                     uMessaggio.setNull(3, java.sql.Types.INTEGER);
@@ -791,26 +810,26 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     @Override
     public void salvaTipo(Tipo tipo) throws DataLayerException {
         int key = tipo.getKey();
-        try{
-            if(tipo.getKey() > 0){//update
-                if(!tipo.isDirty())
+        try {
+            if (tipo.getKey() > 0){ // Update
+                if (!tipo.isDirty())
                     return;
                 this.uTipo.setString(1, tipo.getNome());
-            }else{//inserimento
+            } else { // Insert
                 this.iTipo.setString(1, tipo.getNome());
-                if(this.iTipo.executeUpdate() == 1){
-                    try(ResultSet keys = this.iTipo.getGeneratedKeys()){
-                        if(keys.next())
+                if (this.iTipo.executeUpdate() == 1){
+                    try (ResultSet keys = this.iTipo.getGeneratedKeys()) {
+                        if (keys.next())
                             key = keys.getInt(1);
                     }
                 }
             }
-            if(key > 0){
+            if (key > 0) {
                 tipo.copyFrom(getTipo(key));
             }
             tipo.setDirty(false);
-        }catch(SQLException ex){
-            throw new DataLayerException("Impossibile salvare il tipo",ex);
+        } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile salvare il tipo", ex);
         }
     }
     
@@ -818,57 +837,41 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     public void salvaUtente(Utente utente) throws DataLayerException {
         int key = utente.getKey();
         try {
-            if (key > 0) { // update
-                if (!utente.isDirty()) { // non facciamo nulla se l'oggetto non ha subito modifiche
+            if (key > 0) { // Update
+                if (!utente.isDirty()) { // Non facciamo nulla se l'oggetto non ha subito modifiche
                     return;
                 }
                 uUtente.setString(1, utente.getNome());
                 uUtente.setString(2, utente.getCognome());
                 uUtente.setString(3, utente.getUsername());
                 uUtente.setString(4, utente.getEmail());
-                if (utente.getDataNascita()!= null) {
-                    Date data_nascita = new Date(utente.getDataNascita().getTimeInMillis());
-                    uUtente.setDate(5, data_nascita);
-                } else {
-                    uUtente.setDate(5, null);
-                }
+                Date data_nascita = new Date(utente.getDataNascita().getTimeInMillis());
+                uUtente.setDate(5, data_nascita);
                 uUtente.setString(6, utente.getPassword());
                 uUtente.setString(7, utente.getBiografia());
                 if (utente.getCurriculum() != null) {
-                    uUtente.setInt(6, utente.getCurriculum().getKey());
+                    uUtente.setInt(8, utente.getCurriculum().getKey());
                 } else {
-                    uUtente.setNull(6, java.sql.Types.INTEGER);
+                    uUtente.setNull(8, java.sql.Types.INTEGER);
                 }
                 if (utente.getImmagine() != null) {
-                    uUtente.setInt(7, utente.getImmagine().getKey());
+                    uUtente.setInt(9, utente.getImmagine().getKey());
                 } else {
-                    uUtente.setNull(7, java.sql.Types.INTEGER);
+                    uUtente.setNull(9, java.sql.Types.INTEGER);
                 }
-                uUtente.setInt(8, utente.getKey());
+                uUtente.setInt(10, utente.getKey());
                 uUtente.executeUpdate();
-            } else { //insert
+            } else { // Insert
                 iUtente.setString(1, utente.getNome());
                 iUtente.setString(2, utente.getCognome());
                 iUtente.setString(3, utente.getUsername());
                 iUtente.setString(4, utente.getEmail());
-                if (utente.getDataNascita()!= null) {
-                    Date data_nascita = new Date(utente.getDataNascita().getTimeInMillis());
-                    iUtente.setDate(5, data_nascita);
-                } else {
-                    iUtente.setDate(5, null);
-                }
+                Date data_nascita = new Date(utente.getDataNascita().getTimeInMillis());
+                iUtente.setDate(5, data_nascita);
                 iUtente.setString(6, utente.getPassword());
                 iUtente.setString(7, utente.getBiografia());
-                if (utente.getCurriculum() != null) {
-                    iUtente.setInt(6, utente.getCurriculum().getKey());
-                } else {
-                    iUtente.setNull(6, java.sql.Types.INTEGER);
-                }
-                if (utente.getImmagine() != null) {
-                    iUtente.setInt(7, utente.getImmagine().getKey());
-                } else {
-                    iUtente.setNull(7, java.sql.Types.INTEGER);
-                }
+                iUtente.setInt(8, utente.getCurriculum().getKey());
+                iUtente.setInt(9, utente.getImmagine().getKey());
                 if (iUtente.executeUpdate() == 1) {
                     try (ResultSet keys = iUtente.getGeneratedKeys()) {
                         if (keys.next()) {
@@ -888,19 +891,15 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     
     @Override
     public void salvaAppartenenti(int ext_skill, int ext_tipo) throws DataLayerException {
-        boolean update = false;
         try {
             uAppartenenti.setInt(1, ext_skill);
             uAppartenenti.setInt(2, ext_tipo);
-            try (ResultSet rs = uAppartenenti.executeQuery()) {
-                if (rs.next()) {
-                    update = true;
-                }
-            }
-            if (!update) {
+            uAppartenenti.setInt(3, ext_skill);
+            uAppartenenti.setInt(4, ext_tipo);
+            if (uAppartenenti.executeUpdate() == 0) {
                 iAppartenenti.setInt(1, ext_skill);
                 iAppartenenti.setInt(2, ext_tipo);
-                iAppartenenti.executeQuery();
+                iAppartenenti.executeUpdate();
             }
         } catch (SQLException ex) {
             throw new DataLayerException("Impossibile salvare la tupla di 'appartenenti'", ex);
@@ -911,26 +910,16 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     public void salvaCoprenti(int voto, int ext_utente, int ext_task) throws DataLayerException {
         boolean update = false;
         try {
-            sCoprenti.setInt(1, ext_utente);
-            sCoprenti.setInt(2, ext_task);
-            try (ResultSet rs = sCoprenti.executeQuery()) {
-                if (rs.next()) {
-                    update = true;
-                }
-            }
-            if (update) {
-                uCoprenti.setInt(1, voto);
-                uCoprenti.setInt(2, ext_utente);
-                uCoprenti.setInt(3, ext_task);
-                uCoprenti.setInt(4, ext_utente);
-                uCoprenti.setInt(5, ext_task);
-                uCoprenti.executeUpdate();
-            }
-            else{
+            uCoprenti.setInt(1, voto);
+            uCoprenti.setInt(2, ext_utente);
+            uCoprenti.setInt(3, ext_task);
+            uCoprenti.setInt(4, ext_utente);
+            uCoprenti.setInt(5, ext_task);
+            if (uCoprenti.executeUpdate() == 0) {
                 iCoprenti.setInt(1, voto);
                 iCoprenti.setInt(2, ext_utente);
                 iCoprenti.setInt(3, ext_task);
-                iCoprenti.executeQuery();
+                iCoprenti.executeUpdate();
             }
         } catch (SQLException ex) {
             throw new DataLayerException("Impossibile salvare la tupla di 'coprenti'", ex);
@@ -939,21 +928,17 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     
     @Override
     public void salvaPreparazioni(int livello, int ext_utente, int ext_skill) throws DataLayerException {
-        boolean update = false;
         try {
             uPreparazioni.setInt(1, livello);
             uPreparazioni.setInt(2, ext_utente);
             uPreparazioni.setInt(3, ext_skill);
-            try (ResultSet rs = uPreparazioni.executeQuery()) {
-                if (rs.next()) {
-                    update = true;
-                }
-            }
-            if (!update) {
+            uPreparazioni.setInt(4, ext_utente);
+            uPreparazioni.setInt(5, ext_skill);
+            if (uPreparazioni.executeUpdate() == 0) {
                 iPreparazioni.setInt(1, livello);
                 iPreparazioni.setInt(2, ext_utente);
                 iPreparazioni.setInt(3, ext_skill);
-                iPreparazioni.executeQuery();
+                iPreparazioni.executeUpdate();
             }
         } catch (SQLException ex) {
             throw new DataLayerException("Impossibile salvare la tupla di 'preparazioni'", ex);
@@ -962,21 +947,17 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     
     @Override
     public void salvaRequisiti(int livello, int ext_skill, int ext_task) throws DataLayerException {
-        boolean update = false;
         try {
             uRequisiti.setInt(1, livello);
             uRequisiti.setInt(2, ext_skill);
             uRequisiti.setInt(3, ext_task);
-            try (ResultSet rs = uRequisiti.executeQuery()) {
-                if (rs.next()) {
-                    update = true;
-                }
-            }
-            if (!update) {
+            uRequisiti.setInt(4, ext_skill);
+            uRequisiti.setInt(5, ext_task);
+            if (uRequisiti.executeUpdate() == 0) {
                 iRequisiti.setInt(1, livello);
                 iRequisiti.setInt(2, ext_skill);
                 iRequisiti.setInt(3, ext_task);
-                iRequisiti.executeQuery();
+                iRequisiti.executeUpdate();
             }
         } catch (SQLException ex) {
             throw new DataLayerException("Impossibile salvare la tupla di 'requisiti'", ex);
@@ -1430,6 +1411,21 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
         }
         return null;
     }
+
+    @Override
+    public Skill getSkillByNome(String nome) throws DataLayerException {
+        try {
+            sSkillByNome.setString(1, nome);
+            try (ResultSet rs = sSkillByNome.executeQuery()) {
+                if (rs.next()) {
+                    return creaSkill(rs);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile caricare la skill", ex);
+        }
+        return null;
+    }
     
     @Override
     public List<Skill> getSkills() throws DataLayerException {
@@ -1468,7 +1464,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             sSkillsByUtente.setInt(1, utente.getKey());
             try (ResultSet rs = sSkillsByUtente.executeQuery()) {
                 while (rs.next()) {
-                    result.put(creaSkill(rs), rs.getInt("livello"));
+                    result.put((Skill) getSkill(rs.getInt("ext_skill")), rs.getInt("livello"));
                 }
             }
         } catch (SQLException ex) {
@@ -1494,14 +1490,27 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     }
     
     @Override
-    public List<Skill> getSkillsfiglie(Skill skill) throws DataLayerException {
+    public List<Skill> getSkillsFigli(Skill skill) throws DataLayerException {
         List<Skill> result = new ArrayList();
         try {
-            sSkillsFiglie.setInt(1, skill.getKey());
-            try (ResultSet rs = sSkillsFiglie.executeQuery()) {
+            sSkillsFigli.setInt(1, skill.getKey());
+            try (ResultSet rs = sSkillsFigli.executeQuery()) {
                 while (rs.next()) {
                     result.add(creaSkill(rs));
                 }
+            }
+        } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile caricare le skill", ex);
+        }
+        return result;
+    }
+
+    @Override
+    public List<Skill> getSkillsNoPadre() throws DataLayerException {
+        List<Skill> result = new ArrayList();
+        try (ResultSet rs = sSkillsNoPadre.executeQuery()) {
+            while (rs.next()) {
+                result.add(creaSkill(rs));
             }
         } catch (SQLException ex) {
             throw new DataLayerException("Impossibile caricare le skill", ex);
@@ -1647,6 +1656,36 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
         }
         return null;
     }
+
+    @Override
+    public Utente getUtenteByEmail(String email) throws DataLayerException {
+        try {
+            sUtenteByEmail.setString(1, email);
+            try (ResultSet rs = sUtenteByEmail.executeQuery()) {
+                if (rs.next()) {
+                    return creaUtente(rs);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile caricare l'utente", ex);
+        }
+        return null;
+    }
+    
+    @Override
+    public Utente getUtenteByUsername(String username) throws DataLayerException {
+        try {
+            sUtenteByUsername.setString(1, username);
+            try (ResultSet rs = sUtenteByUsername.executeQuery()) {
+                if (rs.next()) {
+                    return creaUtente(rs);
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile caricare l'utente", ex);
+        }
+        return null;
+    }
     
     @Override
     public Map<Utente, Integer> getUtenti(Task task) throws DataLayerException {
@@ -1772,6 +1811,11 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     }
     
     @Override
+    public String GeneraPasswordMD5(String password) {
+        return password;
+    }
+    
+    @Override
     public void destroy() { // meglio chiudere i PreparedStamenent
         try {
             sCurriculumByID.close();
@@ -1814,7 +1858,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             sSkillsByTipo.close();
             sSkillsByUtente.close();
             sSkillsByTask.close();
-            sSkillsFiglie.close();
+            sSkillsFigli.close();
             iSkill.close();
             uSkill.close();
             dSkill.close();
@@ -1861,5 +1905,4 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
         super.destroy();
     }
 
-    
 }

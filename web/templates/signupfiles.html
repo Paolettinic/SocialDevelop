@@ -1,0 +1,56 @@
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-md-10 col-md-offset-1">
+            <div class="contact--form margin_bottom_50 margin_top_50">
+                <form action="DoSignUp" method="post" name="signup_form" enctype="multipart/form-data">
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <h4 class="margin_top_20">Inserisci il tuo CV in forma testuale o tramite PDF.</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row"> 
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <textarea name="CV_text" id="CV_text" class="form-control" placeholder="Curriculum"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <input type="file" id="CV_PDF" name="CV_PDF" accept=".pdf"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <h4>Carica la tua foto profilo.</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row"> 
+                        <div class="col-xs-4">
+                            <div class="form-group">
+                                <figure>
+                                    <img id="immagine_profilo" src="http://www.turismo.it/typo3temp/pics/a7dcdde17b.jpg" class="img-circle circle-avatar img-responsive">
+                                </figure>
+                                <label class="btn btn-primary btn-file btn-upd bottone_carica_foto_profilo">Carica foto profilo
+                                    <input type="file" id="foto_profilo" name="foto_profilo" class="hidden" accept="image/*" required/>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <button type="submit" class="btn btn-primary float--right">Registrati</button>
+                        </div>
+                    </div>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

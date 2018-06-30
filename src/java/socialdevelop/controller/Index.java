@@ -8,17 +8,17 @@ package socialdevelop.controller;
 import it.univaq.f4i.iw.framework.result.TemplateManagerException;
 import it.univaq.f4i.iw.framework.result.TemplateResult;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Nicolò Paoletti
  */
-public class Index extends SocialDevelopBaseController {
+public class Index extends HttpServlet {
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -30,18 +30,19 @@ public class Index extends SocialDevelopBaseController {
      * @throws IOException if an I/O error occurs
      */
     
-    private void action_error(HttpServletRequest request, HttpServletResponse response){
+    private void action_error(HttpServletRequest request, HttpServletResponse response) {
         
     }
     
-    private void action_home(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, TemplateManagerException{
-        request.setAttribute("user", "Nicolò");
+    private void action_home(HttpServletRequest request, HttpServletResponse response)throws IOException, ServletException, TemplateManagerException {
+        request.setAttribute("page_title", "Index");
+        HttpSession s = request.getSession(true);
+        request.setAttribute("test", "I did it.");
         TemplateResult tmp = new TemplateResult(getServletContext());
         tmp.activate("main_content.html", request, response);
     }
     
-    @Override
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException{
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             action_home(request, response);
         } catch (IOException | TemplateManagerException ex) {

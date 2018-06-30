@@ -1,0 +1,39 @@
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-md-6 col-md-offset-3">
+            <div class="contact--form">
+                <form action="DoLogin" method="post">
+                    <div class="row"> 
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <input type="text" name="user_email" id="user_email" placeholder="Username o e-mail" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <input type="password" name="password" id="password" placeholder="Password" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="action">
+                                <a href="">Hai dimenticato la password?</a>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <button type="submit" class="btn btn-primary float--right">Accedi</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <#if errore??>
+                <div class="row centered">
+                    <h3>${errore}</h3>
+                </div>
+            </#if>
+        </div>
+    </div>
+</div>

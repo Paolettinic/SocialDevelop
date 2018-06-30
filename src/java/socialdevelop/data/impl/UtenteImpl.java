@@ -12,8 +12,9 @@ import socialdevelop.data.model.Task;
 import socialdevelop.data.model.Utente;
 
 /**
- * @author Mario
+ * @author Mario Vetrini
  */
+
 public class UtenteImpl implements Utente {
     
     private int key;
@@ -62,20 +63,6 @@ public class UtenteImpl implements Utente {
     @Override
     public int getKey() {
         return key;
-    }
-    
-    @Override
-    public boolean equals(Object obj){
-        if(!(obj instanceof UtenteImpl) )
-            return false;
-        else{
-            return ((UtenteImpl)obj).getKey() == this.key;
-        }
-    }
-    
-    @Override
-    public int hashCode(){
-        return this.key;
     }
     
     protected void setKey(int key) {
@@ -244,6 +231,20 @@ public class UtenteImpl implements Utente {
     }
     
     // ----------
+
+    @Override
+    public boolean equals(Object obj){
+        if(!(obj instanceof UtenteImpl) )
+            return false;
+        else{
+            return ((UtenteImpl)obj).getKey() == this.key;
+        }
+    }
+    
+    @Override
+    public int hashCode(){
+        return this.key;
+    }
 
     @Override
     public void copyFrom(Utente utente) throws DataLayerException {

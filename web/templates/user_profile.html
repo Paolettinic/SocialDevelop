@@ -1,0 +1,140 @@
+<div class="cover--header pt--80 text-center">
+    <div class="container">
+        <div class="cover--avatar" data-overlay="0.5" data-overlay-color="primary">
+            <img src="img/profile-img/mariovetrini.jpg" alt="">
+        </div>
+        <div>
+            <h2 class="h3 fw--600">${nome} ${cognome} (${username})</h2>
+            <#if utente_key == profilo_key>
+                <a href="EditUserProfileRegistry?utente_key=${profilo_key}" class="btn btn-primary">Modifica il tuo profilo</a>
+            </#if>
+        </div>
+    </div>
+</div>
+
+<section class="page--wrapper pt--80 pb--20">
+    <div class="container">
+        <div class="row">
+            
+            <div class="product--details-nav">
+                <ul class="nav ff--primary fs--18 fw--600 text-black bg-lighter">
+                    <li class="active">
+                        <a href="#profileDetailsTab01" data-toggle="tab">Profilo</a>
+                    </li>
+                    <li>
+                        <a href="#profileDetailsTab02" data-toggle="tab">Skills</a>
+                    </li>
+                    <li>
+                        <a href="#profileDetailsTab03" data-toggle="tab">Tasks</a>
+                    </li>
+                    <li>
+                        <a href="#profileDetailsTab04" data-toggle="tab">Progetti</a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="product--details tab-content pb--60">
+                
+                <div class="tab-pane fade in active" id="profileDetailsTab01">
+                    <div class="profile--details fs--14">
+                        <div class="profile--item">
+                            <div class="profile--info">
+                                <table class="table">
+                                    <tr>
+                                        <th class="fw--700 text-darkest">Nome completo</th>
+                                        <td>${nome} ${cognome}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="fw--700 text-darkest">Data di nascita</th>
+                                        <td>${data_nascita.time?string["dd MMMM yyyy"]}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="fw--700 text-darkest">E-mail</th>
+                                        <td>${email}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="profile--item">
+                            <div class="profile--heading">
+                                <h3 class="h4 fw--700">
+                                    <span class="mr--4">Biografia</span>
+                                    <i class="ml--10 text-primary fa fa-caret-right"></i>
+                                </h3>
+                            </div>
+                            
+                            <div class="profile--info">
+                                <p>${biografia}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-pane fade" id="profileDetailsTab02">
+                    <div class="profile--item">                        
+                        <div class="profile--info">
+                            <dl>
+                                <#list skills?keys as skill>
+                                <dt>
+                                    <p class="h6 fw--700 text-darkest">${skill.nome}</p>
+                                    <p><small class="fw--400 fs--12 text-darker">Voto: ${skills?values[skill?index]}</small></p>
+                                </dt>
+                                </#list>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-pane fade" id="profileDetailsTab03">
+                    <div class="profile--item">
+                        <div class="profile--info">
+                            <dl>
+                                <#if tasks?size == 0>
+                                <p>Questo utente non collabora a dei tasks</p>
+                                </#if>
+                                <#list tasks?keys as task>
+                                <dt>
+                                    <p class="h6 fw--700 text-darkest">${task.nome} nel progetto ${task.progetto.nome}</p>
+                                    <p><small class="fw--400 fs--12 text-darker">Voto: <#if tasks?values[task?index] == 0>In corso<#else>${tasks?values[task?index]}</#if></small></p>
+                                </dt>
+                                </#list>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-pane fade" id="profileDetailsTab04">
+                    <div class="profile--item">
+                        <div class="profile--info">
+                            <dl>
+                                <#if progetti?size == 0>
+                                <p>Questo utente non possiede dei progetti</p>
+                                </#if>
+                                <#list progetti as progetto>
+                                <dt>
+                                    <p class="h6 fw--700 text-darkest">${progetto.nome}</p>
+                                </dt>
+                                </#list>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <div class="main--content col-md-12 pb--60" data-trigger="stickyScroll">
+                <div class="main--content-inner drop--shadow">
+                    
+                    <!-- Content Nav Start -->
+                    <div class="content--nav pb--30">
+                        <ul class="nav ff--primary fs--14 fw--500 bg-lighter">
+                            <li class="active"><a href="">Profilo</a></li>
+                            <li><a href="">Skills</a></li>
+                            <li><a href="">Tasks</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,119 @@
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-md-10 col-md-offset-1">
+            <div class="contact--form margin_bottom_50 margin_top_50">
+                <form action="SignUpSkills" method="post" name="signup_form" onsubmit="return signup_check()">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <h4>Inserisci i tuoi dati anagrafici e dell'account</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row"> 
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <input type="text" name="nome" id="nome" placeholder="Nome" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <input type="text" name="cognome" id="cognome" placeholder="Cognome" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <input type="text" name="username" id="username" placeholder="Username" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <input type="email" name="email" id="email" placeholder="E-mail" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row"> 
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <input type="password" name="password" id="password" placeholder="Password" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <input type="text" name="data_nascita" id="data_nascita" placeholder="Data di nascita" onfocus="(this.type='date')" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row"> 
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <textarea name="biografia" id="biografia" placeholder="Biografia" class="form-control" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="no_javascript">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <h4>Seleziona i tuoi skill e inserisci il relativo voto</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="skills">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <select name="nome_skill_1" class="form-control form-sm nome_skill" data-trigger="selectmenu">
+                                            <#list skills as skill>
+                                            <option value="${skill.nome}">${skill.nome}</option>
+                                            <#list skill.figli as figlio>
+                                            <option value="${figlio.nome}"> --- ${figlio.nome} (sotto-skill)</option>
+                                            </#list>
+                                            </#list>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <input name="voto_skill_1" type="number" class="form-control voto_skill" step="1" min="1"  max="10">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <button type="button" class="btn btn-primary float--left" onclick="add_skill();">Aggiungi un nuovo skill</button>
+                            </div>
+                        </div>
+                    </div>
+                    <noscript>
+                        <h4>Inserisci il numero di skill (saranno presenti nella pagina successiva)</h4>
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <div class="form-group">
+                                    <input name="numero_skill" id="numero_skill" type="number" class="form-control" step="1" min="1" placeholder="Numero skill">
+                                </div>
+                            </div>
+                        </div>
+                    </noscript>
+                    <div class="no_javascript">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <button type="submit" class="btn btn-primary float--right">Avanti</button>
+                            </div>
+                        </div>
+                    </div>
+                    <noscript>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <button type="submit" class="btn btn-primary float--right">Avanti</button>
+                            </div>
+                        </div>
+                    </noscript>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

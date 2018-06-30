@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package socialdevelop.controller;
 
 import it.univaq.f4i.iw.framework.data.DataLayerException;
@@ -24,10 +19,10 @@ import socialdevelop.data.model.Task;
 import socialdevelop.data.model.Utente;
 
 /**
- *
  * @author Davide De Marco
  */
-public class Project extends SocialDevelopBaseController{
+
+public class Project extends SocialDevelopBaseController {
     
     private void action_error(HttpServletRequest request, HttpServletResponse response) {
         System.out.print(request.getAttribute("message")+"\n");
@@ -35,7 +30,7 @@ public class Project extends SocialDevelopBaseController{
     }
     
     private void action_default(HttpServletRequest request, HttpServletResponse response,int utente_id, int progetto_id, int page, int perPage)throws IOException, ServletException, TemplateManagerException{
-        try{
+        try {
             SocialDevelopDataLayer datalayer = ((SocialDevelopDataLayer)request.getAttribute("datalayer"));
             int firstResult = (page-1)*perPage;
             Utente utente = ((SocialDevelopDataLayer)request.getAttribute("datalayer")).getUtente(utente_id);
@@ -91,7 +86,7 @@ public class Project extends SocialDevelopBaseController{
         int progetto_id;
         int page;
         int perPage;
-        try{
+        try {
             utente_id = SecurityLayer.checkNumeric(request.getParameter("utente_id"));
             progetto_id = SecurityLayer.checkNumeric(request.getParameter("progetto_id"));
             page = request.getParameter("page") == null ? 1 : SecurityLayer.checkNumeric(request.getParameter("page"));

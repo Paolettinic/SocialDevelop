@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @authors Nicolò Paoletti, Mario Vetrini
+ * @author Nicolò Paoletti
+ * @author Mario Vetrini
  */
+
 public interface SocialDevelopDataLayer extends DataLayer {
     
     FileSD creaCurriculum();
@@ -32,7 +34,7 @@ public interface SocialDevelopDataLayer extends DataLayer {
     
     Utente creaUtente();
     
-    // ----------
+    // ---------------
     
     void salvaCurriculum(FileSD curriculum) throws DataLayerException;
     
@@ -64,7 +66,7 @@ public interface SocialDevelopDataLayer extends DataLayer {
     
     void salvaRequisiti(int livello, int ext_skill, int ext_task) throws DataLayerException;
     
-    // ----------
+    // ---------------
     
     void eliminaCurriculum(FileSD curriculum) throws DataLayerException;
     
@@ -96,7 +98,7 @@ public interface SocialDevelopDataLayer extends DataLayer {
     
     void eliminaRequisiti(int ext_skill, int ext_task) throws DataLayerException;
     
-    // ----------
+    // ---------------
     
     FileSD getCurriculum(int curriculum_key) throws DataLayerException;
     
@@ -134,6 +136,8 @@ public interface SocialDevelopDataLayer extends DataLayer {
     
     Skill getSkill(int skill_key) throws DataLayerException;
     
+    Skill getSkillByNome(String nome) throws DataLayerException;
+    
     List<Skill> getSkills() throws DataLayerException;
     
     List<Skill> getSkills(Tipo tipo) throws DataLayerException;
@@ -142,7 +146,9 @@ public interface SocialDevelopDataLayer extends DataLayer {
     
     Map<Skill, Integer> getSkills(Task task) throws DataLayerException;
     
-    List<Skill> getSkillsfiglie(Skill skill) throws DataLayerException;
+    List<Skill> getSkillsFigli(Skill skill) throws DataLayerException;
+    
+    List<Skill> getSkillsNoPadre() throws DataLayerException;
     
     Task getTask(int task_key) throws DataLayerException;
     
@@ -162,6 +168,10 @@ public interface SocialDevelopDataLayer extends DataLayer {
     
     Utente getUtente(int utente_key) throws DataLayerException;
     
+    Utente getUtenteByEmail(String email) throws DataLayerException;
+    
+    Utente getUtenteByUsername(String username) throws DataLayerException;
+    
     Map<Utente, Integer> getUtenti(Task task) throws DataLayerException;
     
     List<Utente> getUtenti(String filtro, Map<Integer,Integer> skills, int first, int perPage) throws DataLayerException;
@@ -169,5 +179,9 @@ public interface SocialDevelopDataLayer extends DataLayer {
     int getCountUtenti(String filtro, Map<Integer,Integer> skills) throws DataLayerException;
     
     Map<Utente, Integer> getUtenti(Map<Skill, Integer> skills) throws DataLayerException;
+    
+    // ---------------
+    
+    String GeneraPasswordMD5(String password);
     
 }

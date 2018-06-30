@@ -11,19 +11,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import socialdevelop.data.model.FileSD;
 import socialdevelop.data.model.SocialDevelopDataLayer;
-import socialdevelop.data.model.Utente;
 
 /**
  * @author Nicolò Paoletti
+ * @author Mario Vetrini
  */
+
 public class FileSDImpl implements FileSD {
     
     private int key;
     private String nome;
     private String tipo;
-    private long grandezza;
-    private Utente utente;
-    private int utente_key;
     protected SocialDevelopDataLayer ownerdatalayer;
     protected boolean dirty;
     
@@ -32,9 +30,6 @@ public class FileSDImpl implements FileSD {
         this.key = 0;
         this.nome = "";
         this.tipo = "";
-        this.grandezza = 0;
-        this.utente = null;
-        this.utente_key = 0;
         this.dirty = false;
     }
     
@@ -59,15 +54,6 @@ public class FileSDImpl implements FileSD {
     }
     
     @Override
-    public long getGrandezza() {
-        return this.grandezza;
-    }
-    
-    protected void setGrandezza(int grandezza) {
-        this.grandezza = grandezza;
-    }
-    
-    @Override
     public String getNome() {
         return this.nome;
     }
@@ -83,7 +69,7 @@ public class FileSDImpl implements FileSD {
         try {
             return new FileInputStream(nome);
         } catch (FileNotFoundException ex) {
-            throw new DataLayerException("Errore in fase di apertura dell'immagine", ex);
+            throw new DataLayerException("Errore in fase di apertura del file", ex);
         }
     }
     
@@ -99,9 +85,9 @@ public class FileSDImpl implements FileSD {
             }
             this.dirty = true;
         } catch (FileNotFoundException ex) {
-            throw new DataLayerException("Erroe in fase di salvataggio dell'immagine", ex);
+            throw new DataLayerException("Erroe in fase di salvataggio del file", ex);
         } catch (IOException ex) {
-            throw new DataLayerException("Erroe in fase di salvataggio dell'immagine", ex);
+            throw new DataLayerException("Erroe in fase di salvataggio del file", ex);
         } finally {
             try {
                 os.close();
@@ -109,25 +95,6 @@ public class FileSDImpl implements FileSD {
                 Logger.getLogger(ImmagineImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }
-    
-    @Override
-    public Utente getUtente() throws DataLayerException{
-        if(this.utente == null && this.utente_key>0)
-            this.utente = ownerdatalayer.getUtente(this.utente_key);
-        return this.utente;
-    }
-    
-    @Override
-    public void setUtente(Utente user){
-        this.utente = user;
-        this.utente_key = user.getKey();
-        this.dirty = true;
-    }
-    
-    protected void setUtenteKey(int utente_key) {
-        this.utente_key = utente_key;
-        this.utente = null;
     }
     
     @Override
@@ -139,17 +106,13 @@ public class FileSDImpl implements FileSD {
     public boolean isDirty() {
         return dirty;
     }
-
-  @Override
-  public void copyFrom(FileSD file) throws DataLayerException {
-    try{
-      this.key = file.getKey();
-      this.nome = file.getNome();
-      this.grandezza = file.getGrandezza();
-      this.tipo = file.getTipo();
-      this.utente_key = file.getUtente().getKey();
-    } catch(DataLayerException ex){
-      throw new DataLayerException("Impossibile copiare il file",ex);
+    
+    @Override
+    public void copyFrom(FileSD file) throws DataLayerException {  
+        this.key = file.getKey();
+        this.nome = file.getNome();
+        this.tipo = file.getTipo();
+        this.dirty = true; 
     }
-  }
+    
 }

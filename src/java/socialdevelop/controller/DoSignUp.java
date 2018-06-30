@@ -1,0 +1,133 @@
+package socialdevelop.controller;
+
+import it.univaq.f4i.iw.framework.data.DataLayerException;
+import it.univaq.f4i.iw.framework.result.FailureResult;
+import it.univaq.f4i.iw.framework.result.TemplateManagerException;
+import it.univaq.f4i.iw.framework.security.SecurityLayer;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import javax.naming.NamingException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
+import socialdevelop.data.impl.CurriculumImpl;
+import socialdevelop.data.impl.ImmagineImpl;
+import socialdevelop.data.impl.UtenteImpl;
+import socialdevelop.data.model.SocialDevelopDataLayer;
+
+/**
+ * @author Mario Vetrini
+ */
+
+@MultipartConfig
+public class DoSignUp extends SocialDevelopBaseController {
+    
+    private void action_error(HttpServletRequest request, HttpServletResponse response) {
+        if (request.getAttribute("exception") != null) {
+            (new FailureResult(getServletContext())).activate((Exception) request.getAttribute("exception"), request, response);
+        } else {
+            (new FailureResult(getServletContext())).activate((String) request.getAttribute("message"), request, response);
+        }
+    }
+    
+    private void action_dosignup(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, TemplateManagerException, DataLayerException, SQLException, NamingException {
+        HttpSession s = request.getSession(true);
+        if (s.getAttribute("userid") != null && ((int) s.getAttribute("userid")) > 0) {
+            response.sendRedirect("Index");
+        }
+        
+        // RECUPERO L'UTENTE, I SUOI SKILL E I RELATIVI VOTI DALLA PAGINA PRECEDENTE
+        UtenteImpl utente = (UtenteImpl) s.getAttribute("utente");
+        ArrayList<String> nomi_skill = (ArrayList<String>) s.getAttribute("nomi_skill");
+        ArrayList<Integer> voti_skill = (ArrayList<Integer>) s.getAttribute("voti_skill");
+        
+        //CONTROLLO SE IL PDF E' TESTUALE
+        String CV_text = request.getParameter("CV_text");
+        if (!"".equals(CV_text)) {
+            // CONVERTIRLO IN UN PDF (COME?)
+        } else {
+            Part CV_PDF_Part = request.getPart("CV_PDF");
+            // CONTROLLO SE E' STATO CARICATO IL PDF
+            if (CV_PDF_Part == null || CV_PDF_Part.getSize() > 0) {
+                request.setAttribute("errore_pdf", "PDF non caricato");
+                response.sendRedirect("SignUpFiles");
+            }
+            // CARICO IL PDF
+            CurriculumImpl curriculum = new CurriculumImpl(((SocialDevelopDataLayer) request.getAttribute("datalayer")));
+            curriculum.setNome(utente.getUsername().concat("_CV.pdf"));
+            curriculum.setTipo("curriculum");
+            ((SocialDevelopDataLayer) request.getAttribute("datalayer")).salvaCurriculum(curriculum);
+            utente.setCurriculum(curriculum);
+            File file = new File("/Users/Mario/Desktop/prova", utente.getUsername().concat("_CV.pdf"));
+            try (InputStream IS_CV_DPF = CV_PDF_Part.getInputStream();) {
+                Files.copy(IS_CV_DPF, file.toPath());
+            }
+        }
+        
+        // CONTROLLO SE E' STATA CARICATA L'IMMAGINE
+        Part Propic_Part = request.getPart("foto_profilo");
+        if (Propic_Part == null || Propic_Part.getSize() > 0) {
+            request.setAttribute("errore_propic", "Propic non caricata");
+            response.sendRedirect("SignUpFiles");
+        }
+        // CARICO L'IMMAGINE
+        ImmagineImpl immagine = new ImmagineImpl(((SocialDevelopDataLayer) request.getAttribute("datalayer")));
+        immagine.setNome(utente.getUsername().concat("_PROPIC.png"));
+        immagine.setTipo("immagine");
+        ((SocialDevelopDataLayer) request.getAttribute("datalayer")).salvaImmagine(immagine);
+        utente.setImmagine(immagine);
+        File file = new File("/Users/Mario/Desktop/prova", utente.getUsername().concat("_PROPIC.png"));
+        try (InputStream IS_PROPIC_DPF = Propic_Part.getInputStream();) {
+            Files.copy(IS_PROPIC_DPF, file.toPath());
+        }
+        
+        // INSERISCO L'UTENTE
+        ((SocialDevelopDataLayer) request.getAttribute("datalayer")).salvaUtente(utente);
+        
+        // PRENDO LE KEY DEGLI SKILL E INSERISCO LE TUPLE IN "PREPARAZIONI"
+        for (int k = 0; k < nomi_skill.size(); k++) {
+            int skill_key = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getSkillByNome(nomi_skill.get(k)).getKey();
+            ((SocialDevelopDataLayer) request.getAttribute("datalayer")).salvaPreparazioni(voti_skill.get(k), utente.getKey(), skill_key);
+        }
+        
+        // PULISCO LA SESSIONE
+        s.removeAttribute("utente");
+        s.removeAttribute("nomi_skill");
+        s.removeAttribute("voti_skill");
+        
+        // CREO LA SESSIONE DELL'UTENTE
+        SecurityLayer.createSession(request, utente.getUsername(), utente.getKey());
+        
+        // MANDO L'UTENTE ALLA SUA PAGINA DEL PROFILO
+        response.sendRedirect("ProfiloUtente?utente_key="+utente.getKey());
+        
+    }
+    
+    @Override
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        try {
+            action_dosignup(request, response);
+        } catch (IOException | TemplateManagerException | DataLayerException | SQLException | NamingException ex) {
+            request.setAttribute("exception", ex);
+            action_error(request, response);
+        }
+    }
+    
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Servlet SignUp";
+    }
+    
+}

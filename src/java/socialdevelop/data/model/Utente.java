@@ -8,6 +8,7 @@ import java.util.Map;
 /**
  * @author Mario Vetrini
  */
+
 public interface Utente {
     
     int getKey();
@@ -43,23 +44,23 @@ public interface Utente {
     // ----------
     
     FileSD getCurriculum() throws DataLayerException;
-
+    
     void setCurriculum(FileSD curriculum);
     
     FileSD getImmagine() throws DataLayerException;
-
+    
     void setImmagine(FileSD immagine);
     
     Map<Skill, Integer> getSkills() throws DataLayerException;
-
+    
     void setSkills(Map<Skill, Integer> skills);
     
     Map<Task, Integer> getTasks() throws DataLayerException;
-
+    
     void setTasks(Map<Task, Integer> tasks);
     
     List<Progetto> getProgetti() throws DataLayerException;
-
+    
     void setProgetti(List<Progetto> progetti);
     
     // ----------
@@ -67,7 +68,7 @@ public interface Utente {
     void copyFrom(Utente utente) throws DataLayerException;
     
     void setDirty(boolean dirty);
-
+    
     boolean isDirty();
     
 }

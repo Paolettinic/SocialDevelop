@@ -7,12 +7,8 @@
  * in base a una serie di init parameters del contesto (si veda il codice e 
  * il file web.xml per informazioni)
  * 
- * This class supports the output generation using the Freemarkr template
- * engine. It handles data models passed explicitly or through the request,
- * automatic page outline, and automatically configures using the context
- * init parameters (see web.xml).
- * 
  */
+
 package it.univaq.f4i.iw.framework.result;
 
 import freemarker.core.HTMLOutputFormat;
@@ -20,7 +16,6 @@ import freemarker.core.JSONOutputFormat;
 import freemarker.core.XMLOutputFormat;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapperBuilder;
-import freemarker.template.ObjectWrapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateDateModel;
 import freemarker.template.TemplateException;
@@ -37,14 +32,13 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
  * @author Giuseppe Della Penna
  */
+
 public class TemplateResult {
 
     protected ServletContext context;
@@ -265,4 +259,5 @@ public class TemplateResult {
             throw new TemplateManagerException("Template error: " + ex.getMessage(), ex);
         }
     }
+    
 }

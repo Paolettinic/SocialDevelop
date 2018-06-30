@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    
     <context-param>
         <param-name>view.outline_template</param-name>
         <param-value>skeleton-page.html</param-value>
@@ -8,9 +9,78 @@
         <param-name>images.directory</param-name>
         <param-value>\img\</param-value>
     </context-param>
+    
     <servlet>
         <servlet-name>Index</servlet-name>
         <servlet-class>socialdevelop.controller.Index</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UserProfile</servlet-name>
+        <servlet-class>socialdevelop.controller.UserProfile</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>socialdevelop.controller.Login</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DoLogin</servlet-name>
+        <servlet-class>socialdevelop.controller.DoLogin</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SignUp</servlet-name>
+        <servlet-class>socialdevelop.controller.SignUp</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SignUpFiles</servlet-name>
+        <servlet-class>socialdevelop.controller.SignUpFiles</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DoSignUp</servlet-name>
+        <servlet-class>socialdevelop.controller.DoSignUp</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SignUpSkills</servlet-name>
+        <servlet-class>socialdevelop.controller.SignUpSkills</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditUserProfileRegistry</servlet-name>
+        <servlet-class>socialdevelop.controller.EditUserProfileRegistry</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DoEditUserProfileRegistry</servlet-name>
+        <servlet-class>socialdevelop.controller.DoEditUserProfileRegistry</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditUserProfilePassword</servlet-name>
+        <servlet-class>socialdevelop.controller.EditUserProfilePassword</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DoEditUserProfilePassword</servlet-name>
+        <servlet-class>socialdevelop.controller.DoEditUserProfilePassword</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditUserProfileEmail</servlet-name>
+        <servlet-class>socialdevelop.controller.EditUserProfileEmail</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DoEditUserProfileEmail</servlet-name>
+        <servlet-class>socialdevelop.controller.DoEditUserProfileEmail</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditUserProfileSkills</servlet-name>
+        <servlet-class>socialdevelop.controller.EditUserProfileSkills</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DoEditUserProfileDeleteSkill</servlet-name>
+        <servlet-class>socialdevelop.controller.DoEditUserProfileDeleteSkill</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DoEditUserProfileEditSkill</servlet-name>
+        <servlet-class>socialdevelop.controller.DoEditUserProfileEditSkill</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DoEditUserProfileAddSkills</servlet-name>
+        <servlet-class>socialdevelop.controller.DoEditUserProfileAddSkills</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>GetImage</servlet-name>
@@ -53,6 +123,74 @@
         <servlet-class>socialdevelop.controller.Project</servlet-class>
     </servlet>
     
+    <servlet-mapping>
+        <servlet-name>UserProfile</servlet-name>
+        <url-pattern>/UserProfile</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>/Login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoLogin</servlet-name>
+        <url-pattern>/DoLogin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SignUp</servlet-name>
+        <url-pattern>/SignUp</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SignUpFiles</servlet-name>
+        <url-pattern>/SignUpFiles</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoSignUp</servlet-name>
+        <url-pattern>/DoSignUp</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SignUpSkills</servlet-name>
+        <url-pattern>/SignUpSkills</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditUserProfileRegistry</servlet-name>
+        <url-pattern>/EditUserProfileRegistry</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoEditUserProfileRegistry</servlet-name>
+        <url-pattern>/DoEditUserProfileRegistry</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditUserProfilePassword</servlet-name>
+        <url-pattern>/EditUserProfilePassword</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoEditUserProfilePassword</servlet-name>
+        <url-pattern>/DoEditUserProfilePassword</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditUserProfileEmail</servlet-name>
+        <url-pattern>/EditUserProfileEmail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoEditUserProfileEmail</servlet-name>
+        <url-pattern>/DoEditUserProfileEmail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditUserProfileSkills</servlet-name>
+        <url-pattern>/EditUserProfileSkills</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoEditUserProfileDeleteSkill</servlet-name>
+        <url-pattern>/DoEditUserProfileDeleteSkill</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoEditUserProfileEditSkill</servlet-name>
+        <url-pattern>/DoEditUserProfileEditSkill</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoEditUserProfileAddSkills</servlet-name>
+        <url-pattern>/DoEditUserProfileAddSkills</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Project</servlet-name>
         <url-pattern>/Project</url-pattern>
@@ -97,12 +235,15 @@
         <servlet-name>Search</servlet-name>
         <url-pattern>/search</url-pattern>
     </servlet-mapping>
+    
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
+    
     <welcome-file-list>
         <welcome-file>Index</welcome-file>
     </welcome-file-list>
+    
 </web-app>
