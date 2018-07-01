@@ -32,7 +32,7 @@ public class GetImage extends SocialDevelopBaseController {
         //ad esempio, possiamo caricare un'immagine di default se non riusciamo a trovare quella indicata
         //as an example, we can send a default image if we cannot find the requested one
         try {
-            action_download(request, response, 0);
+            action_download(request, response, 4);
         } catch (IOException | DataLayerException ex) {
             //if the error image cannot be sent, try a standard HTTP error message
             //se non possiamo inviare l'immagine di errore, proviamo un messaggio di errore HTTP standard
@@ -49,6 +49,8 @@ public class GetImage extends SocialDevelopBaseController {
     private void action_download(HttpServletRequest request, HttpServletResponse response, int imgid) throws IOException, DataLayerException {
         StreamResult result = new StreamResult(getServletContext());
         FileSD image = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getImmagine(imgid);
+        System.out.println(image);
+        System.out.println(imgid);
         if (image != null) {
             //settiamo il tipo del file da trasmettere
             //set the media type of the file to send
@@ -58,11 +60,13 @@ public class GetImage extends SocialDevelopBaseController {
             request.setAttribute("contentDisposition", "inline");
             //prendiamo il file dal filesystem, anche se la classe Image supporterebbe anche la lettura dal DB
             //get the image from the filesystem, even if the Image class supports also reading image data from the DB
+            String path = "members-img";
+            if(image.getTipo().equals("image"))
+                path = "members-img";
             result.activate(
                 new File(
                     getServletContext().getRealPath("/")+
-                    getServletContext().getInitParameter("images.directory")+
-                    image.getTipo()+
+                    getServletContext().getInitParameter("images.directory")+path+"/"+
                     image.getNome()
                 ), 
                 request, 
@@ -77,7 +81,11 @@ public class GetImage extends SocialDevelopBaseController {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException {
         try {
-            int imgid = SecurityLayer.checkNumeric(request.getParameter("imgid"));
+            int imgid;
+            if(request.getParameter("imgid") == null)
+                imgid=0;
+            else
+                imgid =  SecurityLayer.checkNumeric(request.getParameter("imgid"));
             action_download(request, response, imgid);
         } catch (NumberFormatException ex) {
             action_error(request, response);
