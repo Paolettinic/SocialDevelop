@@ -116,7 +116,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             dSkill = connection.prepareStatement("DELETE FROM skills WHERE id = ?");
 
             sTaskByID = connection.prepareStatement("SELECT * FROM tasks WHERE id = ?");
-            sTasksByUtente = connection.prepareStatement("SELECT tasks.* FROM tasks INNER JOIN coprenti ON tasks.id = coprenti.ext_task WHERE coprenti.ext_utente = ?");
+            sTasksByUtente = connection.prepareStatement("SELECT tasks.*, coprenti.voto FROM tasks INNER JOIN coprenti ON tasks.id = coprenti.ext_task WHERE coprenti.ext_utente = ?");
             sTasksByProgetto = connection.prepareStatement("SELECT * FROM tasks WHERE tasks.ext_progetto = ?");
             sTasksByTipo = connection.prepareStatement("SELECT * FROM tasks WHERE tasks.ext_tipo = ?");
             sTasksBySkill = connection.prepareStatement("SELECT tasks.* FROM tasks INNER JOIN requisiti ON tasks.id = requisiti.ext_task WHERE requisiti.ext_skill = ?");
@@ -134,7 +134,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             sUtenteByID = connection.prepareStatement("SELECT * FROM utenti WHERE id = ?");
             sUtenteByEmail = connection.prepareStatement("SELECT * FROM utenti WHERE email = ?");
             sUtenteByUsername = connection.prepareStatement("SELECT * FROM utenti WHERE username = ?");
-            sUtentiByTask = connection.prepareStatement("SELECT utenti.*, coprenti.voto FROM utenti INNER JOIN coprenti ON utente.id = coprenti.ext_utente WHERE coprenti.ext_task = ?");
+            sUtentiByTask = connection.prepareStatement("SELECT utenti.*, coprenti.voto FROM utenti INNER JOIN coprenti ON utenti.id = coprenti.ext_utente WHERE coprenti.ext_task = ?");
             sUtentiByFiltro = connection.prepareStatement("SELECT * FROM utenti WHERE name LIKE ? OR cognome LIKE ? OR username = ?");
             countUtentiByFiltro = connection.prepareStatement("SELECT COUNT(id) as total FROM utenti WHERE nome LIKE ? OR cognome LIKE ? OR username = ?");
             sUtentiBySkill = connection.prepareStatement("SELECT utenti.*, preparazioni.livello FROM utenti INNER JOIN preparazioni ON utente.id = preparazioni.ext_utente WHERE preparazioni.ext_skill = ? AND preparazioni.livello >= ?");
@@ -1540,7 +1540,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             sTasksByUtente.setInt(1, utente.getKey());
             try (ResultSet rs = sTasksByUtente.executeQuery()) {
                 while (rs.next()) {
-                    result.put(creaTask(rs), rs.getInt("voto"));
+                    result.put(creaTask(rs), rs.getInt("coprenti.voto"));
                 }
             }
         } catch (SQLException ex) {
@@ -1694,7 +1694,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             sUtentiByTask.setInt(1, task.getKey());
             try (ResultSet rs = sUtentiByTask.executeQuery()) {
                 while (rs.next()) {
-                    result.put(creaUtente(rs), rs.getInt("coprenti.voto"));
+                    result.put(creaUtente(rs), rs.getInt("voto"));
                 }
             }
         } catch (SQLException ex) {
