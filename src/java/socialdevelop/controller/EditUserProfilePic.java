@@ -18,7 +18,7 @@ import socialdevelop.data.model.Utente;
  * @author Mario Vetrini
  */
 
-public class EditUserProfileEmail extends SocialDevelopBaseController {
+public class EditUserProfilePic extends SocialDevelopBaseController {
     
     private void action_error(HttpServletRequest request, HttpServletResponse response) {
         if (request.getAttribute("exception") != null) {
@@ -28,14 +28,15 @@ public class EditUserProfileEmail extends SocialDevelopBaseController {
         }
     }
     
-    private void action_edit_user_profile_email(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, TemplateManagerException, DataLayerException {
+    private void action_edit_user_profile_pic(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, TemplateManagerException, DataLayerException {
         HttpSession s = request.getSession(true);
         request.setAttribute("page_title", "Modifica i tuoi dati");
         Utente utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtente((int) s.getAttribute("userid"));
         if (utente != null) {
             request.setAttribute("profilo_key", (int) s.getAttribute("userid"));
+            request.setAttribute("propic_key", utente.getImmagine().getKey());
             TemplateResult res = new TemplateResult(getServletContext());
-            res.activate("edit_user_profile_email.html", request, response);
+            res.activate("edit_user_profile_pic.html", request, response);
         } else {
             response.sendRedirect("Index");
         }
@@ -46,7 +47,7 @@ public class EditUserProfileEmail extends SocialDevelopBaseController {
         HttpSession s = request.getSession(true);
         try {
             if (s.getAttribute("userid") != null) {
-                action_edit_user_profile_email(request, response);
+                action_edit_user_profile_pic(request, response);
             } else {
                 response.sendRedirect("Login");
             }

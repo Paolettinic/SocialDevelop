@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 /**
  * @author Davide De Marco
  */
+
 public interface Messaggio {
     
     int getKey();

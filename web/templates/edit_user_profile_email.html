@@ -2,17 +2,17 @@
     <div class="row">
         <div class="col-xs-3">
             <ul class="nav">
-                <li><a href="EditUserProfileRegistry?utente_key=${profilo_key}">Modifica i tuoi dati anagrafici e dell'account</a></li>
-                <li><a href="EditUserProfilePassword?utente_key=${profilo_key}">Modifica la tua password</a></li>
-                <li><a href="EditUserProfileEmail?utente_key=${profilo_key}">Modifica la tua e-mail</a></li>
-                <li><a href="EditUserProfileSkills?utente_key=${profilo_key}">Modifica le tue skills</a>
-                <li><a href="EditUserProfilePropic?utente_key=${profilo_key}">Modifica la tua immagine del profilo</a>
-                <li><a href="EditUserProfileCV?utente_key=${profilo_key}">Modifica il tuo curriculum vitae</a>
+                <li><a href="EditUserProfileRegistry">Modifica i tuoi dati anagrafici e dell'account</a></li>
+                <li><a href="EditUserProfilePassword">Modifica la tua password</a></li>
+                <li><a href="EditUserProfileEmail">Modifica la tua e-mail</a></li>
+                <li><a href="EditUserProfileSkills">Modifica le tue skills</a>
+                <li><a href="EditUserProfilePic">Modifica la tua immagine del profilo</a>
+                <li><a href="EditUserProfileCV">Modifica il tuo curriculum vitae</a>
             </ul>
         </div>
         <div class="col-xs-9">
             <div class="contact--form margin_bottom_50 margin_top_50">
-                <form action="DoEditUserProfileEmail" method="post" name="signup_form" onsubmit="return signup_check()">
+                <form action="DoEditUserProfileEmail" method="post">
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="form-group">

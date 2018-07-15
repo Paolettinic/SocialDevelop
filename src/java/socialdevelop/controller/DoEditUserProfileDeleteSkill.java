@@ -45,7 +45,7 @@ public class DoEditUserProfileDeleteSkill extends SocialDevelopBaseController {
         ((SocialDevelopDataLayer) request.getAttribute("datalayer")).eliminaPreparazioni(utente_key, skill_key);
         
         // RIMANDO L'UTENTE ALLA PAGINA DI MODIFICA DELLE SKILLS (MODALE?)
-        response.sendRedirect("EditUserProfileSkills?utente_key="+utente_key);
+        response.sendRedirect("EditUserProfileSkills");
     }
     
     @Override

@@ -1,13 +1,10 @@
 <div class="cover--header pt--80 text-center">
     <div class="container">
         <div class="cover--avatar" data-overlay="0.5" data-overlay-color="primary">
-            <img src="img/profile-img/mariovetrini.jpg" alt="">
+            <img src="image?imgid=${propic_key}" alt="">
         </div>
         <div>
             <h2 class="h3 fw--600">${nome} ${cognome} (${username})</h2>
-            <#if utente_key == profilo_key>
-                <a href="EditUserProfileRegistry?utente_key=${profilo_key}" class="btn btn-primary">Modifica il tuo profilo</a>
-            </#if>
         </div>
     </div>
 </div>
@@ -106,34 +103,16 @@
                 <div class="tab-pane fade" id="profileDetailsTab04">
                     <div class="profile--item">
                         <div class="profile--info">
-                            <dl>
-                                <#if progetti?size == 0>
+                            <#if progetti?size == 0>
                                 <p>Questo utente non possiede dei progetti</p>
-                                </#if>
-                                <#list progetti as progetto>
-                                <dt>
-                                    <p class="h6 fw--700 text-darkest">${progetto.nome}</p>
-                                </dt>
-                                </#list>
-                            </dl>
+                            </#if>
+                            <#list progetti as progetto>
+                                <a href="Project?progetto_id=${progetto.key}"><span>${progetto.nome}</span></a>
+                            </#list>
                         </div>
                     </div>
                 </div>
                 
-            </div>
-            
-            <div class="main--content col-md-12 pb--60" data-trigger="stickyScroll">
-                <div class="main--content-inner drop--shadow">
-                    
-                    <!-- Content Nav Start -->
-                    <div class="content--nav pb--30">
-                        <ul class="nav ff--primary fs--14 fw--500 bg-lighter">
-                            <li class="active"><a href="">Profilo</a></li>
-                            <li><a href="">Skills</a></li>
-                            <li><a href="">Tasks</a></li>
-                        </ul>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

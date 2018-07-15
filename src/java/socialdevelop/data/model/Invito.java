@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 /**
  * @author Nicolò Paoletti
  */
+
 public interface Invito {
 	
     int getKey();
@@ -14,9 +15,9 @@ public interface Invito {
 
     void setMessaggio(String messaggio);
     
-    GregorianCalendar getData();
+    GregorianCalendar getDataInvio();
 
-    void setData(GregorianCalendar date);
+    void setDataInvio(GregorianCalendar data_invio);
     
     String getStato();
 

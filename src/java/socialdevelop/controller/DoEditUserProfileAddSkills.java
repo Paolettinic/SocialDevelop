@@ -3,14 +3,11 @@ package socialdevelop.controller;
 import it.univaq.f4i.iw.framework.data.DataLayerException;
 import it.univaq.f4i.iw.framework.result.FailureResult;
 import it.univaq.f4i.iw.framework.result.TemplateManagerException;
-import it.univaq.f4i.iw.framework.security.SecurityLayer;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -20,6 +17,7 @@ import socialdevelop.data.model.Utente;
 /**
  * @author Mario Vetrini
  */
+
 public class DoEditUserProfileAddSkills extends SocialDevelopBaseController {
     
     private void action_error(HttpServletRequest request, HttpServletResponse response) {
@@ -41,6 +39,7 @@ public class DoEditUserProfileAddSkills extends SocialDevelopBaseController {
         Set<String> nomi_skill_check =  new HashSet<>();
         ArrayList<Integer> voti_skill = new ArrayList<>();
         
+        // RECUPERO LE SKILLS DALLA FORM
         while (request.getParameter("nome_skill_".concat(String.valueOf(i))) != null) {
             nomi_skill.add(request.getParameter("nome_skill_".concat(String.valueOf(i))));
             nomi_skill_check.add(request.getParameter("nome_skill_".concat(String.valueOf(i))));
@@ -50,16 +49,29 @@ public class DoEditUserProfileAddSkills extends SocialDevelopBaseController {
         
         // CONTROLLO SE SONO STATI RIPETUTI DEGLI SKILL
         if (nomi_skill_check.size() != nomi_skill.size()) {
-            request.setAttribute("errore_signup", "Skill ripetute");
-            response.sendRedirect("SignUp");
+            request.setAttribute("errore_skills", "Skill ripetute");
+            response.sendRedirect("EditUserProfileSkills");
+            return;
         }
         
-        // PRENDO LE KEY DELLE SKILLS E CONTROLLO SE NON SIANO GIA' PRESENTI SULL'UTENTE
+        // PRENDO LE SKILLS E CONTROLLO CHE NON SIANO GIA' PRESENTI SULL'UTENTE
+        for (int k = 0; k < nomi_skill.size(); k++) {
+            if (utente.getSkills().containsKey(((SocialDevelopDataLayer) request.getAttribute("datalayer")).getSkillByNome(nomi_skill.get(k)))) {
+                request.setAttribute("errore_skills", "Skill già esistente");
+                response.sendRedirect("EditUserProfileSkills");
+                return;
+            }
+        }
+        
+        // SALVO LE NUOVE SKILLS
         for (int k = 0; k < nomi_skill.size(); k++) {
             int skill_key = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getSkillByNome(nomi_skill.get(k)).getKey();
-            
-            //((SocialDevelopDataLayer) request.getAttribute("datalayer")).salvaPreparazioni(voti_skill.get(k), utente_key, skill_key);
+            ((SocialDevelopDataLayer) request.getAttribute("datalayer")).salvaPreparazioni(voti_skill.get(k), utente_key, skill_key);
         }
+        
+        // RIMANDO ALLA PAGINA PRECEDENTE
+        response.sendRedirect("EditUserProfileSkills");
+        
     }
     
     @Override

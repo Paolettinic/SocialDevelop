@@ -12,32 +12,36 @@
         </div>
         <div class="col-xs-9">
             <div class="contact--form margin_bottom_50 margin_top_50">
-                <form action="DoEditUserProfilePassword" method="post" name="signup_form" onsubmit="return signup_check()">
+                <form action="DoEditUserProfileCV" method="post" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="form-group">
-                                <h4>Modifica la tua password</h4>
+                                <h4>Modifica il tuo curriculum vitae</h4>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-xs-6">
+                    <div class="row"> 
+                        <div class="col-xs-12">
                             <div class="form-group">
-                                <input type="password" name="old_psw" id="old_psw" placeholder="Inserisci la vecchia password" class="form-control" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <div class="form-group">
-                                <input type="password" name="new_psw" id="new_psw" placeholder="Inserisci la nuova password" class="form-control" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <div class="form-group">
-                                <input type="password" name="new_psw_rpt" id="new_psw_rpt" placeholder="Conferma la nuova password" class="form-control" required>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <p>Inserisci il tuo CV in forma testuale o tramite PDF<p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row"> 
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <textarea name="CV_text" id="CV_text" class="form-control" placeholder="Curriculum"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <input type="file" id="CV_PDF" name="CV_PDF" accept=".pdf"/>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

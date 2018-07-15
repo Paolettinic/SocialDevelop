@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import socialdevelop.data.impl.UtenteImpl;
 import socialdevelop.data.model.SocialDevelopDataLayer;
+import socialdevelop.data.model.Utente;
 
 /**
  * @author Mario Vetrini
@@ -55,7 +56,7 @@ public class SignUpFiles extends SocialDevelopBaseController {
             response.sendRedirect("SignUp");
         }
         
-        UtenteImpl utente = new UtenteImpl(((SocialDevelopDataLayer) request.getAttribute("datalayer")));
+        Utente utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).creaUtente();
         
         // CONTROLLO SE SONO ARRIVATO A QUESTA PAGINA DA "SignUpSkills" o "SignUp"
         if(s.getAttribute("javascript").equals(false)) {
@@ -110,16 +111,6 @@ public class SignUpFiles extends SocialDevelopBaseController {
             request.setAttribute("exception", ex);
             action_error(request, response);
         }
-    }
-    
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Servlet SignUp";
     }
     
 }

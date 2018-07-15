@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Map;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+import socialdevelop.data.model.Curriculum;
 import socialdevelop.data.model.Discussione;
-import socialdevelop.data.model.FileSD;
 import socialdevelop.data.model.Invito;
 import socialdevelop.data.model.Messaggio;
 import socialdevelop.data.model.Progetto;
@@ -24,6 +24,7 @@ import socialdevelop.data.model.SocialDevelopDataLayer;
 import socialdevelop.data.model.Task;
 import socialdevelop.data.model.Tipo;
 import socialdevelop.data.model.Utente;
+import socialdevelop.data.model.Immagine;
 
 /**
  * @author Mario Vetrini
@@ -35,7 +36,6 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     // select, insert, update, delete, generiche funzionalità del sito, ecc...
     private PreparedStatement sCurriculumByID, iCurriculum, uCurriculum, dCurriculum;
     private PreparedStatement sDiscussioneByID, sDiscussioniByTask, iDiscussione, uDiscussione, dDiscussione, countDiscussioniByTask, sDiscussioniByProgetto;
-    private PreparedStatement sFileByID, sFilesByUtente, iFile, uFile, dFile;
     private PreparedStatement sImmagineByID, iImmagine, uImmagine, dImmagine;
     private PreparedStatement sInvitoByID, sInvitiByUtente, sInvitiByTask, iInvito, uInvito, dInvito;
     private PreparedStatement sMessaggioByID, sMessaggiByDiscussione, iMessaggio, uMessaggio, dMessaggio;
@@ -58,10 +58,10 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
         try {
             super.init();
             
-            sCurriculumByID = connection.prepareStatement("SELECT * FROM files WHERE id = ?");
-            iCurriculum = connection.prepareStatement("INSERT INTO files (nome, tipo) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
-            uCurriculum = connection.prepareStatement("UPDATE files SET nome = ?, tipo = ? WHERE id = ?");
-            dCurriculum = connection.prepareStatement("DELETE FROM files WHERE 'id' = ?");
+            sCurriculumByID = connection.prepareStatement("SELECT * FROM curricula WHERE id = ?");
+            iCurriculum = connection.prepareStatement("INSERT INTO curricula (nome, tipo, testuale) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            uCurriculum = connection.prepareStatement("UPDATE curricula SET nome = ?, tipo = ?, testuale = ? WHERE id = ?");
+            dCurriculum = connection.prepareStatement("DELETE FROM curricula WHERE id = ?");
             
             sDiscussioneByID = connection.prepareStatement("SELECT * FROM discussioni WHERE id = ?");
             sDiscussioniByProgetto = connection.prepareStatement("SELECT * FROM discussioni LEFT JOIN tasks ON tasks.id = discussioni.ext_task LEFT JOIN progetti ON progetti.id = tasks.ext_progetto WHERE progetti.id = ? LIMIT ?, ?");
@@ -70,23 +70,17 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             iDiscussione = connection.prepareStatement("INSERT INTO discussioni (titolo, pubblica, data_creazione, ext_utente, ext_task) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             uDiscussione = connection.prepareStatement("UPDATE discussioni SET titolo = ?, pubblica = ?, data_creazione = ?, ext_utente = ?, ext_task = ? WHERE id = ?");
             dDiscussione = connection.prepareStatement("DELETE FROM discussioni WHERE id = ?");
+
+            sImmagineByID = connection.prepareStatement("SELECT * FROM immagini WHERE id = ?");
+            iImmagine = connection.prepareStatement("INSERT INTO immagini (nome, tipo) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+            uImmagine = connection.prepareStatement("UPDATE immagini SET nome = ?, tipo = ? WHERE id = ?");
+            dImmagine = connection.prepareStatement("DELETE FROM immagini WHERE id = ?");
             
-            sFilesByUtente = connection.prepareStatement("SELECT * FROM files WHERE ext_utente = ?");
-            sFileByID = connection.prepareStatement("SELECT * FROM files WHERE id = ?");
-            iFile = connection.prepareStatement("INSERT INTO files (nome, tipo) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
-            uFile = connection.prepareStatement("UPDATE files SET 'nome' = ?, 'tipo' = ? WHERE id = ?");
-            dFile = connection.prepareStatement("DELETE FROM files WHERE id = ?");
-            
-            sImmagineByID = connection.prepareStatement("SELECT * FROM files WHERE id = ?");
-            iImmagine = connection.prepareStatement("INSERT INTO files (nome, tipo) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
-            uImmagine = connection.prepareStatement("UPDATE files SET 'nome' = ?, 'tipo' = ? WHERE id = ?");
-            dImmagine = connection.prepareStatement("DELETE FROM files WHERE id = ?");
-            
-            sInvitoByID = connection.prepareStatement("SELECT * FROM inviti WHERE id= ?");
-            sInvitiByUtente = connection.prepareStatement("SELECT * FROM 'inviti' WHERE 'ext_utente' = ?");
-            sInvitiByTask = connection.prepareStatement("SELECT * FROM 'inviti' WHERE 'ext_task' = ?");
-            iInvito = connection.prepareStatement("INSERT INTO 'inviti' ('messaggio','data','request','state','ext_user','ext_task') VALUES (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-            uInvito = connection.prepareStatement("UPDATE 'inviti' SET 'status' = ? WHERE 'id' = ?");
+            sInvitoByID = connection.prepareStatement("SELECT * FROM inviti WHERE id = ?");
+            sInvitiByUtente = connection.prepareStatement("SELECT * FROM inviti WHERE ext_utente = ?");
+            sInvitiByTask = connection.prepareStatement("SELECT * FROM 'inviti' WHERE ext_task = ?");
+            iInvito = connection.prepareStatement("INSERT INTO inviti (messaggio, data_invio, stato, offerta, ext_utente, ext_task) VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            uInvito = connection.prepareStatement("UPDATE inviti SET stato = ? WHERE id = ?");
             dInvito = connection.prepareStatement("DELETE FROM inviti WHERE id = ?");
             
             sMessaggioByID = connection.prepareStatement("SELECT * FROM messaggi WHERE id = ?");
@@ -116,7 +110,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             dSkill = connection.prepareStatement("DELETE FROM skills WHERE id = ?");
 
             sTaskByID = connection.prepareStatement("SELECT * FROM tasks WHERE id = ?");
-            sTasksByUtente = connection.prepareStatement("SELECT tasks.*, coprenti.voto FROM tasks INNER JOIN coprenti ON tasks.id = coprenti.ext_task WHERE coprenti.ext_utente = ?");
+            sTasksByUtente = connection.prepareStatement("SELECT tasks.* FROM tasks INNER JOIN coprenti ON tasks.id = coprenti.ext_task WHERE coprenti.ext_utente = ?");
             sTasksByProgetto = connection.prepareStatement("SELECT * FROM tasks WHERE tasks.ext_progetto = ?");
             sTasksByTipo = connection.prepareStatement("SELECT * FROM tasks WHERE tasks.ext_tipo = ?");
             sTasksBySkill = connection.prepareStatement("SELECT tasks.* FROM tasks INNER JOIN requisiti ON tasks.id = requisiti.ext_task WHERE requisiti.ext_skill = ?");
@@ -134,7 +128,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             sUtenteByID = connection.prepareStatement("SELECT * FROM utenti WHERE id = ?");
             sUtenteByEmail = connection.prepareStatement("SELECT * FROM utenti WHERE email = ?");
             sUtenteByUsername = connection.prepareStatement("SELECT * FROM utenti WHERE username = ?");
-            sUtentiByTask = connection.prepareStatement("SELECT utenti.*, coprenti.voto FROM utenti INNER JOIN coprenti ON utenti.id = coprenti.ext_utente WHERE coprenti.ext_task = ?");
+            sUtentiByTask = connection.prepareStatement("SELECT utenti.*, coprenti.voto FROM utenti INNER JOIN coprenti ON utente.id = coprenti.ext_utente WHERE coprenti.ext_task = ?");
             sUtentiByFiltro = connection.prepareStatement("SELECT * FROM utenti WHERE name LIKE ? OR cognome LIKE ? OR username = ?");
             countUtentiByFiltro = connection.prepareStatement("SELECT COUNT(id) as total FROM utenti WHERE nome LIKE ? OR cognome LIKE ? OR username = ?");
             sUtentiBySkill = connection.prepareStatement("SELECT utenti.*, preparazioni.livello FROM utenti INNER JOIN preparazioni ON utente.id = preparazioni.ext_utente WHERE preparazioni.ext_skill = ? AND preparazioni.livello >= ?");
@@ -168,11 +162,11 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     }
     
     @Override
-    public FileSD creaCurriculum() {
+    public Curriculum creaCurriculum() {
         return new CurriculumImpl(this);
     }
     
-    public FileSD creaCurriculum(ResultSet rs) throws DataLayerException {
+    public Curriculum creaCurriculum(ResultSet rs) throws DataLayerException {
         CurriculumImpl cur = new CurriculumImpl(this);
         try {
             cur.setKey(rs.getInt("id"));
@@ -212,28 +206,11 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     }
     
     @Override
-    public FileSD creaFile() {
-        return new FileSDImpl(this);
-    }
-    
-    public FileSD creaFile(ResultSet rs) throws DataLayerException{
-        FileSDImpl file = new FileSDImpl(this);
-        try {
-            file.setKey(rs.getInt("id"));
-            file.setNome(rs.getString("nome"));
-            file.setTipo(rs.getString("tipo"));
-            return file;
-        } catch (SQLException ex) {
-            throw new DataLayerException("Impossibile creare l'istanza del file dal ResultSet", ex);
-        }
-    }
-    
-    @Override
-    public FileSD creaImmagine() {
+    public Immagine creaImmagine() {
         return new ImmagineImpl(this);
     }
     
-    public FileSD creaImmagine(ResultSet rs) throws DataLayerException{
+    public Immagine creaImmagine(ResultSet rs) throws DataLayerException{
         ImmagineImpl img = new ImmagineImpl(this);
         try {
             img.setKey(rs.getInt("id"));
@@ -252,16 +229,19 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     
     public Invito creaInvito(ResultSet rs) throws DataLayerException{
         InvitoImpl inv = new InvitoImpl(this);
+        
         try {
             inv.setKey(rs.getInt("id"));
             inv.setMessaggio(rs.getString("messaggio"));
             inv.setStato(rs.getString("stato"));
             inv.setOfferta(rs.getBoolean("offerta"));
-            inv.setTaskKey(rs.getInt("ext_task"));
             inv.setUtenteKey(rs.getInt("ext_utente"));
-            GregorianCalendar gc = new GregorianCalendar();
-            gc.setTime(rs.getDate("date"));
-            inv.setData(gc);
+            inv.setTaskKey(rs.getInt("ext_task"));
+            
+            Date data_invio_sql = rs.getDate("data_invio");
+            GregorianCalendar data_invio = new GregorianCalendar();
+            data_invio.setTime(data_invio_sql);
+            inv.setDataInvio(data_invio);
             
             return inv;
         } catch(SQLException ex) {
@@ -341,8 +321,6 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     
     public Task creaTask(ResultSet rs) throws DataLayerException {
         try {
-            Date data_inizio_sql;
-            Date data_fine_sql;
             TaskImpl task = new TaskImpl(this);
             
             task.setKey(rs.getInt("id"));
@@ -354,12 +332,12 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             task.setProgettoKey(rs.getInt("ext_progetto"));
             task.setTipoKey(rs.getInt("ext_tipo"));
             
-            data_inizio_sql = rs.getDate("data_inizio");
+            Date data_inizio_sql = rs.getDate("data_inizio");
             GregorianCalendar data_inizio = new GregorianCalendar();
             data_inizio.setTime(data_inizio_sql);
             task.setDataInizio(data_inizio);
             
-            data_fine_sql = rs.getDate("data_fine");
+            Date data_fine_sql = rs.getDate("data_fine");
             GregorianCalendar data_fine = new GregorianCalendar();
             data_fine.setTime(data_fine_sql);
             task.setDataFine(data_fine);
@@ -419,7 +397,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     }
     
     @Override
-    public void salvaCurriculum(FileSD curriculum) throws DataLayerException {
+    public void salvaCurriculum(Curriculum curriculum) throws DataLayerException {
         int key = curriculum.getKey();
         try {
             if (curriculum.getKey() > 0) { // Update
@@ -427,11 +405,13 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
                     return;
                 this.uCurriculum.setString(1, curriculum.getNome());
                 this.uCurriculum.setString(2, curriculum.getTipo());
-                this.uCurriculum.setInt(3, key);
+                this.uCurriculum.setString(3, curriculum.getTestuale());
+                this.uCurriculum.setInt(4, key);
                 this.uCurriculum.executeUpdate();
             } else { // Insert
                 this.iCurriculum.setString(1, curriculum.getNome());
                 this.iCurriculum.setString(2, curriculum.getTipo());
+                this.iCurriculum.setString(2, curriculum.getTestuale());
                 if (this.iCurriculum.executeUpdate() == 1) {
                     try (ResultSet keys = iCurriculum.getGeneratedKeys()) {
                         if (keys.next())
@@ -507,37 +487,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     }
     
     @Override
-    public void salvaFileSD(FileSD filesd) throws DataLayerException {
-        int key = filesd.getKey();
-        try{
-            if (filesd.getKey() > 0) { // Update
-                if (!filesd.isDirty())
-                    return;
-                this.uFile.setString(1, filesd.getNome());
-                this.uFile.setString(2, filesd.getTipo());
-                this.uFile.setInt(3, key);
-                this.uFile.executeUpdate();
-            } else { // insert
-                this.iFile.setString(1, filesd.getNome());
-                this.iFile.setString(2, filesd.getTipo());
-                if (this.iFile.executeUpdate() == 1) {
-                    try (ResultSet keys = iFile.getGeneratedKeys()) {
-                        if (keys.next())
-                            key = keys.getInt(1);
-                    }
-                }
-            }
-            if (key > 0) {
-                filesd.copyFrom(getFile(key));
-            }
-            filesd.setDirty(false);
-        } catch (SQLException ex) {
-            throw new DataLayerException("Impossibile salvare il file", ex);
-        }
-    }
-    
-    @Override
-    public void salvaImmagine(FileSD immagine) throws DataLayerException {
+    public void salvaImmagine(Immagine immagine) throws DataLayerException {
         int key = immagine.getKey();
         try {
             if (immagine.getKey() > 0) { // Update
@@ -570,16 +520,16 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     public void salvaInvito(Invito invito) throws DataLayerException {
         int key = invito.getKey();
         try {
-            if (invito.getKey() > 0) { // update
+            if (invito.getKey() > 0) { // Update
                 if(!invito.isDirty())
                     return;
+                this.uInvito.setString(1, invito.getStato());
                 this.uInvito.setInt(2, key);
-                this.uInvito.setString(1,invito.getStato());
                 this.uInvito.executeUpdate();
-            } else { // inserimento
+            } else { // Insert
                 this.iInvito.setString(1, invito.getMessaggio());
-                if (invito.getData() != null) {
-                    this.iInvito.setDate(2, new Date(invito.getData().getTimeInMillis()));
+                if (invito.getDataInvio() != null) {
+                    this.iInvito.setDate(2, new Date(invito.getDataInvio().getTimeInMillis()));
                 } else {
                     this.iInvito.setNull(2, java.sql.Types.DATE);
                 }
@@ -965,7 +915,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     }
     
     @Override
-    public void eliminaCurriculum(FileSD curriculum) throws DataLayerException {
+    public void eliminaCurriculum(Immagine curriculum) throws DataLayerException {
         int key = curriculum.getKey();
         try {
             dCurriculum.setInt(1, key);
@@ -987,18 +937,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     }
     
     @Override
-    public void eliminaFileSD(FileSD filesd) throws DataLayerException {
-        int key = filesd.getKey();
-        try {
-            dFile.setInt(1, key);
-            dFile.executeUpdate();
-        } catch (SQLException ex) {
-            throw new DataLayerException("Impossibile eliminare il file", ex);
-        }
-    }
-    
-    @Override
-    public void eliminaImmagine(FileSD immagine) throws DataLayerException {
+    public void eliminaImmagine(Immagine immagine) throws DataLayerException {
         int key = immagine.getKey();
         try {
             dImmagine.setInt(1, key);
@@ -1110,9 +1049,9 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     @Override
     public void eliminaPreparazioni(int ext_utente, int ext_skill) throws DataLayerException {
         try {
-            dCoprenti.setInt(1, ext_utente);
-            dCoprenti.setInt(2, ext_skill);
-            dCoprenti.executeUpdate();
+            dPreparazioni.setInt(1, ext_utente);
+            dPreparazioni.setInt(2, ext_skill);
+            dPreparazioni.executeUpdate();
         } catch (SQLException ex) {
             throw new DataLayerException("Impossibile cancellare la tupla di 'preparazioni'", ex);
         }
@@ -1130,7 +1069,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     }
     
     @Override
-    public FileSD getCurriculum(int curriculum_key) throws DataLayerException {
+    public Curriculum getCurriculum(int curriculum_key) throws DataLayerException {
         try {
             this.sCurriculumByID.setInt(1, curriculum_key);
             try(ResultSet rs = this.sCurriculumByID.executeQuery()){
@@ -1210,37 +1149,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     }
     
     @Override
-    public FileSD getFile(int file_key) throws DataLayerException {
-        try {
-            this.sFileByID.setInt(1, file_key);
-            try(ResultSet rs = this.sFileByID.executeQuery()){
-                if (rs.next())
-                    return creaFile(rs);
-            }
-        } catch (SQLException ex) {
-            throw new DataLayerException("Impossibile recuperare il file",ex);
-        }
-        return null;
-    }
-    
-    @Override
-    public List<FileSD> getFiles(Utente utente) throws DataLayerException {
-        List<FileSD> result = new ArrayList();
-        try {
-            this.sFilesByUtente.setInt(1, utente.getKey());
-            try (ResultSet rs = this.sFilesByUtente.executeQuery()) {
-                while (rs.next()) {
-                    result.add((FileSD) getFile(rs.getInt("id")));
-                }
-            }
-        } catch(SQLException ex) {
-            throw new DataLayerException("Impossibile reperire i file dell'utente", ex);
-        }
-        return result;
-    }
-    
-    @Override
-    public FileSD getImmagine(int immagine_key) throws DataLayerException {
+    public Immagine getImmagine(int immagine_key) throws DataLayerException {
         try {
             this.sImmagineByID.setInt(1, immagine_key);
             try (ResultSet rs = this.sImmagineByID.executeQuery()) {
@@ -1257,7 +1166,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     public Invito getInvito(int invito_key) throws DataLayerException {
         try {
             this.sInvitoByID.setInt(1, invito_key);
-            try (ResultSet rs = sInvitoByID.executeQuery()) {
+            try (ResultSet rs = this.sInvitoByID.executeQuery()) {
                 if (rs.next())
                     return creaInvito(rs);
             }
@@ -1278,7 +1187,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
                 }
             }
         } catch(SQLException ex) {
-            throw new DataLayerException("Impossibile reperire gli inviti dell'utente", ex);
+            throw new DataLayerException("Impossibile recuperare gli inviti dell'utente", ex);
         }
         return result;
     }
@@ -1540,7 +1449,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             sTasksByUtente.setInt(1, utente.getKey());
             try (ResultSet rs = sTasksByUtente.executeQuery()) {
                 while (rs.next()) {
-                    result.put(creaTask(rs), rs.getInt("coprenti.voto"));
+                    result.put(creaTask(rs), rs.getInt("voto"));
                 }
             }
         } catch (SQLException ex) {
@@ -1694,7 +1603,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             sUtentiByTask.setInt(1, task.getKey());
             try (ResultSet rs = sUtentiByTask.executeQuery()) {
                 while (rs.next()) {
-                    result.put(creaUtente(rs), rs.getInt("voto"));
+                    result.put(creaUtente(rs), rs.getInt("coprenti.voto"));
                 }
             }
         } catch (SQLException ex) {
@@ -1827,11 +1736,6 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             iDiscussione.close();
             uDiscussione.close();
             dDiscussione.close();
-            sFileByID.close();
-            sFilesByUtente.close();
-            iFile.close();
-            uFile.close();
-            dFile.close();
             sImmagineByID.close();
             iImmagine.close();
             uImmagine.close();

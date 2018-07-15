@@ -12,32 +12,23 @@
         </div>
         <div class="col-xs-9">
             <div class="contact--form margin_bottom_50 margin_top_50">
-                <form action="DoEditUserProfilePassword" method="post" name="signup_form" onsubmit="return signup_check()">
+                <form action="DoEditUserProfilePic" method="post" name="signup_form" onsubmit="return signup_check()" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="form-group">
-                                <h4>Modifica la tua password</h4>
+                                <h4>Modifica la tua immagine del profilo</h4>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-xs-6">
+                    <div class="row"> 
+                        <div class="col-xs-4">
                             <div class="form-group">
-                                <input type="password" name="old_psw" id="old_psw" placeholder="Inserisci la vecchia password" class="form-control" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <div class="form-group">
-                                <input type="password" name="new_psw" id="new_psw" placeholder="Inserisci la nuova password" class="form-control" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <div class="form-group">
-                                <input type="password" name="new_psw_rpt" id="new_psw_rpt" placeholder="Conferma la nuova password" class="form-control" required>
+                                <figure>
+                                    <img id="immagine_profilo" src="image?imgid=${propic_key}" class="img-circle circle-avatar img-responsive">
+                                </figure>
+                                <label class="btn btn-primary btn-file btn-upd bottone_carica_foto_profilo">Carica nuova foto profilo
+                                    <input type="file" id="foto_profilo" name="foto_profilo" class="hidden" accept="image/*" required/>
+                                </label>
                             </div>
                         </div>
                     </div>

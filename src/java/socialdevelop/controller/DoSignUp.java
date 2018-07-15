@@ -17,10 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
-import socialdevelop.data.impl.CurriculumImpl;
-import socialdevelop.data.impl.ImmagineImpl;
 import socialdevelop.data.impl.UtenteImpl;
+import socialdevelop.data.model.Curriculum;
 import socialdevelop.data.model.SocialDevelopDataLayer;
+import socialdevelop.data.model.Immagine;
 
 /**
  * @author Mario Vetrini
@@ -41,6 +41,7 @@ public class DoSignUp extends SocialDevelopBaseController {
         HttpSession s = request.getSession(true);
         if (s.getAttribute("userid") != null && ((int) s.getAttribute("userid")) > 0) {
             response.sendRedirect("Index");
+            return;
         }
         
         // RECUPERO L'UTENTE, I SUOI SKILL E I RELATIVI VOTI DALLA PAGINA PRECEDENTE
@@ -48,44 +49,61 @@ public class DoSignUp extends SocialDevelopBaseController {
         ArrayList<String> nomi_skill = (ArrayList<String>) s.getAttribute("nomi_skill");
         ArrayList<Integer> voti_skill = (ArrayList<Integer>) s.getAttribute("voti_skill");
         
-        //CONTROLLO SE IL PDF E' TESTUALE
+        // RECUPERO GLI IPOTETICI CV DPF E TESTUALI
+        Part CV_PDF_Part = request.getPart("CV_PDF");
         String CV_text = request.getParameter("CV_text");
+        
+        //CONTROLLO SE SONO STATI USATI ENTRAMBI I METODI DI CARICAMENTO
+        if (!"".equals(CV_text) && CV_PDF_Part.getSize() > 0) {
+            request.setAttribute("errore", "CV caricato in entrambi i modi");
+            response.sendRedirect("SignUpFiles");
+            return;
+        } else if (CV_PDF_Part.getSize() == 0 && "".equals(CV_text)) {
+            // CONTROLLO SE NON E' STATO CARICATO IL PDF IN ALCUN MODO
+            request.setAttribute("errore", "CV non caricato");
+            response.sendRedirect("SignUpFiles");
+            return;
+        }
+        
+        Curriculum curriculum = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).creaCurriculum();
+        // CONTROLLO SE E' STATO CARICATO IL PDF TESTUALE E SETTO I CAMPI
         if (!"".equals(CV_text)) {
-            // CONVERTIRLO IN UN PDF (COME?)
+            curriculum.setNome(utente.getUsername().concat("_CV testuale"));
+            curriculum.setTipo("curriculum testuale");
+            curriculum.setTestuale(CV_text);
         } else {
-            Part CV_PDF_Part = request.getPart("CV_PDF");
-            // CONTROLLO SE E' STATO CARICATO IL PDF
-            if (CV_PDF_Part == null || CV_PDF_Part.getSize() > 0) {
-                request.setAttribute("errore_pdf", "PDF non caricato");
-                response.sendRedirect("SignUpFiles");
-            }
-            // CARICO IL PDF
-            CurriculumImpl curriculum = new CurriculumImpl(((SocialDevelopDataLayer) request.getAttribute("datalayer")));
+            // CARICO IL PDF SUL SERVER
             curriculum.setNome(utente.getUsername().concat("_CV.pdf"));
             curriculum.setTipo("curriculum");
-            ((SocialDevelopDataLayer) request.getAttribute("datalayer")).salvaCurriculum(curriculum);
-            utente.setCurriculum(curriculum);
-            File file = new File("/Users/Mario/Desktop/prova", utente.getUsername().concat("_CV.pdf"));
+            File file = new File(getServletContext().getRealPath(File.separator)+
+                getServletContext().getInitParameter("cv.directory"), utente.getUsername().concat("_CV.pdf"));
             try (InputStream IS_CV_DPF = CV_PDF_Part.getInputStream();) {
                 Files.copy(IS_CV_DPF, file.toPath());
             }
         }
+        ((SocialDevelopDataLayer) request.getAttribute("datalayer")).salvaCurriculum(curriculum);
+        utente.setCurriculum(curriculum);
+        
         
         // CONTROLLO SE E' STATA CARICATA L'IMMAGINE
         Part Propic_Part = request.getPart("foto_profilo");
-        if (Propic_Part == null || Propic_Part.getSize() > 0) {
-            request.setAttribute("errore_propic", "Propic non caricata");
+        if (Propic_Part == null || Propic_Part.getSize() == 0) {
+            request.setAttribute("errore", "Propic non caricata");
             response.sendRedirect("SignUpFiles");
+            return;
         }
         // CARICO L'IMMAGINE
-        ImmagineImpl immagine = new ImmagineImpl(((SocialDevelopDataLayer) request.getAttribute("datalayer")));
+        Immagine immagine = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).creaImmagine();
         immagine.setNome(utente.getUsername().concat("_PROPIC.png"));
-        immagine.setTipo("immagine");
+        immagine.setTipo("members-img");
         ((SocialDevelopDataLayer) request.getAttribute("datalayer")).salvaImmagine(immagine);
         utente.setImmagine(immagine);
-        File file = new File("/Users/Mario/Desktop/prova", utente.getUsername().concat("_PROPIC.png"));
-        try (InputStream IS_PROPIC_DPF = Propic_Part.getInputStream();) {
-            Files.copy(IS_PROPIC_DPF, file.toPath());
+        //File file = new File("/Users/Mario/Desktop/prova", utente.getUsername().concat("_PROPIC.png"));
+        File file = new File(getServletContext().getRealPath(File.separator)+
+                getServletContext().getInitParameter("images.directory")+File.separator+
+                utente.getImmagine().getTipo(), utente.getUsername().concat("_PROPIC.png"));
+        try (InputStream IS_PROPIC = Propic_Part.getInputStream();) {
+            Files.copy(IS_PROPIC, file.toPath());
         }
         
         // INSERISCO L'UTENTE
@@ -118,16 +136,6 @@ public class DoSignUp extends SocialDevelopBaseController {
             request.setAttribute("exception", ex);
             action_error(request, response);
         }
-    }
-    
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Servlet SignUp";
     }
     
 }

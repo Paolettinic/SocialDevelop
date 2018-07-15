@@ -10,13 +10,14 @@ import socialdevelop.data.model.Invito;
 /**
  * @author Nicolò Paoletti
  */
+
 public class InvitoImpl implements Invito {
     
     private int key;
     private String messaggio;
-    private GregorianCalendar data;
-    private boolean offerta;
+    private GregorianCalendar data_invio;
     private String stato;
+    private boolean offerta;
     private Utente utente;
     private int utente_key;
     private Task task;
@@ -28,11 +29,11 @@ public class InvitoImpl implements Invito {
         this.ownerdatalayer = ownerdatalayer;
         this.key = 0;
         this.messaggio = "";
-        this.data = null;
-        this.offerta = false;
+        this.data_invio = null;
         this.stato = "";
-        this.utente_key = 0;
+        this.offerta = false;        
         this.utente = null;
+        this.utente_key = 0;
         this.task = null;
         this.task_key = 0;
     }
@@ -119,13 +120,13 @@ public class InvitoImpl implements Invito {
     }
     
     @Override
-    public GregorianCalendar getData() {
-        return this.data;
+    public GregorianCalendar getDataInvio() {
+        return this.data_invio;
     }
     
     @Override
-    public void setData(GregorianCalendar date) {
-        this.data = date;
+    public void setDataInvio(GregorianCalendar data_inizio) {
+        this.data_invio = data_inizio;
         this.dirty = true;
     }
     
@@ -133,7 +134,7 @@ public class InvitoImpl implements Invito {
     public void copyFrom(Invito invito) throws DataLayerException {
         this.key = invito.getKey();
         this.messaggio = invito.getMessaggio();
-        this.data = invito.getData();
+        this.data_invio = invito.getDataInvio();
         this.offerta = invito.getOfferta();
         this.utente_key = invito.getUtente().getKey();
         this.stato = invito.getStato();

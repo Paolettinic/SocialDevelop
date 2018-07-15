@@ -106,6 +106,22 @@ public class SkillImpl implements Skill {
         this.figli = figli;
         this.dirty = true;
     }
+    
+    // -------------------------
+    
+    @Override
+    public boolean equals(Object obj){
+        if(!(obj instanceof SkillImpl) )
+            return false;
+        else{
+            return ((SkillImpl)obj).getKey() == this.key;
+        }
+    }
+    
+    @Override
+    public int hashCode(){
+        return this.key;
+    }
 
     @Override
     public void copyFrom(Skill skill) throws DataLayerException {

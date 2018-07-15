@@ -43,13 +43,13 @@ public interface Utente {
     
     // ----------
     
-    FileSD getCurriculum() throws DataLayerException;
+    Curriculum getCurriculum() throws DataLayerException;
     
-    void setCurriculum(FileSD curriculum);
+    void setCurriculum(Curriculum curriculum);
     
-    FileSD getImmagine() throws DataLayerException;
+    Immagine getImmagine() throws DataLayerException;
     
-    void setImmagine(FileSD immagine);
+    void setImmagine(Immagine immagine);
     
     Map<Skill, Integer> getSkills() throws DataLayerException;
     
@@ -62,6 +62,10 @@ public interface Utente {
     List<Progetto> getProgetti() throws DataLayerException;
     
     void setProgetti(List<Progetto> progetti);
+    
+    List<Invito> getInviti() throws DataLayerException;
+    
+    void setInviti(List<Invito> inviti);
     
     // ----------
     

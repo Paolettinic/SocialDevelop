@@ -15,6 +15,7 @@ import socialdevelop.data.model.Utente;
 /**
  * @author Mario Vetrini
  */
+
 public class DoEditUserProfileRegistry extends SocialDevelopBaseController {
     
     private void action_error(HttpServletRequest request, HttpServletResponse response) {
@@ -49,7 +50,7 @@ public class DoEditUserProfileRegistry extends SocialDevelopBaseController {
         ((SocialDevelopDataLayer) request.getAttribute("datalayer")).salvaUtente(utente);
         
         // RIMANDO L'UTENTE ALLA PAGINA DI MODIFICA DEI DATI (MODALE?)
-        response.sendRedirect("EditUserProfileRegistry?utente_key="+utente.getKey());
+        response.sendRedirect("EditUserProfileRegistry");
         
         
     }

@@ -4,12 +4,14 @@ import it.univaq.f4i.iw.framework.data.DataLayerException;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
-import socialdevelop.data.model.FileSD;
+import socialdevelop.data.model.Curriculum;
 import socialdevelop.data.model.Progetto;
 import socialdevelop.data.model.Skill;
 import socialdevelop.data.model.SocialDevelopDataLayer;
 import socialdevelop.data.model.Task;
 import socialdevelop.data.model.Utente;
+import socialdevelop.data.model.Immagine;
+import socialdevelop.data.model.Invito;
 
 /**
  * @author Mario Vetrini
@@ -26,13 +28,14 @@ public class UtenteImpl implements Utente {
     private String password;
     private String biografia;
     // ----------
-    private FileSD curriculum;
+    private Curriculum curriculum;
     private int curriculum_key;
-    private FileSD immagine;
+    private Immagine immagine;
     private int immagine_key;
     private Map<Skill, Integer> skills;
     private Map<Task, Integer> tasks;
     private List<Progetto> progetti;
+    private List<Invito> inviti;
     // ----------
     protected SocialDevelopDataLayer ownerdatalayer;
     protected boolean dirty;
@@ -56,6 +59,7 @@ public class UtenteImpl implements Utente {
         skills = null;
         tasks = null;
         progetti = null;
+        inviti = null;
         // ----------
         dirty = false;
     }
@@ -149,7 +153,7 @@ public class UtenteImpl implements Utente {
     // ----------
 
     @Override
-    public FileSD getCurriculum() throws DataLayerException {
+    public Curriculum getCurriculum() throws DataLayerException {
         if (curriculum == null && curriculum_key > 0) {
             curriculum = ownerdatalayer.getCurriculum(curriculum_key);
         }
@@ -157,7 +161,7 @@ public class UtenteImpl implements Utente {
     }
 
     @Override
-    public void setCurriculum(FileSD curriculum) {
+    public void setCurriculum(Curriculum curriculum) {
         this.curriculum = curriculum;
         this.curriculum_key = curriculum.getKey();
         this.dirty = true;
@@ -169,7 +173,7 @@ public class UtenteImpl implements Utente {
     }
 
     @Override
-    public FileSD getImmagine() throws DataLayerException {
+    public Immagine getImmagine() throws DataLayerException {
         if (immagine == null && immagine_key > 0) {
             immagine = ownerdatalayer.getImmagine(immagine_key);
         }
@@ -177,7 +181,7 @@ public class UtenteImpl implements Utente {
     }
 
     @Override
-    public void setImmagine(FileSD immagine) {
+    public void setImmagine(Immagine immagine) {
         this.immagine = immagine;
         this.immagine_key = immagine.getKey();
         this.dirty = true;
@@ -230,7 +234,21 @@ public class UtenteImpl implements Utente {
         this.dirty = true;
     }
     
-    // ----------
+    @Override
+    public List<Invito> getInviti() throws DataLayerException {
+        if(inviti == null) {
+            inviti = ownerdatalayer.getInviti(this);
+        }
+        return inviti;
+    }
+
+    @Override
+    public void setInviti(List<Invito> inviti) {
+        this.inviti = inviti;
+        this.dirty = true;
+    }
+    
+    // -------------------------
 
     @Override
     public boolean equals(Object obj){

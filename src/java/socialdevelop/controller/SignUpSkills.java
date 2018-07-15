@@ -13,13 +13,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import socialdevelop.data.impl.UtenteImpl;
 import socialdevelop.data.model.Skill;
 import socialdevelop.data.model.SocialDevelopDataLayer;
+import socialdevelop.data.model.Utente;
 
 /**
  * @author Mario Vetrini
  */
+
 public class SignUpSkills extends SocialDevelopBaseController {
     
     private void action_error(HttpServletRequest request, HttpServletResponse response) {
@@ -51,7 +52,7 @@ public class SignUpSkills extends SocialDevelopBaseController {
         int numero_skill = Integer.valueOf(request.getParameter("numero_skill"));
         request.setAttribute("numero_skill", numero_skill);
         
-        UtenteImpl utente = new UtenteImpl(((SocialDevelopDataLayer) request.getAttribute("datalayer")));
+        Utente utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).creaUtente();
         
         // RACCOLGO I DATI GENERALI (DATI DA CONTROLLARE)
         utente.setNome(request.getParameter("nome"));

@@ -17,6 +17,7 @@ import socialdevelop.data.model.SocialDevelopDataLayer;
 /**
  * @author Mario Vetrini
  */
+
 public class DoLogin extends SocialDevelopBaseController {
     
     private void action_error(HttpServletRequest request, HttpServletResponse response) {

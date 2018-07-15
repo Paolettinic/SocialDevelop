@@ -30,6 +30,11 @@
     border-color: #f44336 !important;
 }
 
+.green-btn {
+    background-color: #4caf50 !important;
+    border-color: #4caf50 !important;
+}
+
 .centered {
     text-align: center;
 }

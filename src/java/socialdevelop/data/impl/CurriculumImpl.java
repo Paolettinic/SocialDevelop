@@ -2,7 +2,6 @@ package socialdevelop.data.impl;
 
 import it.univaq.f4i.iw.framework.data.DataLayerException;
 import socialdevelop.data.model.SocialDevelopDataLayer;
-import socialdevelop.data.model.FileSD;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -11,17 +10,19 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import socialdevelop.data.model.Curriculum;
 
 /**
  * @author Nicolò Paoletti
  * @author Mario Vetrini;
  */
 
-public class CurriculumImpl implements FileSD {
+public class CurriculumImpl implements Curriculum {
     
     private int key;
     private String nome;
     private String tipo;
+    private String testuale;
     protected SocialDevelopDataLayer ownerdatalayer;
     protected boolean dirty;
     
@@ -30,6 +31,7 @@ public class CurriculumImpl implements FileSD {
         this.key = 0;
         this.nome = "";
         this.tipo = "";
+        this.testuale = "";
         this.dirty = false;
     }
     
@@ -40,6 +42,17 @@ public class CurriculumImpl implements FileSD {
     
     protected void setKey(int key) {
         this.key = key;
+    }
+    
+    @Override
+    public String getNome() {
+        return this.nome;
+    }
+    
+    @Override
+    public void setNome(String nome) {
+        this.nome = nome;
+        this.dirty = true;
     }
     
     @Override
@@ -54,15 +67,16 @@ public class CurriculumImpl implements FileSD {
     }
     
     @Override
-    public String getNome() {
-        return this.nome;
+    public String getTestuale() {
+        return this.testuale;
     }
     
     @Override
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setTestuale(String testuale) {
+        this.testuale = testuale;
         this.dirty = true;
     }
+    
     
     @Override
     public InputStream getFile() throws DataLayerException {
@@ -98,10 +112,11 @@ public class CurriculumImpl implements FileSD {
     }
     
     @Override
-    public void copyFrom(FileSD curriculum) throws DataLayerException {
+    public void copyFrom(Curriculum curriculum) throws DataLayerException {
         this.key = curriculum.getKey();
         this.nome = curriculum.getNome();
         this.tipo = curriculum.getTipo();
+        this.testuale = curriculum.getTestuale();
         this.dirty = true;
     }
     

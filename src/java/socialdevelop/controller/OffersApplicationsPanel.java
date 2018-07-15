@@ -5,12 +5,14 @@ import it.univaq.f4i.iw.framework.result.FailureResult;
 import it.univaq.f4i.iw.framework.result.TemplateManagerException;
 import it.univaq.f4i.iw.framework.result.TemplateResult;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import socialdevelop.data.model.Invito;
 import socialdevelop.data.model.SocialDevelopDataLayer;
 import socialdevelop.data.model.Utente;
 
@@ -18,7 +20,7 @@ import socialdevelop.data.model.Utente;
  * @author Mario Vetrini
  */
 
-public class EditUserProfileEmail extends SocialDevelopBaseController {
+public class OffersApplicationsPanel extends SocialDevelopBaseController {
     
     private void action_error(HttpServletRequest request, HttpServletResponse response) {
         if (request.getAttribute("exception") != null) {
@@ -28,17 +30,22 @@ public class EditUserProfileEmail extends SocialDevelopBaseController {
         }
     }
     
-    private void action_edit_user_profile_email(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, TemplateManagerException, DataLayerException {
+    private void action_offers_applications_panel(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, TemplateManagerException, DataLayerException {
         HttpSession s = request.getSession(true);
-        request.setAttribute("page_title", "Modifica i tuoi dati");
-        Utente utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtente((int) s.getAttribute("userid"));
-        if (utente != null) {
-            request.setAttribute("profilo_key", (int) s.getAttribute("userid"));
-            TemplateResult res = new TemplateResult(getServletContext());
-            res.activate("edit_user_profile_email.html", request, response);
+        if (s.getAttribute("userid") == null) {
+            request.setAttribute("utente_key", 0);
         } else {
-            response.sendRedirect("Index");
+            request.setAttribute("utente_key", (int) s.getAttribute("userid"));
         }
+        
+        Utente utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtente((int) s.getAttribute("userid"));
+        List<Invito> inviti = utente.getInviti();
+        request.setAttribute("inviti", inviti);
+
+        request.setAttribute("page_title", "Pannello delle offerte e delle proposte");
+        TemplateResult tmp = new TemplateResult(getServletContext());
+        tmp.activate("action_offers_applications_panel.html", request, response);
+        
     }
     
     @Override
@@ -46,7 +53,7 @@ public class EditUserProfileEmail extends SocialDevelopBaseController {
         HttpSession s = request.getSession(true);
         try {
             if (s.getAttribute("userid") != null) {
-                action_edit_user_profile_email(request, response);
+                action_offers_applications_panel(request, response);
             } else {
                 response.sendRedirect("Login");
             }
@@ -57,5 +64,5 @@ public class EditUserProfileEmail extends SocialDevelopBaseController {
             Logger.getLogger(UserProfile.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
 }

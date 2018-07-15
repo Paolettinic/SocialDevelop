@@ -14,6 +14,7 @@ import socialdevelop.data.model.Utente;
 /**
  * @author Mario Vetrini
  */
+
 public class DoEditUserProfilePassword extends SocialDevelopBaseController {
     
     private void action_error(HttpServletRequest request, HttpServletResponse response) {
@@ -52,7 +53,7 @@ public class DoEditUserProfilePassword extends SocialDevelopBaseController {
         ((SocialDevelopDataLayer) request.getAttribute("datalayer")).salvaUtente(utente);
         
         // RIMANDO L'UTENTE ALLA PAGINA DI MODIFICA DEI DATI (MODALE?)
-        response.sendRedirect("EditUserProfilePassword?utente_key="+utente.getKey());
+        response.sendRedirect("EditUserProfilePassword");
     }
     
     @Override
@@ -64,15 +65,5 @@ public class DoEditUserProfilePassword extends SocialDevelopBaseController {
             action_error(request, response);
         }
     }
-    
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
     
 }

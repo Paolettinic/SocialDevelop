@@ -9,14 +9,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import socialdevelop.data.model.FileSD;
 import socialdevelop.data.model.SocialDevelopDataLayer;
+import socialdevelop.data.model.Immagine;
 
 /**
  * @author Nicolò Paoletti
  * @author Mario Vetrini
  */
-public class ImmagineImpl implements FileSD {
+
+public class ImmagineImpl implements Immagine {
     
     private int key;
     private String nome;
@@ -107,7 +108,7 @@ public class ImmagineImpl implements FileSD {
     }
     
     @Override
-    public void copyFrom(FileSD immagine) throws DataLayerException {
+    public void copyFrom(Immagine immagine) throws DataLayerException {
         this.key = immagine.getKey();
         this.nome = immagine.getNome();
         this.tipo = immagine.getTipo();

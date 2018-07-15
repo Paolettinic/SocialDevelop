@@ -12,8 +12,7 @@ import socialdevelop.data.model.SocialDevelopDataLayer;
 import socialdevelop.data.model.Utente;
 
 /**
- *
- * @author Mario
+ * @author Mario Vetrini
  */
 public class DoEditUserProfileEmail extends SocialDevelopBaseController {
     
@@ -32,10 +31,13 @@ public class DoEditUserProfileEmail extends SocialDevelopBaseController {
         int utente_key = (int) s.getAttribute("userid");
         Utente utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtente(utente_key);
         
-        // EFFETTUO VARI CONTROLLI SUI DATI (LATO CLIENT CONTROLLARE CHE LE DUE NUOVE PASSWORD SIANO UGUALI E DIVERSE DALLA VECCHIA)
+        // EFFETTUO VARI CONTROLLI SUI DATI
         String new_email = request.getParameter("new_email");
         if (new_email.equals(utente.getEmail())) {
-            // RIMANDARE ALLA STESSA PAGINA MA CON UN MESSAGGIO DI ERRORE
+            // RIMANDARE ALLA STESSA PAGINA MA CON UN MESSAGGIO DI ERRORE (E-MAIL UGUALE)
+        }
+        if (((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtenteByEmail(new_email) != null) {
+            // RIMANDARE ALLA STESSA PAGINA MA CON UN MESSAGGIO DI ERRORE (E-MAIL GIA' IN USO)
         }
         
         // SETTO LA NUOVA E-MAIL
@@ -45,7 +47,7 @@ public class DoEditUserProfileEmail extends SocialDevelopBaseController {
         ((SocialDevelopDataLayer) request.getAttribute("datalayer")).salvaUtente(utente);
         
         // RIMANDO L'UTENTE ALLA PAGINA DI MODIFICA DEI DATI (MODALE?)
-        response.sendRedirect("EditUserProfileEmail?utente_key="+utente.getKey());
+        response.sendRedirect("EditUserProfileEmail");
     }
     
     @Override
@@ -57,15 +59,5 @@ public class DoEditUserProfileEmail extends SocialDevelopBaseController {
             action_error(request, response);
         }
     }
-    
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
     
 }

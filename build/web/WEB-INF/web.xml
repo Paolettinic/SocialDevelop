@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
-    
     <context-param>
         <param-name>view.outline_template</param-name>
         <param-value>skeleton-page.html</param-value>
     </context-param>
     <context-param>
         <param-name>images.directory</param-name>
-        <param-value>\img\</param-value>
+        <param-value>img</param-value>
     </context-param>
-    
+    <context-param>
+        <param-name>cv.directory</param-name>
+        <param-value>cv</param-value>
+    </context-param>
     <servlet>
         <servlet-name>Index</servlet-name>
         <servlet-class>socialdevelop.controller.Index</servlet-class>
@@ -122,7 +124,34 @@
         <servlet-name>Project</servlet-name>
         <servlet-class>socialdevelop.controller.Project</servlet-class>
     </servlet>
-    
+    <servlet>
+        <servlet-name>EditUserProfilePic</servlet-name>
+        <servlet-class>socialdevelop.controller.EditUserProfilePic</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DoEditUserProfilePic</servlet-name>
+        <servlet-class>socialdevelop.controller.DoEditUserProfilePic</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditUserProfileCV</servlet-name>
+        <servlet-class>socialdevelop.controller.EditUserProfileCV</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DoEditUserProfileCV</servlet-name>
+        <servlet-class>socialdevelop.controller.DoEditUserProfileCV</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>OffersApplicationsPanel</servlet-name>
+        <servlet-class>socialdevelop.controller.OffersApplicationsPanel</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Logout</servlet-name>
+        <servlet-class>socialdevelop.controller.Logout</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChangeInviteStatus</servlet-name>
+        <servlet-class>socialdevelop.controller.ChangeInviteStatus</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UserProfile</servlet-name>
         <url-pattern>/UserProfile</url-pattern>
@@ -235,15 +264,40 @@
         <servlet-name>Search</servlet-name>
         <url-pattern>/search</url-pattern>
     </servlet-mapping>
-    
+    <servlet-mapping>
+        <servlet-name>EditUserProfilePic</servlet-name>
+        <url-pattern>/EditUserProfilePic</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoEditUserProfilePic</servlet-name>
+        <url-pattern>/DoEditUserProfilePic</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditUserProfileCV</servlet-name>
+        <url-pattern>/EditUserProfileCV</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoEditUserProfileCV</servlet-name>
+        <url-pattern>/DoEditUserProfileCV</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OffersApplicationsPanel</servlet-name>
+        <url-pattern>/OffersApplicationsPanel</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Logout</servlet-name>
+        <url-pattern>/Logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangeInviteStatus</servlet-name>
+        <url-pattern>/ChangeInviteStatus</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
-    
     <welcome-file-list>
         <welcome-file>Index</welcome-file>
     </welcome-file-list>
-    
 </web-app>

@@ -12,13 +12,11 @@ import java.util.Map;
 
 public interface SocialDevelopDataLayer extends DataLayer {
     
-    FileSD creaCurriculum();
+    Curriculum creaCurriculum();
     
     Discussione creaDiscussione();
     
-    FileSD creaFile();
-    
-    FileSD creaImmagine();
+    Immagine creaImmagine();
     
     Invito creaInvito();
     
@@ -36,13 +34,11 @@ public interface SocialDevelopDataLayer extends DataLayer {
     
     // ---------------
     
-    void salvaCurriculum(FileSD curriculum) throws DataLayerException;
+    void salvaCurriculum(Curriculum curriculum) throws DataLayerException;
     
     void salvaDiscussione(Discussione discussione) throws DataLayerException;
     
-    void salvaFileSD(FileSD filesd) throws DataLayerException;
-    
-    void salvaImmagine(FileSD immagine) throws DataLayerException;
+    void salvaImmagine(Immagine immagine) throws DataLayerException;
     
     void salvaInvito(Invito invito) throws DataLayerException;
     
@@ -68,13 +64,11 @@ public interface SocialDevelopDataLayer extends DataLayer {
     
     // ---------------
     
-    void eliminaCurriculum(FileSD curriculum) throws DataLayerException;
+    void eliminaCurriculum(Immagine curriculum) throws DataLayerException;
     
     void eliminaDiscussione(Discussione discussione) throws DataLayerException;
     
-    void eliminaFileSD(FileSD filesd) throws DataLayerException;
-    
-    void eliminaImmagine(FileSD immagine) throws DataLayerException;
+    void eliminaImmagine(Immagine immagine) throws DataLayerException;
     
     void eliminaInvito(Invito invito) throws DataLayerException;
     
@@ -100,7 +94,7 @@ public interface SocialDevelopDataLayer extends DataLayer {
     
     // ---------------
     
-    FileSD getCurriculum(int curriculum_key) throws DataLayerException;
+    Curriculum getCurriculum(int curriculum_key) throws DataLayerException;
     
     Discussione getDiscussione(int discussione_key) throws DataLayerException;
     
@@ -110,11 +104,7 @@ public interface SocialDevelopDataLayer extends DataLayer {
     
     List<Discussione> getDiscussioni(Progetto progetto, int first, int perPage) throws DataLayerException;
     
-    FileSD getFile(int file_key) throws DataLayerException;
-    
-    List<FileSD> getFiles(Utente utente) throws DataLayerException;
-    
-    FileSD getImmagine(int immagine_key) throws DataLayerException;
+    Immagine getImmagine(int immagine_key) throws DataLayerException;
     
     Invito getInvito(int invito_key) throws DataLayerException;
     
