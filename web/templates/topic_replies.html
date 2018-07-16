@@ -7,8 +7,8 @@
         </div>
 
         <ul class="breadcrumb text-gray ff--primary">
-            <li><a href="home-1.html" class="btn-link">${task.progetto.nome}</a></li>
-            <li><a href="forums.html" class="btn-link">${task.nome}</a></li>
+            <li><a href="Project?utente_key=${utente.key}&progetto_id=${task.progetto.key}&page=1&perPage=1" class="btn-link">${task.progetto.nome}</a></li>
+            <li><a href="TaskPage?utente_key=${utente.key}&task_id=${task.key}&page=1&perPage=1" class="btn-link">${task.nome}</a></li>
             <li class="active"><span class="text-primary">${discussione.titolo}</span></li>
         </ul>
     </div>
@@ -22,18 +22,6 @@
             <!-- Main Content Start -->
             <div class="main--content col-md-12 pb--60" data-trigger="stickyScroll">
                 <div class="main--content-inner drop--shadow">
-                    <!-- Forum Header Start -->
-                    <div class="forum--header pb--50">
-                        <div class="forum--subtitle ff--primary fs--14 text-darker">
-                            <#assign count = 0>
-                            <#list messaggi as messaggio>
-                            <#assign count++>
-                            </#list>
-                            <p>Viewing 5 topics - 1 through 5 (of ${count} total)</p>
-                        </div>
-                    </div>
-                    <!-- Forum Header End -->
-
                     <!-- Topic Replies Start -->
                     <div class="topic--replies">
                         <ul class="nav">
@@ -45,20 +33,20 @@
                                 <div class="topic--reply">
                                     <div class="header clearfix">
                                         <p class="date float--left">${messaggio.data.time?string["dd MMMM yyyy"]}</p>
-                                        <p class="link float--right"><a href="topic-replies.html#575">#${i}</a></p>
+                                        <p class="link float--right"><a>#${i}</a></p>
                                         <#assign i++>
                                     </div>
 
                                     <div class="body clearfix">
                                         <div class="author mr--20 float--left text-center">
                                             <div class="avatar" data-overlay="0.3" data-overlay-color="primary">
-                                                <a href="member-activity-personal.html">
+                                                <a href="UserProfile?utente_key=${messaggio.utente.key}">
                                                     <img src="image?imgid=${messaggio.utente.immagine.key}" alt="">
                                                 </a>
                                             </div>
 
                                             <div class="name text-darkest">
-                                                <p><a href="member-activity-personal.html">${messaggio.utente.nome} ${messaggio.utente.cognome}</a></p>
+                                                <p><a href="UserProfile?utente_key=${messaggio.utente.key}">${messaggio.utente.nome} ${messaggio.utente.cognome}</a></p>
                                             </div>
                                             <#if messaggio.utente.key == messaggio.discussione.task.progetto.key>
                                             <div class="role text-uppercase">
@@ -81,9 +69,8 @@
                     <!-- Topic Replies End -->
 
                 </div>
-                <form action ="<#if true>setMessage?utente_id=${utente.key}&task_id=${task.key}&discussione_id=${discussione.key}</#if>" method="POST">
-                    <input type="hidden" name="user_id" value="${utente.key}"/>
-                    <input type="hidden" name="taskerino_id" value="${task.key}"/>
+                <form action ="SetMessage" method="GET">
+                    <input type="hidden" name="taskerino_id" value="${task_id}"/>
                     <input type="hidden" name="discussion_id" value="${discussione.key}"/>
                 
                     <div class="alert mt--30">

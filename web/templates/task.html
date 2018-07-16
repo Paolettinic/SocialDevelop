@@ -13,7 +13,7 @@
         
         <br>
         <ul class="breadcrumb text-gray ff--primary">
-            <li><a href="Test" class="btn-link">${project_name}</a></li>
+            <li><a href="Project?utente_key=${utente.key}&progetto_id=${project_id}&page=1&perPage=1" class="btn-link">${project_name}</a></li>
             <li class="active"><span class="text-primary">${task_name}</span></li>
         </ul>
         <div>
@@ -21,9 +21,27 @@
                 <p>${task.descrizione}</p>
             </div>
         </div>
-        <div class="col-md-3 col-xs-12 float--md-none main--content">
-                <a class="btn btn-primary max-width" href="#">Richiedi l'iscrizione al task</a>
+        <div class="row">
+            <div class="col-md-12">
+                <span class="cover--user-desc fw--400 fs--18 fstyle--i text-white"> Skills e livelli richiesti: <#list skills as skill, vote> ${skill.nome}: ${vote} </#list></span>
+            </div>
         </div>
+        </br>
+        <#assign presente = false>
+        <#list inviti as invito>
+            <#if invito.utente.key == utente.key>
+                <#assign presente = true>
+            </#if>
+        </#list>
+        <#if skilled == true && presente == false && task.chiuso == true && utente.key != coordinatore>
+            <div class="row">
+                <div class="col-xs-4 col-xs-offset-4">
+                    <form action="SendTaskRequest" method="POST">
+                        <button class="btn btn-primary max-width" name="taskiddi" value="${task.key}">Richiedi l'iscrizione al task</button>
+                    </form>
+                </div>
+            </div>
+        </#if>
     </div>
 </div>
 <!-- Cover Header End -->
@@ -63,11 +81,18 @@
                                     </thead>
 
                                     <tbody>
+                                        <#assign visualizza = false>
+                                        <#list task.utenti as user, vote>
+                                            <#if user.key == utente.key>
+                                                <#assign visualizza = true>
+                                            </#if>
+                                        </#list>
                                         <#list topics?sort_by("data")?reverse as topic>
                                         <#assign j = topic?index>
+                                        <#if topic.pubblica == true || visualizza == true>
                                         <tr>
                                             <td>
-                                                <h4 class="h6 fw--500 text-darkest"><a href="sub-forums.html" class="btn-link"><strong>${topic.titolo}</strong></a></h4>
+                                                <h4 class="h6 fw--500 text-darkest"><a href="Messages?discussione_id=${topic.key}" class="btn-link"><strong>${topic.titolo}</strong></a></h4>
                                             </td>
                                             <td>
                                                 <p class="ff--primary fw--500 fs--14 text-darkest">${posts[j]}</p>
@@ -75,19 +100,21 @@
                                             <td>
                                                 <p>${topic.data.time?string["dd MMMM yyyy"]}</p>
 
-                                                <a href="member-activity-personal.html" class="topic--author">
+                                                <a href="UserProfile?utente_key=${topic.utente.key}" class="topic--author">
                                                     <span class="name">${topic.utente.nome} ${topic.utente.cognome}</span>
                                                     <span class="avatar"><img src="image?imgid=${topic.utente.immagine.key}" alt=""></span>
                                                 </a>
                                             </td>
                                         </tr>
+                                        </#if>
                                         </#list>
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="alert mt--30">
-                                <div class="alert--inner ff--primary text-white bg-primary">
-                                    <p>Guarda tutte le discussioni del relativo task</p>
+                            </br>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <a href="TaskForum?task_id=${task.key}&page=1&perPage=1&async=0" class="btn btn-primary col-md float--right">Guarda tutte le discussioni del relativo task</a>
                                 </div>
                             </div>
                             </div>
@@ -97,22 +124,11 @@
                             <div class="filter--nav pb--60 clearfix">
                                 <div class="filter--link float--left">
                                     <#assign i=0>
+                                    <#assign visualizza = false>
                                     <#list task.utenti as user, vote>
                                     <#assign i++>
                                     </#list>
-                                    <h2 class="h4"><a href="members.html" class="btn-link">Membri: ${i}</a></h2>
-                                </div>
-
-                                <div class="filter--options float--right">
-                                    <label>
-                                        <span class="fs--14 ff--primary fw--500 text-darker">Show By :</span>
-
-                                        <select name="activityfilter" class="form-control form-sm" data-trigger="selectmenu">
-                                            <option value="last-active" selected>Last Active</option>
-                                            <option value="new-registered">New Registerd</option>
-                                            <option value="alphabetical">Alphabetical</option>
-                                        </select>
-                                    </label>
+                                    <h2 class="h4"><a class="btn-link">Membri: ${i}</a></h2>
                                 </div>
                             </div>
                     <!-- Filter Nav End -->
@@ -126,14 +142,14 @@
                                         <!-- Member Item Start -->
                                         <div class="member--item online">
                                             <div class="img img-circle">
-                                                <a href="member-activity-personal.html" class="btn-link">
+                                                <a href="UserProfile?utente_key=${user.key}" class="btn-link">
                                                     <img src="image?imgid=${user.immagine.key}" alt="">
                                                 </a>
                                             </div>
 
                                             <div class="name">
                                                 <h3 class="h6 fs--12">
-                                                    <a href="member-activity-personal.html" class="btn-link">${user.nome} ${user.cognome}</a>
+                                                    <a href="UserProfile?utente_key=${user.key}" class="btn-link">${user.nome} ${user.cognome}</a>
                                                 </h3>
                                             </div>
 
@@ -189,9 +205,6 @@
                 </div>
             </div>
             <!-- Main Content End -->
-
-            <!-- Main Sidebar Start -->
-            <!-- Main Sidebar End -->
         </div>
     </div>
 </section>

@@ -12,19 +12,29 @@ import javax.servlet.http.HttpServletResponse;
 import socialdevelop.data.model.SocialDevelopDataLayer;
 import socialdevelop.data.model.Messaggio;
 import java.util.GregorianCalendar;
+import javax.servlet.http.HttpSession;
 import socialdevelop.data.impl.MessaggioImpl;
+import socialdevelop.data.model.Discussione;
+import socialdevelop.data.model.Utente;
 
 /**
  * @author Davide De Marco
  */
 
 public class SetMessage extends SocialDevelopBaseController{
-    private void setmessage(HttpServletRequest request, HttpServletResponse response, String message) throws ServletException, DataLayerException, IOException{
+    private void setmessage(HttpServletRequest request, HttpServletResponse response) throws ServletException, DataLayerException, IOException{
+        
+        HttpSession s = request.getSession(true);
+        
+        int utente_key = (int) s.getAttribute("userid");
+        Utente utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtente(utente_key);
+        
+        int taskid = SecurityLayer.checkNumeric(request.getParameter("taskerino_id"));
         String testo = request.getParameter("reply");
-        int ext_utente = SecurityLayer.checkNumeric(request.getParameter("user_id"));
         int ext_discussione = SecurityLayer.checkNumeric(request.getParameter("discussion_id"));
         GregorianCalendar data = new GregorianCalendar();
         boolean async = false;
+        Discussione discussione = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getDiscussione(ext_discussione);
         
         if(request.getParameter("async")!=null)
             async = SecurityLayer.checkNumeric(request.getParameter("async")) == 1;
@@ -32,10 +42,11 @@ public class SetMessage extends SocialDevelopBaseController{
         System.out.println(async);
        
         SocialDevelopDataLayer datalayer = (SocialDevelopDataLayer) request.getAttribute("datalayer");
-        Messaggio messaggio = new MessaggioImpl(((SocialDevelopDataLayer) request.getAttribute("datalayer")));
+        Messaggio messaggio = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).creaMessaggio();
         messaggio.setTesto(testo);
-        //messaggio.setUtente(utente);
-        //messaggio.setDiscussione(discussione);
+        messaggio.setUtente(utente);
+        messaggio.setDiscussione(discussione);
+        messaggio.setData(data);
         
         datalayer.salvaMessaggio(messaggio);
         System.out.println(testo);
@@ -47,16 +58,14 @@ public class SetMessage extends SocialDevelopBaseController{
                 out.print(testo);
             }
         } else {
-            response.sendRedirect("/SocialDevelop/Messages?utente_id="+SecurityLayer.checkNumeric(request.getParameter("user_id"))+"&task_id="+SecurityLayer.checkNumeric(request.getParameter("taskerino_id"))+"&discussione_id="+SecurityLayer.checkNumeric(request.getParameter("taskerino_id")));
+            response.sendRedirect("Messages?discussione_id="+ext_discussione);
         }
     }
     
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-       String message;
         try {
-            message = SecurityLayer.addSlashes(request.getParameter("reply"));
-            setmessage(request, response, message);
+            setmessage(request, response);
         } catch (DataLayerException | IOException ex) {
             Logger.getLogger(SetMessage.class.getName()).log(Level.SEVERE, null, ex);
         }

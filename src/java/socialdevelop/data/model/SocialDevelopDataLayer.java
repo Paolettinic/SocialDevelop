@@ -140,6 +140,8 @@ public interface SocialDevelopDataLayer extends DataLayer {
     
     List<Skill> getSkillsNoPadre() throws DataLayerException;
     
+    boolean checkUtenteTask(Utente utente, Task task) throws DataLayerException;
+    
     Task getTask(int task_key) throws DataLayerException;
     
     Map<Task, Integer> getTasks(Utente utente) throws DataLayerException;

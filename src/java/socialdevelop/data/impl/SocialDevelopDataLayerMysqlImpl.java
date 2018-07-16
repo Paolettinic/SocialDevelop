@@ -1419,6 +1419,27 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     }
     
     @Override
+    public boolean checkUtenteTask(Utente utente, Task task) throws DataLayerException{
+        Map<Skill, Integer> user_skills = utente.getSkills();
+        Map<Skill, Integer> task_skills = task.getSkills();
+                
+        for(Map.Entry<Skill, Integer> task_skill: task_skills.entrySet()){
+            if(!user_skills.containsKey(task_skill.getKey())) return false;
+            for(Map.Entry<Skill, Integer> user_skill: user_skills.entrySet()){
+                if(user_skill.getKey().equals(task_skill.getKey())){
+                    System.out.println(user_skill.getValue());
+                    System.out.println(task_skill.getValue());
+                    if(user_skill.getValue()<task_skill.getValue()){
+                        System.out.println(user_skill.getValue()<task_skill.getValue());
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+    
+    @Override
     public Task getTask(int task_key) throws DataLayerException {
         try {
             sTaskByID.setInt(1, task_key);
@@ -1440,7 +1461,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             sTasksByUtente.setInt(1, utente.getKey());
             try (ResultSet rs = sTasksByUtente.executeQuery()) {
                 while (rs.next()) {
-                    result.put((Task) getTask(rs.getInt("ext_task")), rs.getInt("voto"));
+                    result.put(creaTask(rs), rs.getInt("coprenti.voto"));
                 }
             }
         } catch (SQLException ex) {
@@ -1594,7 +1615,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             sUtentiByTask.setInt(1, task.getKey());
             try (ResultSet rs = sUtentiByTask.executeQuery()) {
                 while (rs.next()) {
-                    result.put(creaUtente(rs), rs.getInt("coprenti.voto"));
+                    result.put(creaUtente(rs), rs.getInt("voto"));
                 }
             }
         } catch (SQLException ex) {

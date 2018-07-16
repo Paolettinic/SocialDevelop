@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import socialdevelop.data.model.Discussione;
 import socialdevelop.data.model.Progetto;
 import socialdevelop.data.model.SocialDevelopDataLayer;
@@ -29,48 +30,54 @@ public class Project extends SocialDevelopBaseController {
         return; //body for action_error
     }
     
-    private void action_default(HttpServletRequest request, HttpServletResponse response,int utente_id, int progetto_id, int page, int perPage)throws IOException, ServletException, TemplateManagerException{
+    private void action_default(HttpServletRequest request, HttpServletResponse response, int progetto_id)throws IOException, ServletException, TemplateManagerException{
         try {
+            
+            HttpSession s = request.getSession(true);
+            
+            if (s.getAttribute("userid") == null) {
+                request.setAttribute("utente_key", 0);
+            } else {
+                request.setAttribute("utente_key", (int) s.getAttribute("userid"));
+            }
+            
+            int utente_key = (int) s.getAttribute("userid");
+            
+            Utente utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtente(utente_key);
+            
+            
             SocialDevelopDataLayer datalayer = ((SocialDevelopDataLayer)request.getAttribute("datalayer"));
-            int firstResult = (page-1)*perPage;
-            Utente utente = ((SocialDevelopDataLayer)request.getAttribute("datalayer")).getUtente(utente_id);
             Progetto progetto = datalayer.getProgetto(progetto_id);
-            Task task = datalayer.getTask(progetto_id);
             List<Task> tasks = datalayer.getTasks(progetto);
-            Progetto proj = task.getProgetto();
-            Map<Utente,Integer> utenti = datalayer.getUtenti(task);
-            List<Discussione> discussioni = datalayer.getDiscussioni(task,firstResult,perPage);
+            
             List<Integer> n_posts = new ArrayList();
             List<Date> deadline = new ArrayList();
-            List<Discussione> discussionis = datalayer.getDiscussioni(progetto, firstResult, perPage);
+            List<Discussione> discussionis = datalayer.getDiscussioni(progetto, 0, 3);
+            List<Discussione> discussioni = new ArrayList<>();
+            
+            for(Task t : tasks){
+                deadline.add(t.getDataFine().getTime());
+                discussioni.addAll(datalayer.getDiscussioni(t,0,3));
+            }
             
             for(Discussione d : discussioni){
                 n_posts.add(d.getMessaggi().size());
             }
             
-            for(Task t : tasks){
-                deadline.add(t.getDataFine().getTime());
-            }
-            
-            request.setAttribute("utente_id", utente_id);
             request.setAttribute("utente", utente);
             request.setAttribute("tasks", tasks);
             request.setAttribute("progetto", progetto);
-            request.setAttribute("project_id", proj.getKey());
-            request.setAttribute("project_name",proj.getNome());
-            request.setAttribute("project_description",proj.getDescrizione());
-            request.setAttribute("project_collaborators",proj.getUtente());
-            request.setAttribute("utenti",utenti);
-            request.setAttribute("progetto",proj);
-            request.setAttribute("utente_img",proj.getUtente().getImmagine().toString());
+            request.setAttribute("project_id", progetto.getKey());
+            request.setAttribute("project_name",progetto.getNome());
+            request.setAttribute("project_description",progetto.getDescrizione());
+            request.setAttribute("project_collaborators",progetto.getUtente());
+            request.setAttribute("progetto",progetto);
+            request.setAttribute("utente_img",progetto.getUtente().getImmagine().toString());
             request.setAttribute("topics",discussioni);
             request.setAttribute("posts",n_posts);
-            request.setAttribute("data_fine",task.getDataFine());
             request.setAttribute("deadline", deadline);
             request.setAttribute("topicss", discussionis);
-            
-            request.setAttribute("currentpage",page);
-            request.setAttribute("perPage",perPage);
+            request.setAttribute("utente_key", s.getAttribute("userid"));
             
             TemplateResult res = new TemplateResult(getServletContext());
             res.activate("project.html", request, response);
@@ -82,16 +89,10 @@ public class Project extends SocialDevelopBaseController {
     
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        int utente_id;
         int progetto_id;
-        int page;
-        int perPage;
         try {
-            utente_id = SecurityLayer.checkNumeric(request.getParameter("utente_id"));
             progetto_id = SecurityLayer.checkNumeric(request.getParameter("progetto_id"));
-            page = request.getParameter("page") == null ? 1 : SecurityLayer.checkNumeric(request.getParameter("page"));
-            perPage = request.getParameter("perpage") == null ? 7 : SecurityLayer.checkNumeric(request.getParameter("perpage"));
-            action_default(request,response,utente_id, progetto_id, page, perPage);
+            action_default(request,response, progetto_id);
         } catch (IOException ex) {
             request.setAttribute("exception", ex);
             action_error(request, response);

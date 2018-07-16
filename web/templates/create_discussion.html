@@ -1,0 +1,54 @@
+<!-- Page Header Start -->
+<div class="page--header pt--60 pb--60 text-center" data-bg-img="img/page-header-img/bg.jpg" data-overlay="0.85">
+    <div class="container">
+        <div class="title">
+            <h2 class="h1 text-white">${task.nome}</h2>
+        </div>
+
+        <ul class="breadcrumb text-gray ff--primary">
+            <li><a href="Project?utente_key=${utente.key}&progetto_id=${task.progetto.key}&page=1&perPage=1" class="btn-link">${task.progetto.nome}</a></li>
+            <li class="active"><span class="text-primary">${task.nome}</span></li>
+        </ul>
+    </div>
+</div>
+<!-- Page Header End -->
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-9">
+        <div class="contact--form margin_bottom_50 margin_top_50">
+            <form action="DoCreateDiscussion" method="post" name="signup_form">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <h3>Inizia una nuova discussione</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <input type="text" name="titolo" id="titolo" placeholder="Titolo" class="form-control" required>
+                            <input type="hidden" name="taskerino_id" value="${task_id}"/>
+                        </div>
+                    </div>
+                </div> 
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="form-group float--right">
+                            <input type="radio" name="pubblica" value="true"> Pubblica
+                            <input type="radio" name="pubblica" value="false"> Privata
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <button type="submit" class="btn btn-primary float--right">Crea</button>
+                    </div>
+                </div>
+            </form>
+        </div>  
+        </div>
+    </div><!-- Main Sidebar End -->
+</div>
+

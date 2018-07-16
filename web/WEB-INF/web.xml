@@ -16,6 +16,42 @@
         <servlet-name>Index</servlet-name>
         <servlet-class>socialdevelop.controller.Index</servlet-class>
     </servlet>
+    <servlet>   
+	<servlet-name>DoCreateProject</servlet-name>
+        <servlet-class>socialdevelop.controller.DoCreateProject</servlet-class>
+    </servlet>
+    <servlet>   
+	<servlet-name>CreateProject</servlet-name>
+        <servlet-class>socialdevelop.controller.CreateProject</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DoCreateDiscussion</servlet-name>
+        <servlet-class>socialdevelop.controller.DoCreateDiscussion</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateDiscussion</servlet-name>
+        <servlet-class>socialdevelop.controller.CreateDiscussion</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DoCreateTask</servlet-name>
+        <servlet-class>socialdevelop.controller.DoCreateTask</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CreateTask</servlet-name>
+        <servlet-class>socialdevelop.controller.CreateTask</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SendTaskRequest</servlet-name>
+        <servlet-class>socialdevelop.controller.SendTaskRequest</servlet-class>
+    </servlet>
+    <servlet>   
+	<servlet-name>EditProject</servlet-name>
+        <servlet-class>socialdevelop.controller.EditProject</servlet-class>
+    </servlet>
+    <servlet>   
+	<servlet-name>DoEditProject</servlet-name>
+        <servlet-class>socialdevelop.controller.DoEditProject</servlet-class>
+    </servlet>
     <servlet>
         <servlet-name>UserProfile</servlet-name>
         <servlet-class>socialdevelop.controller.UserProfile</servlet-class>
@@ -152,6 +188,43 @@
         <servlet-name>ChangeInviteStatus</servlet-name>
         <servlet-class>socialdevelop.controller.ChangeInviteStatus</servlet-class>
     </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>CreateProject</servlet-name>
+        <url-pattern>/CreateProject</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoCreateProject</servlet-name>
+        <url-pattern>/DoCreateProject</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateTask</servlet-name>
+        <url-pattern>/CreateTask</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoCreateTask</servlet-name>
+        <url-pattern>/DoCreateTask</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CreateDiscussion</servlet-name>
+        <url-pattern>/CreateDiscussion</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoCreateDiscussion</servlet-name>
+        <url-pattern>/DoCreateDiscussion</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SendTaskRequest</servlet-name>
+        <url-pattern>/SendTaskRequest</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditProject</servlet-name>
+        <url-pattern>/EditProject</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoEditProject</servlet-name>
+        <url-pattern>/DoEditProject</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>UserProfile</servlet-name>
         <url-pattern>/UserProfile</url-pattern>
@@ -238,7 +311,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>SetMessage</servlet-name>
-        <url-pattern>/setMessage</url-pattern>
+        <url-pattern>/SetMessage</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Index</servlet-name>
