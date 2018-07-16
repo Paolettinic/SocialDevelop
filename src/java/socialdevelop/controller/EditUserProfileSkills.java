@@ -32,7 +32,12 @@ public class EditUserProfileSkills extends SocialDevelopBaseController {
     
     private void action_edit_user_profile_skills(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, TemplateManagerException, DataLayerException {
         HttpSession s = request.getSession(true);
-        request.setAttribute("page_title", "Modifica i tuoi dati");
+        if (s.getAttribute("userid") == null) {
+            request.setAttribute("utente_key", 0);
+        } else {
+            request.setAttribute("utente_key", (int) s.getAttribute("userid"));
+        }
+        
         Utente utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtente((int) s.getAttribute("userid"));
         if (utente != null) {
             request.setAttribute("profilo_key", (int) s.getAttribute("userid"));
@@ -48,8 +53,9 @@ public class EditUserProfileSkills extends SocialDevelopBaseController {
                 }
             }
             request.setAttribute("skills", skills);
-            
             request.setAttribute("user_skills", utente.getSkills());
+            
+            request.setAttribute("page_title", "Modifica i tuoi dati");
             TemplateResult res = new TemplateResult(getServletContext());
             res.activate("edit_user_profile_skills.html", request, response);
         } else {

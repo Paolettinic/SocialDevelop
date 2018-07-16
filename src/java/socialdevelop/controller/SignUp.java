@@ -18,6 +18,7 @@ import socialdevelop.data.model.SocialDevelopDataLayer;
 /**
  * @author Mario Vetrini
  */
+
 public class SignUp extends SocialDevelopBaseController {
     
     private void action_error(HttpServletRequest request, HttpServletResponse response) {
@@ -29,8 +30,13 @@ public class SignUp extends SocialDevelopBaseController {
     }
     
     private void action_signup(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, TemplateManagerException, DataLayerException, SQLException, NamingException {
-        request.setAttribute("page_title", "Registrazione iniziale");
         HttpSession s = request.getSession(true);
+        if (s.getAttribute("userid") == null) {
+            request.setAttribute("utente_key", 0);
+        } else {
+            request.setAttribute("utente_key", (int) s.getAttribute("userid"));
+        }
+        
         if (s.getAttribute("userid") != null && ((int) s.getAttribute("userid")) > 0) {
             response.sendRedirect("Index");
         }
@@ -52,6 +58,7 @@ public class SignUp extends SocialDevelopBaseController {
         //  SOVRASCRIVERA' CON FALSE
         s.setAttribute("javascript", true);
         
+        request.setAttribute("page_title", "Registrazione iniziale");
         TemplateResult res = new TemplateResult(getServletContext());
         res.activate("signup.html", request, response);
     }

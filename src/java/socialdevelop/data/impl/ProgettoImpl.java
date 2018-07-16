@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package socialdevelop.data.impl;
 
 import it.univaq.f4i.iw.framework.data.DataLayerException;
@@ -15,6 +10,7 @@ import java.util.List;
 /**
  * @author Davide De Marco
  */
+
 public class ProgettoImpl implements Progetto{
     
     private int key;

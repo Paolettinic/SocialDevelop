@@ -30,8 +30,11 @@ public class EditUserProfileRegistry extends SocialDevelopBaseController {
     
     private void action_edit_user_profile_registry(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, TemplateManagerException, DataLayerException {
         HttpSession s = request.getSession(true);
-        request.setAttribute("utente_key", s.getAttribute("userid"));
-        request.setAttribute("page_title", "Modifica i tuoi dati");
+        if (s.getAttribute("userid") == null) {
+            request.setAttribute("utente_key", 0);
+        } else {
+            request.setAttribute("utente_key", (int) s.getAttribute("userid"));
+        }
         
         Utente utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtente((int) s.getAttribute("userid"));
         if (utente != null) {
@@ -40,6 +43,7 @@ public class EditUserProfileRegistry extends SocialDevelopBaseController {
             request.setAttribute("utente", utente);
             request.setAttribute("data_nascita", utente.getDataNascita());
             
+            request.setAttribute("page_title", "Modifica i tuoi dati");
             TemplateResult res = new TemplateResult(getServletContext());
             res.activate("edit_user_profile_registry.html", request, response);
         } else {

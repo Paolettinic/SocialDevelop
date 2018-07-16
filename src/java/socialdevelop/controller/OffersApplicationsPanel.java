@@ -38,6 +38,7 @@ public class OffersApplicationsPanel extends SocialDevelopBaseController {
             request.setAttribute("utente_key", (int) s.getAttribute("userid"));
         }
         
+        // RECUPERO GLI INVITI RIGUARDANTI L'UTENTE
         Utente utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtente((int) s.getAttribute("userid"));
         List<Invito> inviti = utente.getInviti();
         request.setAttribute("inviti", inviti);

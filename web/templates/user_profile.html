@@ -1,18 +1,18 @@
-<div class="cover--header pt--80 text-center">
-    <div class="container">
-        <div class="cover--avatar" data-overlay="0.5" data-overlay-color="primary">
-            <img src="image?imgid=${propic_key}" alt="">
-        </div>
-        <div>
-            <h2 class="h3 fw--600">${nome} ${cognome} (${username})</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="cover--header pt--80 text-center">
+                <div class="cover--avatar" data-overlay="0.5" data-overlay-color="primary">
+                    <img src="image?imgid=${utente.immagine.key}" alt="">
+                </div>
+                <div>
+                    <h2 class="h3 fw--600">${utente.nome} ${utente.cognome} (${utente.username})</h2>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-
-<section class="page--wrapper pt--80 pb--20">
-    <div class="container">
-        <div class="row">
-            
+    <div class="row">
+        <div class="col-xs-12">
             <div class="product--details-nav">
                 <ul class="nav ff--primary fs--18 fw--600 text-black bg-lighter">
                     <li class="active">
@@ -29,9 +29,7 @@
                     </li>
                 </ul>
             </div>
-            
             <div class="product--details tab-content pb--60">
-                
                 <div class="tab-pane fade in active" id="profileDetailsTab01">
                     <div class="profile--details fs--14">
                         <div class="profile--item">
@@ -39,7 +37,7 @@
                                 <table class="table">
                                     <tr>
                                         <th class="fw--700 text-darkest">Nome completo</th>
-                                        <td>${nome} ${cognome}</td>
+                                        <td>${utente.nome} ${utente.cognome}</td>
                                     </tr>
                                     <tr>
                                         <th class="fw--700 text-darkest">Data di nascita</th>
@@ -47,7 +45,7 @@
                                     </tr>
                                     <tr>
                                         <th class="fw--700 text-darkest">E-mail</th>
-                                        <td>${email}</td>
+                                        <td>${utente.email}</td>
                                     </tr>
                                 </table>
                             </div>
@@ -61,59 +59,57 @@
                             </div>
                             
                             <div class="profile--info">
-                                <p>${biografia}</p>
+                                <p>${utente.biografia}</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                
                 <div class="tab-pane fade" id="profileDetailsTab02">
                     <div class="profile--item">                        
                         <div class="profile--info">
                             <dl>
-                                <#list skills?keys as skill>
+                                <#list utente.skills?keys as skill>
                                 <dt>
                                     <p class="h6 fw--700 text-darkest">${skill.nome}</p>
-                                    <p><small class="fw--400 fs--12 text-darker">Voto: ${skills?values[skill?index]}</small></p>
+                                    <p class="fw--400 fs--12 text-darker">Voto: ${utente.skills?values[skill?index]}</p>
                                 </dt>
                                 </#list>
                             </dl>
                         </div>
                     </div>
                 </div>
-                
                 <div class="tab-pane fade" id="profileDetailsTab03">
                     <div class="profile--item">
                         <div class="profile--info">
                             <dl>
-                                <#if tasks?size == 0>
+                                <#if utente.tasks?size == 0>
                                 <p>Questo utente non collabora a dei tasks</p>
-                                </#if>
-                                <#list tasks?keys as task>
+                                <#else>
+                                <#list utente.tasks?keys as task>
                                 <dt>
-                                    <p class="h6 fw--700 text-darkest">${task.nome} nel progetto ${task.progetto.nome}</p>
-                                    <p><small class="fw--400 fs--12 text-darker">Voto: <#if tasks?values[task?index] == 0>In corso<#else>${tasks?values[task?index]}</#if></small></p>
+                                    <p class="h6 fw--700 text-darkest"><a href="Task?task_id=${task.key}"><span>"${task.nome}"</span></a> nel progetto <a href="Progetto?progetto_id=${task.progetto.key}"><span>"${task.progetto.nome}"</span></a></p>
+                                    <p class="fw--400 fs--12 text-darker">Voto: <#if utente.tasks?values[task?index]??>task in corso<#else>${utente.tasks?values[task?index]}</#if></p>
                                 </dt>
                                 </#list>
+                                </#if>
                             </dl>
                         </div>
                     </div>
                 </div>
-                
                 <div class="tab-pane fade" id="profileDetailsTab04">
                     <div class="profile--item">
                         <div class="profile--info">
-                            <#if progetti?size == 0>
-                                <p>Questo utente non possiede dei progetti</p>
-                            </#if>
-                            <#list progetti as progetto>
-                                <a href="Project?progetto_id=${progetto.key}"><span>${progetto.nome}</span></a>
+                            <#if utente.progetti?size == 0>
+                            <p>Questo utente non possiede dei progetti</p>
+                            <#else>
+                            <#list utente.progetti as progetto>
+                            <a href="Project?progetto_id=${progetto.key}"><span>${progetto.nome}</span></a>
                             </#list>
+                            </#if>
                         </div>
                     </div>
                 </div>
-                
             </div>
         </div>
     </div>
-</section>
+</div>

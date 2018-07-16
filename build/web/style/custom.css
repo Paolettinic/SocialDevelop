@@ -59,6 +59,10 @@
     margin-bottom: 50px !important;
 }
 
+.margin_left_right {
+    margin: 0px;
+}
+
 .bottone_carica_foto_profilo {
     width: 100% !important;
     margin-top: 5px !important;

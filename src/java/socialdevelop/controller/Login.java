@@ -27,11 +27,17 @@ public class Login extends SocialDevelopBaseController {
     }
     
     private void action_login(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, TemplateManagerException, DataLayerException, SQLException, NamingException {
-        request.setAttribute("page_title", "Login");
         HttpSession s = request.getSession(true);
+        if (s.getAttribute("userid") == null) {
+            request.setAttribute("utente_key", 0);
+        } else {
+            request.setAttribute("utente_key", (int) s.getAttribute("userid"));
+        }
+        
         if (s.getAttribute("userid") != null && ((int) s.getAttribute("userid")) > 0) {
             response.sendRedirect("Index");
         } else {
+            request.setAttribute("page_title", "Login");
             TemplateResult res = new TemplateResult(getServletContext());
             res.activate("login.html", request, response);
         }

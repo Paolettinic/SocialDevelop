@@ -78,7 +78,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             
             sInvitoByID = connection.prepareStatement("SELECT * FROM inviti WHERE id = ?");
             sInvitiByUtente = connection.prepareStatement("SELECT * FROM inviti WHERE ext_utente = ?");
-            sInvitiByTask = connection.prepareStatement("SELECT * FROM 'inviti' WHERE ext_task = ?");
+            sInvitiByTask = connection.prepareStatement("SELECT * FROM inviti WHERE ext_task = ?");
             iInvito = connection.prepareStatement("INSERT INTO inviti (messaggio, data_invio, stato, offerta, ext_utente, ext_task) VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             uInvito = connection.prepareStatement("UPDATE inviti SET stato = ? WHERE id = ?");
             dInvito = connection.prepareStatement("DELETE FROM inviti WHERE id = ?");
@@ -97,12 +97,12 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             uProgetto = connection.prepareStatement("UPDATE progetti SET nome = ?, descrizione = ?, ext_coordinatore = ? WHERE id = ?");
             dProgetto = connection.prepareStatement("DELETE FROM progetti WHERE id = ?");
             
-            sSkillByID = connection.prepareStatement("SELECT * FROM skills WHERE id =?");
-            sSkillByNome = connection.prepareStatement("SELECT * FROM skills WHERE nome =?");
+            sSkillByID = connection.prepareStatement("SELECT * FROM skills WHERE id = ?");
+            sSkillByNome = connection.prepareStatement("SELECT * FROM skills WHERE nome = ?");
             sSkills = connection.prepareStatement("SELECT * FROM skills");
             sSkillsByTipo = connection.prepareStatement("SELECT skills.* FROM skills INNER JOIN appartenenti ON skills.id = appartenenti.ext_skill WHERE appartenenti.ext_tipo = ?");
-            sSkillsByUtente = connection.prepareStatement("SELECT ext_skill, livello FROM preparazioni WHERE preparazioni.ext_utente = ?");
-            sSkillsByTask = connection.prepareStatement("SELECT skills.* FROM skills INNER JOIN requisiti ON skills.id = requisiti.ext_skill WHERE requisiti.ext_task = ?");
+            sSkillsByUtente = connection.prepareStatement("SELECT * FROM preparazioni WHERE ext_utente = ?");
+            sSkillsByTask = connection.prepareStatement("SELECT * FROM requisiti WHERE ext_task = ?");
             sSkillsFigli = connection.prepareStatement("SELECT * FROM skills WHERE ext_padre = ?");
             sSkillsNoPadre = connection.prepareStatement("SELECT * FROM skills WHERE ext_padre IS NULL");
             iSkill = connection.prepareStatement("INSERT INTO skills (nome, ext_padre) VALUES(?, ?)", Statement.RETURN_GENERATED_KEYS);
@@ -110,11 +110,11 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             dSkill = connection.prepareStatement("DELETE FROM skills WHERE id = ?");
 
             sTaskByID = connection.prepareStatement("SELECT * FROM tasks WHERE id = ?");
-            sTasksByUtente = connection.prepareStatement("SELECT tasks.* FROM tasks INNER JOIN coprenti ON tasks.id = coprenti.ext_task WHERE coprenti.ext_utente = ?");
+            sTasksByUtente = connection.prepareStatement("SELECT * FROM coprenti WHERE ext_utente = ?");
             sTasksByProgetto = connection.prepareStatement("SELECT * FROM tasks WHERE tasks.ext_progetto = ?");
             sTasksByTipo = connection.prepareStatement("SELECT * FROM tasks WHERE tasks.ext_tipo = ?");
             sTasksBySkill = connection.prepareStatement("SELECT tasks.* FROM tasks INNER JOIN requisiti ON tasks.id = requisiti.ext_task WHERE requisiti.ext_skill = ?");
-            iTask = connection.prepareStatement("INSERT INTO tasks (nome, descrizione, chiuso, numero_corrente_collaboratori, numero_massimo_collaboratori, data_inizio, data_fine, ext_progetto, ext_tipo) VALUES(?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            iTask = connection.prepareStatement("INSERT INTO tasks (nome, descrizione, chiuso, numero_corrente_collaboratori, numero_massimo_collaboratori, data_inizio, data_fine, ext_progetto, ext_tipo) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             uTask = connection.prepareStatement("UPDATE tasks SET nome = ?, descrizione = ?, chiuso = ?, numero_corrente_collaboratori = ?, numero_massimo_collaboratori = ?, data_inizio = ?, data_fine = ?, ext_progetto = ?, ext_tipo = ? WHERE id = ?");
             dTask = connection.prepareStatement("DELETE FROM tasks WHERE id = ?");
             
@@ -128,10 +128,10 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             sUtenteByID = connection.prepareStatement("SELECT * FROM utenti WHERE id = ?");
             sUtenteByEmail = connection.prepareStatement("SELECT * FROM utenti WHERE email = ?");
             sUtenteByUsername = connection.prepareStatement("SELECT * FROM utenti WHERE username = ?");
-            sUtentiByTask = connection.prepareStatement("SELECT utenti.*, coprenti.voto FROM utenti INNER JOIN coprenti ON utente.id = coprenti.ext_utente WHERE coprenti.ext_task = ?");
+            sUtentiByTask = connection.prepareStatement("SELECT utenti.*, coprenti.voto FROM utenti INNER JOIN coprenti ON utenti.id = coprenti.ext_utente WHERE coprenti.ext_task = ?");
             sUtentiByFiltro = connection.prepareStatement("SELECT * FROM utenti WHERE name LIKE ? OR cognome LIKE ? OR username = ?");
             countUtentiByFiltro = connection.prepareStatement("SELECT COUNT(id) as total FROM utenti WHERE nome LIKE ? OR cognome LIKE ? OR username = ?");
-            sUtentiBySkill = connection.prepareStatement("SELECT utenti.*, preparazioni.livello FROM utenti INNER JOIN preparazioni ON utente.id = preparazioni.ext_utente WHERE preparazioni.ext_skill = ? AND preparazioni.livello >= ?");
+            sUtentiBySkill = connection.prepareStatement("SELECT utenti.*, preparazioni.livello FROM utenti INNER JOIN preparazioni ON utenti.id = preparazioni.ext_utente WHERE preparazioni.ext_skill = ? AND preparazioni.livello >= ?");
             iUtente = connection.prepareStatement("INSERT INTO utenti (nome, cognome, username, email, data_nascita, password, biografia, ext_curriculum, ext_immagine) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
             uUtente = connection.prepareStatement("UPDATE utenti SET nome = ?, cognome = ?, username = ?, email = ?, data_nascita = ?, password = ?, biografia = ?, ext_curriculum = ?, ext_immagine = ? WHERE id = ?");
             dUtente = connection.prepareStatement("DELETE FROM utenti WHERE id = ?");
@@ -643,7 +643,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
                 }
             }
             if (key > 0) {
-                progetto.copyFrom(getProgetto(progetto.getKey()));
+                progetto.copyFrom(getProgetto(key));
             }
             progetto.setDirty(false);
         } catch (SQLException ex) {
@@ -655,8 +655,8 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     public void salvaSkill(Skill skill) throws DataLayerException {
         int key = skill.getKey();
         try {
-            if (skill.getKey() > 0) { // update
-                if (!skill.isDirty()) { // non facciamo nulla se l'oggetto non ha subito modifiche
+            if (skill.getKey() > 0) { // Update
+                if (!skill.isDirty()) { // Non facciamo nulla se l'oggetto non ha subito modifiche
                     return;
                 }
                 uSkill.setString(1, skill.getNome());
@@ -683,7 +683,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
                 }
             }
             if (key > 0) {
-                skill.copyFrom(getSkill(skill.getKey()));
+                skill.copyFrom(getSkill(key));
             }
             skill.setDirty(false);
         } catch (SQLException ex) {
@@ -695,8 +695,8 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     public void salvaTask(Task task) throws DataLayerException {
         int key = task.getKey();
         try {
-            if (key > 0) { // update
-                if (!task.isDirty()) { //non facciamo nulla se l'oggetto non ha subito modifiche
+            if (key > 0) { // Update
+                if (!task.isDirty()) { // Non facciamo nulla se l'oggetto non ha subito modifiche
                     return;
                 }
                 uTask.setString(1, task.getNome());
@@ -708,19 +708,11 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
                 uTask.setDate(6, data_inizio);
                 Date data_fine = new Date(task.getDataFine().getTimeInMillis());
                 uTask.setDate(7, data_fine);
-                if (task.getProgetto() != null) {
-                    uTask.setInt(8, task.getProgetto().getKey());
-                } else {
-                    uTask.setNull(8, java.sql.Types.INTEGER);
-                }
-                if(task.getTipo() != null) {
-                    uTask.setInt(9, task.getProgetto().getKey());
-                } else {
-                    uTask.setNull(9, java.sql.Types.INTEGER);
-                }
+                uTask.setInt(8, task.getProgetto().getKey());
+                uTask.setInt(9, task.getTipo().getKey());
                 uTask.setInt(10, task.getKey());
                 uTask.executeUpdate();
-            } else { // insert
+            } else { // Insert
                 iTask.setString(1, task.getNome());
                 iTask.setString(2, task.getDescrizione());
                 iTask.setBoolean(3, task.getChiuso());
@@ -858,7 +850,6 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     
     @Override
     public void salvaCoprenti(int voto, int ext_utente, int ext_task) throws DataLayerException {
-        boolean update = false;
         try {
             uCoprenti.setInt(1, voto);
             uCoprenti.setInt(2, ext_utente);
@@ -1389,7 +1380,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             sSkillsByTask.setInt(1, task.getKey());
             try (ResultSet rs = sSkillsByTask.executeQuery()) {
                 while (rs.next()) {
-                    result.put(creaSkill(rs), rs.getInt("livello"));
+                    result.put((Skill) getSkill(rs.getInt("ext_skill")), rs.getInt("livello"));
                 }
             }
         } catch (SQLException ex) {
@@ -1449,7 +1440,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             sTasksByUtente.setInt(1, utente.getKey());
             try (ResultSet rs = sTasksByUtente.executeQuery()) {
                 while (rs.next()) {
-                    result.put(creaTask(rs), rs.getInt("voto"));
+                    result.put((Task) getTask(rs.getInt("ext_task")), rs.getInt("voto"));
                 }
             }
         } catch (SQLException ex) {

@@ -30,7 +30,11 @@ public class UserProfile extends SocialDevelopBaseController {
     
     private void action_user_profile(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, TemplateManagerException, DataLayerException {
         HttpSession s = request.getSession(true);
-        request.setAttribute("utente_key", s.getAttribute("userid"));
+        if (s.getAttribute("userid") == null) {
+            request.setAttribute("utente_key", 0);
+        } else {
+            request.setAttribute("utente_key", (int) s.getAttribute("userid"));
+        }
         
         Utente utente;
         if (request.getParameter("username") != null) {
@@ -40,38 +44,26 @@ public class UserProfile extends SocialDevelopBaseController {
                 return;
             }
         } else {
+            if (s.getAttribute("userid") == null) {
+                response.sendRedirect("Index");
+                return;
+            }
             utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtente((int) s.getAttribute("userid"));
         }
         
-        if (utente != null) {
-            request.setAttribute("page_title", utente.getUsername());
-            request.setAttribute("nome", utente.getNome());
-            request.setAttribute("cognome", utente.getCognome());
-            request.setAttribute("username", utente.getUsername());
-            request.setAttribute("email", utente.getEmail());
-            request.setAttribute("biografia", utente.getBiografia());
-            request.setAttribute("data_nascita", utente.getDataNascita());
-            request.setAttribute("skills", utente.getSkills());
-            request.setAttribute("tasks", utente.getTasks());
-            request.setAttribute("progetti", utente.getProgetti());
-            request.setAttribute("profilo_key", utente.getKey());
-            request.setAttribute("propic_key", utente.getImmagine().getKey());
-            
-            TemplateResult res = new TemplateResult(getServletContext());
-            request.setAttribute("page_title", utente.getUsername());
-            res.activate("user_profile.html", request, response);
-        } else {
-            response.sendRedirect("Index");
-        }
+        request.setAttribute("utente", utente);
+        request.setAttribute("data_nascita", utente.getDataNascita());
+        
+        request.setAttribute("page_title", utente.getUsername());
+        TemplateResult res = new TemplateResult(getServletContext());
+        res.activate("user_profile.html", request, response);
+        
     }
     
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         try {
             action_user_profile(request, response);
-        } catch (NumberFormatException ex) {
-            request.setAttribute("message", "Invalid number submitted");
-            action_error(request, response);
         } catch (IOException | TemplateManagerException ex) {
             request.setAttribute("exception", ex);
             action_error(request, response);
