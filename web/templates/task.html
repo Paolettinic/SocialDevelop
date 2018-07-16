@@ -33,7 +33,7 @@
                 <#assign presente = true>
             </#if>
         </#list>
-        <#if skilled == true && presente == false && task.chiuso == true && utente.key != coordinatore>
+        <#if skilled == true && presente == false && task.chiuso == false && utente.key != coordinatore>
             <div class="row">
                 <div class="col-xs-4 col-xs-offset-4">
                     <form action="SendTaskRequest" method="POST">
