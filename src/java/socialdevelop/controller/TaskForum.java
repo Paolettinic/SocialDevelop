@@ -21,6 +21,7 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import socialdevelop.data.model.Discussione;
 import socialdevelop.data.model.SocialDevelopDataLayer;
 import socialdevelop.data.model.Progetto;
@@ -38,7 +39,13 @@ public class TaskForum extends SocialDevelopBaseController{
     private void action_default(HttpServletRequest request, HttpServletResponse response,int task_id, int page, int perPage, boolean async)throws IOException, ServletException, TemplateManagerException{
         try {
             SocialDevelopDataLayer datalayer = ((SocialDevelopDataLayer)request.getAttribute("datalayer"));
-            
+
+            HttpSession s = request.getSession(true);
+            if (s.getAttribute("userid") == null) {
+                request.setAttribute("utente_key", 0);
+            } else {
+                request.setAttribute("utente_key", (int) s.getAttribute("userid"));
+            }
             int firstResult = (page-1)*perPage; //numero del primo risultato della paginazione
             
             Task task = datalayer.getTask(task_id);

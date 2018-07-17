@@ -75,7 +75,7 @@ public class DoSignUp extends SocialDevelopBaseController {
             // CARICO IL PDF SUL SERVER
             curriculum.setNome(utente.getUsername().concat("_CV.pdf"));
             curriculum.setTipo("curriculum");
-            File file = new File(getServletContext().getRealPath(File.separator)+
+            File file = new File(getServletContext().getRealPath("/")+
                 getServletContext().getInitParameter("cv.directory"), utente.getUsername().concat("_CV.pdf"));
             try (InputStream IS_CV_DPF = CV_PDF_Part.getInputStream();) {
                 Files.copy(IS_CV_DPF, file.toPath());

@@ -32,6 +32,7 @@ public class TipoImpl implements Tipo {
 
     protected void setKey(int key){
         this.key = key;
+        this.dirty = true;
     }
 
     @Override
@@ -42,6 +43,7 @@ public class TipoImpl implements Tipo {
     @Override
     public void setNome(String nome) {
         this.nome = nome;
+        this.dirty = true;
     }
 
     @Override

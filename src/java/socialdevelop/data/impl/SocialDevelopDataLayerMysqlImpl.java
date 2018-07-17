@@ -411,7 +411,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             } else { // Insert
                 this.iCurriculum.setString(1, curriculum.getNome());
                 this.iCurriculum.setString(2, curriculum.getTipo());
-                this.iCurriculum.setString(2, curriculum.getTestuale());
+                this.iCurriculum.setString(3, curriculum.getTestuale());
                 if (this.iCurriculum.executeUpdate() == 1) {
                     try (ResultSet keys = iCurriculum.getGeneratedKeys()) {
                         if (keys.next())

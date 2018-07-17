@@ -18,8 +18,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import socialdevelop.data.model.Progetto;
 import socialdevelop.data.model.SocialDevelopDataLayer;
+import socialdevelop.data.model.Utente;
 
 /**
  *
@@ -34,11 +36,34 @@ public class Rate extends SocialDevelopBaseController {
 
     private void action_default(HttpServletRequest request, HttpServletResponse response,int project_id)throws IOException, ServletException, TemplateManagerException{
         try{
-            Progetto proj = ((SocialDevelopDataLayer)request.getAttribute("datalayer")).getProgetto(project_id);
-            request.setAttribute("project_id", project_id);
-            request.setAttribute("project", proj);
-            TemplateResult res = new TemplateResult(getServletContext());
-            res.activate("rate.html", request, response);
+            SocialDevelopDataLayer datalayer = ((SocialDevelopDataLayer)request.getAttribute("datalayer"));
+            HttpSession s = request.getSession(true);
+            if (s.getAttribute("userid") == null) {
+                request.setAttribute("utente_key", 0);
+            } else {
+                request.setAttribute("utente_key", (int) s.getAttribute("userid"));
+            }
+            if(s.getAttribute("userid") == null){
+                response.sendRedirect("Index");
+            }else{
+            Utente u = datalayer.getUtente((int) s.getAttribute("userid"));
+            Progetto proj = datalayer.getProgetto(project_id);
+            List<Progetto> user_projects = u.getProgetti();
+            boolean found = false;
+            for(Progetto p : user_projects){
+                if(p.getKey() == project_id)
+                    found = true;
+            }
+            if(!found)
+                response.sendRedirect("Index");
+            else{
+                request.setAttribute("project_id", project_id);
+                request.setAttribute("project", proj);
+                request.setAttribute("page_title", "Valuta collaboratori | SocialDevelop");
+                TemplateResult res = new TemplateResult(getServletContext());
+                res.activate("rate.html", request, response);
+            }
+            }
         } catch (DataLayerException ex){
             request.setAttribute("message", "Data access exception: " + ex.getMessage());
             action_error(request, response);

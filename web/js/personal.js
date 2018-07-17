@@ -4,14 +4,10 @@
  * and open the template in the editor.
  */
 
-
-
 $(document).ready(reloadContent);
 
 $("skill_filter").ready(function(){
     skills = $("#skill_filter").children(".filter-item").length + 1;
-    console.log(skills);
-    console.log($("#skill_filter").children(".filter-item"));
 });
 function reloadContent(){
     $('.script_enabled').removeClass('display_none'); 
@@ -30,9 +26,181 @@ function reloadContent(){
         }
     });  
     
+    $("#project_select").change(function(){
+        var project = $("#project_select").val();
+        console.log(project);
+        $("#task_select").children().remove();
+        $.ajax({
+            type: 'POST',
+            url: 'getTasks',
+            data:{
+                proj_id:    project
+            },
+            success: function (response) {
+                $(".filter_task").removeClass("display_none");
+                var withoutbrackets = response.substring(1,response.length-1);
+                var split = withoutbrackets.split(", ");
+                var biarray = new Array();
+                var result = new Array();
+                for(var i=0;i<split.length;i++){
+                    biarray[i]=split[i].split("=");
+                }
+                var opt=document.createElement("option");
+                opt.setAttribute("value",-1);
+                opt.setAttribute("disabled","disabled");
+                opt.setAttribute("selected","selected");
+                opt.setAttribute("hidden","hidden");
+                opt.innerHTML="Seleziona un task";
+                $("#task_select").append(opt);
+                for(var i=0;i<biarray.length;i++){
+                    opt = document.createElement("option");
+                    opt.setAttribute("value",biarray[i][0]);
+                    opt.innerHTML=biarray[i][1];
+                    $("#task_select").append(opt);
+                }
+            }
+        });
+    });
+    
+    $("#type_select").change(function(){
+        $("#btn_delete_type").removeClass("display_none");
+        $("#btn_edit_type").removeClass("display_none");
+        $("#selected_type").val($("#type_select").val());
+    });
+    
+    $("#btn_edit_type").on("click",function(){
+        $("#btn_edit_type").addClass("display_none");
+        $("#input_edit_type").removeClass("display_none");
+    });
+    
+    $("#btn_delete_type").on("click",function(){
+         $.ajax({
+            type: 'POST',
+            url: 'doadmintypedelete',
+            data:{
+                type_id: $("#type_select").val()
+            },
+            success: function () {
+                window.location.replace("type");
+            }
+        });
+    });
+    
+    $("#btn_new_type").on("click",function(){
+        $.ajax({
+            type: 'POST',
+            url: 'doadmintypeadd',
+            data:{
+                newtypename: $("#newtype").val()
+            },
+            success: function () {
+                window.location.replace("type");
+            }
+        });
+    });
+    
+    $("#btn_new_skill").on("click",function(){
+        var parent = $("#skill_parent").val() !== null && $("#select_father").checked? $("#skill_parent").val() : 0;
+        var nome = $("#newskill").val();
+        if(nome === "") return
+        $.ajax({
+            type: 'POST',
+            url: 'doadminskilladd',
+            data:{
+                parent: parent,
+                newskill: nome
+            },
+            success: function () {
+                window.location.replace("skill");
+            }
+        });
+    });
+    
+    $("#skill_select").change(function(){
+        $("input[name='task_parent']").removeAttr("disabled");
+    });
+    
+    $("#btn_set_types").on("click",function(){
+        var types = [];
+        var skill = $("#skill_select").val();
+        $("input[type=checkbox]:checked").each(function(i){
+            types[i] = $(this).val();
+        });
+       
+        if(types.length===0 || skill=== null) return;
+        else{
+            $.ajax({
+            type: 'POST',
+            dataType:'json',
+            url: 'doadminsetskilltypes',
+            data:{
+                skill: skill,
+                types: types
+            },
+            success: function () {
+                window.location.replace("skill");
+            }
+        });
+        }
+    });
+    
+    $("#btn_delete_skill").on("click",function(){
+        if($("#skill_edit").val() === null)
+            return;
+        $.ajax({
+            type: 'POST',
+            url: 'doadminskilldelete',
+            data:{
+                skill_id: $("#skill_edit").val()
+            },
+            success: function () {
+                window.location.replace("skill");
+            }
+        });
+    });
+    
+    $("#btn_edit_skill").on("click",function(){
+        $("#edit_box").toggleClass("display_none");
+    });
+    
+    
+    $("#skill_edit").change(function(){
+        var selected=$("#skill_edit").val();
+        console.log(selected);
+        if(actual_skill === 0){
+            actual_skill=$("#skill_edit_parent option[value='"+selected+"']");
+            $("#skill_edit_parent option[value='"+selected+"']").remove();
+        }else{
+            $("#skill_edit_parent").append(actual_skill);
+            actual_skill=$("#skill_edit_parent option[value='"+selected+"']");
+            $("#skill_edit_parent option[value='"+selected+"']").remove();
+        }
+    });
+    
+    $("#edit_skill_conf").on("click",function(){
+        var newname = $("#new_name_skill").val();
+        var newparent = $("#skill_edit_parent").val() !== null? $("#skill_edit_parent").val() : 0;
+        if(newname==="" && newparent===null) return;
+        $.ajax({
+            type: 'POST',
+            url: 'doadminskilledit',
+            data:{
+                skill_id: $("#skill_edit").val(),
+                newname: newname,
+                newparent: newparent,
+            },
+            success: function () {
+                window.location.replace("skill");
+            }
+        });
+        
+    });
+    
+    
     
 }
 var skills = 2;
+var actual_skill = 0;
 function add_filter_skill(){
     var skill_container = $("#skill_filter");
     let new_skill = document.createElement("div");
