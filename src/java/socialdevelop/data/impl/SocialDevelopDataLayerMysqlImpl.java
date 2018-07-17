@@ -533,9 +533,9 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
                 } else {
                     this.iInvito.setNull(2, java.sql.Types.DATE);
                 }
-                this.iInvito.setBoolean(3, invito.getOfferta());
-                this.iInvito.setString(4,invito.getStato());
-                this.iInvito.setInt(4, invito.getUtente().getKey());
+                this.iInvito.setString(3,invito.getStato());
+                this.iInvito.setBoolean(4, invito.getOfferta());
+                this.iInvito.setInt(5, invito.getUtente().getKey());
                 this.iInvito.setInt(6, invito.getTask().getKey());
                 if (this.iInvito.executeUpdate() == 1) {
                     try (ResultSet keys = this.iInvito.getGeneratedKeys()) {
