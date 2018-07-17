@@ -1,0 +1,100 @@
+<section class="page--wrapper pt--80 pb--20">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Aggiungi uno skill</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <input type="text" placeholder="Nome del nuovo skill" id="newskill" class="form-control max-width">   
+            </div>
+            <div class="col-md-2">
+                <div class="checkbox">
+                    <label class="collapsed" data-toggle="collapse" data-target="#select_father">
+                        <input type="checkbox" name="has_child"><span>Skill figlio</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row mt--15 collapse" id="select_father" >
+            <div class="col-md-3">
+                <select id="parent_skill" class="form-control form-sm">
+                    <option value="-1" selected disabled>Seleziona lo skill padre</option>
+                    <#list skills as skill>
+                    <option value="${skill.key}">${skill.nome}</option>
+                    </#list>
+                </select>
+            </div>
+        </div>
+        <div class="row mt--15">
+            <div class="col-md-3">
+                <button type="button" id="btn_new_skill" class="btn btn-default max-width"><i class="fa fa-plus"></i>&nbsp;Aggiungi skill</button>       
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Assegna tipi ad uno skill</h2>
+            </div>
+        </div>
+        <div class="row mt--15">
+            <div class="col-md-3">
+                <select id="skill_select" class="form-control form-sm">
+                    <option value="-1" selected disabled>Seleziona uno skill</option>
+                    <#list skills as skill>
+                    <option value="${skill.key}">${skill.nome}</option>
+                    </#list>
+                </select>
+            </div>
+        </div>
+        <div class="row mt--15">
+            <div class="col-md-3 scrollable_100">
+                <span class="fstyle--i">Seleziona i tipi associati</span>
+                <#list tipi as tipo>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" name="task_parent" disabled value="${tipo.key}"><span>${tipo.nome}</span>
+                    </label>
+                </div>
+                </#list>
+            </div>
+        </div>
+        <div class="row mt--15">
+            <div class="col-md-3">
+                <button type="button" id="btn_set_types" class="btn btn-default max-width">Assegna</button>       
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Modifica o elimina skill</h2>
+            </div>
+        </div>
+        <div class="row mt--15">
+            <div class="col-md-3">
+                <select id="skill_edit" class="form-control form-sm">
+                    <option value="-1" selected disabled>Seleziona uno skill</option>
+                    <#list skills as skill>
+                    <option value="${skill.key}">${skill.nome}</option>
+                    </#list>
+                </select>
+            </div>
+            <button type="button" id="btn_delete_skill" class="btn btn-default-red "><i class="fa fa-trash"></i>Elimina</button>
+            <button type="button" id="btn_edit_skill" class="btn btn-default ">Modifica</button>
+        </div>
+        <div class="row mt--15 display_none" id="edit_box">
+            <div class="col-md-3">
+                <input type="text" placeholder="Nuovo nome dello skill" id="new_name_skill" class="form-control max-width">   
+            </div>
+            <div class="col-md-3" id="edit_box">
+                <select id="skill_edit_parent" class="form-control">
+                    <option value="-1" selected disabled>Seleziona lo skill padre</option>
+                    <option value="-1">Nessuno</option>
+                    <#list skills as skill>
+                    <option value="${skill.key}">${skill.nome}</option>
+                    </#list>
+                </select>
+            </div>
+            <button type="button" class="btn btn-primary" id="edit_skill_conf">Conferma</button>
+        </div>
+    </div>
+</section>

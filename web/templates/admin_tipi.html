@@ -1,0 +1,44 @@
+<section class="page--wrapper pt--80 pb--20">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Aggiungi un tipo</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <input type="text" placeholder="Nome del nuovo tipo" id="newtype" class="form-control max-width">   
+            </div>
+        </div>
+        <div class="row mt--15">
+            <div class="col-md-3">
+                <button type="button" id="btn_new_type" class="btn btn-default max-width"><i class="fa fa-plus"></i>&nbsp;Aggiungi tipo</button>       
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Modifica o elimina tipi</h2>
+            </div>
+        </div>
+        <div class="row mt--20">
+            <div class="col-md-4">
+                <select id="type_select" class="form-control form-sm">
+                     <option value="-1" selected disabled>Seleziona un tipo</option>
+                    <#list tipi as tipo>
+                        <option value="${tipo.key}">${tipo.nome}</option>
+                    </#list>
+                </select>
+            </div>
+
+                <button type="button" id="btn_delete_type" class="btn btn-default red-btn display_none">Elimina</button>
+
+                <button type="button" id="btn_edit_type"  onclick="" class="btn btn-default display_none">Modifica</button>
+
+                <form name="edit_type_form" action="doadmintypeedit" method="POST">
+                    <input type="hidden" id="selected_type" name="type_id" value="">
+                    <input type="text" id="input_edit_type" name="newname" class="display_none"  placeholder="Nuovo nome di tipo"/>
+                </form>
+
+        </div>
+    </div>
+</section>

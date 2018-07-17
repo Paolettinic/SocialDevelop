@@ -1,0 +1,60 @@
+<!-- Header Section Start -->
+<header class="header--section style--3"> 
+
+    <!-- Header Navbar Start -->
+    <div class="header--navbar navbar bg-black">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle style--3 collapsed" data-toggle="collapse" data-target="#headerNav">
+                    <span class="sr-only">Toggle Navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                
+                <!-- Header Navbar Logo Start -->
+                <div class="header--navbar-logo navbar-brand">
+                    <a  class="logo" href="/SocialDevelop">
+                        <span class="logo-social">Social</span><span class="logo-develop-admin">Develop</span>
+                        <span class="admin">ADMIN</span>
+                    </a>
+                </div>
+                <!-- Header Navbar Logo End -->
+            </div>
+            
+            <div id="headerNav" class="navbar-collapse collapse float--right">
+                <!-- Header Nav Links Start -->
+                
+                <ul class="header--nav-links style--3 nav ff--primary">
+                    <#if logged??>
+                    <li>
+                        <a href="type">
+                            <span>Tipi</span>
+                        </a>
+                    </li>
+                        
+                    <li>
+                        <a href="skill">
+                            <span>Skill</span>
+                        </a>
+                    </li>
+                        
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-user-o"></i>
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Logout</a></li>
+                        </ul>
+                    </li>
+                    </#if>
+                </ul>
+                
+                <!-- Header Nav Links End -->
+            </div>
+        </div>
+    </div>
+    <!-- Header Navbar End -->
+</header>
+<!-- Header Section End -->
