@@ -16,19 +16,20 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import socialdevelop.data.model.Progetto;
 import socialdevelop.data.model.SocialDevelopDataLayer;
+import socialdevelop.data.model.Task;
 import socialdevelop.data.model.Utente;
 
 /**
  *
  * @author Davide De Marco
  */
-public class EditProject extends SocialDevelopBaseController{
+public class EditTask extends SocialDevelopBaseController{
     private void action_error(HttpServletRequest request, HttpServletResponse response) {
         System.out.print(request.getAttribute("message")+"\n");
         return; //body for action_error
     }
     
-    private void action_default(HttpServletRequest request, HttpServletResponse response, int progetto_id)throws IOException, ServletException, TemplateManagerException{
+    private void action_default(HttpServletRequest request, HttpServletResponse response, int task_id)throws IOException, ServletException, TemplateManagerException{
         try{
             SocialDevelopDataLayer datalayer = ((SocialDevelopDataLayer)request.getAttribute("datalayer"));
             HttpSession s = request.getSession(true);
@@ -42,14 +43,14 @@ public class EditProject extends SocialDevelopBaseController{
             int utente_key = (int) s.getAttribute("userid");
         
             Utente utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtente(utente_key);
-            Progetto progetto = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getProgetto(progetto_id);
+            Task task = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getTask(task_id);
             
             request.setAttribute("utente_key", s.getAttribute("userid"));
             request.setAttribute("utente", utente);
-            request.setAttribute("progetto", progetto);
+            request.setAttribute("task", task);
             
             TemplateResult res = new TemplateResult(getServletContext());
-            res.activate("edit_project.html", request, response);
+            res.activate("edit_task.html", request, response);
         } catch (DataLayerException ex){
             request.setAttribute("message", "Data access exception: " + ex.getMessage());
             action_error(request, response);
@@ -58,10 +59,10 @@ public class EditProject extends SocialDevelopBaseController{
     
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        int progetto_id;
+        int task_id;
         try{
-            progetto_id = SecurityLayer.checkNumeric(request.getParameter("progetto_id"));
-            action_default(request,response, progetto_id);
+            task_id = SecurityLayer.checkNumeric(request.getParameter("task_id"));
+            action_default(request,response, task_id);
         } catch (IOException ex) {
             request.setAttribute("exception", ex);
             action_error(request, response);

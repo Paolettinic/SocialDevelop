@@ -24,6 +24,7 @@ import socialdevelop.data.impl.InvitoImpl;
 import socialdevelop.data.model.SocialDevelopDataLayer;
 import socialdevelop.data.model.Utente;
 import socialdevelop.data.model.Invito;
+import socialdevelop.data.model.Progetto;
 import socialdevelop.data.model.Task;
 
 /**
@@ -49,14 +50,31 @@ public class SendTaskRequest extends SocialDevelopBaseController {
         int utente_key = (int) s.getAttribute("userid");
         GregorianCalendar date = new GregorianCalendar();
         Utente utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtente(utente_key);
+        
         Task task = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getTask(taskid);
+        Progetto progetto = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getProgetto(task.getProgetto().getKey());
+        Utente utente2 = null;
+        
+        if(utente.getKey()==progetto.getUtente().getKey()){
+            int devkey = SecurityLayer.checkNumeric(request.getParameter("utente_key"));
+            utente2 = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtente(devkey);
+        }
         
         Invito invito = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).creaInvito();
-        invito.setUtente(utente);
+        if(utente.getKey()!=progetto.getUtente().getKey()){
+            invito.setMessaggio("L'utente "+utente.getNome()+" "+utente.getCognome()+"vorrebbe partecipare al task");
+            invito.setOfferta(true);
+            invito.setUtente(progetto.getUtente());
+        }
+        else{
+            invito.setMessaggio("Il coordinatore "+utente.getNome()+" "+utente.getCognome()+"vorrebbe tu partecipassi al task");
+            invito.setOfferta(false);
+            invito.setUtente(utente2);
+        }
+        
         invito.setDataInvio(date);
         invito.setTask(task);
-        invito.setMessaggio("L'utente "+utente.getNome()+" "+utente.getCognome()+"vorrebbe partecipare al task");
-        invito.setOfferta(true);
+        
         invito.setStato("processing");
         
         

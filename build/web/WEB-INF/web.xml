@@ -17,6 +17,18 @@
         <servlet-class>socialdevelop.controller.Index</servlet-class>
     </servlet>
     <servlet>   
+	<servlet-name>DoEditTask</servlet-name>
+        <servlet-class>socialdevelop.controller.DoEditTask</servlet-class>
+    </servlet>
+    <servlet>   
+	<servlet-name>EditTask</servlet-name>
+        <servlet-class>socialdevelop.controller.EditTask</servlet-class>
+    </servlet>
+    <servlet>   
+	<servlet-name>InviteSendReceive</servlet-name>
+        <servlet-class>socialdevelop.controller.InviteSendReceive</servlet-class>
+    </servlet>
+    <servlet>   
 	<servlet-name>DoCreateProject</servlet-name>
         <servlet-class>socialdevelop.controller.DoCreateProject</servlet-class>
     </servlet>
@@ -188,7 +200,62 @@
         <servlet-name>ChangeInviteStatus</servlet-name>
         <servlet-class>socialdevelop.controller.ChangeInviteStatus</servlet-class>
     </servlet>
-    
+    <servlet>
+        <servlet-name>GetTasksByProject</servlet-name>
+        <servlet-class>socialdevelop.controller.GetTasksByProject</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminLogin</servlet-name>
+        <servlet-class>socialdevelop.controller.AdminLogin</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DoLoginAdmin</servlet-name>
+        <servlet-class>socialdevelop.controller.DoLoginAdmin</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AdminType</servlet-name>
+        <servlet-class>socialdevelop.controller.AdminType</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DoAdminTypeEdit</servlet-name>
+        <servlet-class>socialdevelop.controller.DoAdminTypeEdit</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DoAdminTypeDelete</servlet-name>
+        <servlet-class>socialdevelop.controller.DoAdminTypeDelete</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DoAdminTypeAdd</servlet-name>
+        <servlet-class>socialdevelop.controller.DoAdminTypeAdd</servlet-class>
+    </servlet>
+     <servlet>
+        <servlet-name>AdminSkill</servlet-name>
+        <servlet-class>socialdevelop.controller.AdminSkill</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DoAdminSkillAdd</servlet-name>
+        <servlet-class>socialdevelop.controller.DoAdminSkillAdd</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DoAdminSetSkillTypes</servlet-name>
+        <servlet-class>socialdevelop.controller.DoAdminSetSkillTypes</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DoAdminSkillDelete</servlet-name>
+        <servlet-class>socialdevelop.controller.DoAdminSkillDelete</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DoEditTask</servlet-name>
+        <url-pattern>/DoEditTask</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditTask</servlet-name>
+        <url-pattern>/EditTask</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InviteSendReceive</servlet-name>
+        <url-pattern>/InviteSendReceive</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>CreateProject</servlet-name>
         <url-pattern>/CreateProject</url-pattern>
@@ -364,6 +431,50 @@
     <servlet-mapping>
         <servlet-name>ChangeInviteStatus</servlet-name>
         <url-pattern>/ChangeInviteStatus</url-pattern>
+    </servlet-mapping>
+        <servlet-mapping>
+        <servlet-name>GetTasksByProject</servlet-name>
+        <url-pattern>/getTasks</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminLogin</servlet-name>
+        <url-pattern>/admin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoLoginAdmin</servlet-name>
+        <url-pattern>/doLoginAdmin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminType</servlet-name>
+        <url-pattern>/type</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoAdminTypeEdit</servlet-name>
+        <url-pattern>/doadmintypeedit</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoAdminTypeDelete</servlet-name>
+        <url-pattern>/doadmintypedelete</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoAdminTypeAdd</servlet-name>
+        <url-pattern>/doadmintypeadd</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminSkill</servlet-name>
+        <url-pattern>/skill</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoAdminSkillAdd</servlet-name>
+        <url-pattern>/doadminskilladd</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoAdminSetSkillTypes</servlet-name>
+        <url-pattern>/doadminsetskilltypes</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoAdminSkillDelete</servlet-name>
+        <url-pattern>/doadminskilldelete</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

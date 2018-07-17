@@ -28,8 +28,11 @@
         </br>
         <#if progetto.utente.key == utente.key>
             <div class="row">
-                <div class="col-xs-2 col-xs-offset-5">
+                <div class="col-xs-3 col-xs-offset-2">
                     <a href="CreateTask?progetto_id=${progetto.key}" class="btn btn-primary col-md">Crea un task</a>
+                </div>
+                <div class="col-xs-3 col-xs-offset-2">
+                    <a href="EditProject?progetto_id=${progetto.key}" class="btn btn-primary col-md"> Modifica progetto</a>
                 </div>
             </div>
         </#if>

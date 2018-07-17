@@ -29,7 +29,6 @@ public class SetMessage extends SocialDevelopBaseController{
         int utente_key = (int) s.getAttribute("userid");
         Utente utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtente(utente_key);
         
-        int taskid = SecurityLayer.checkNumeric(request.getParameter("taskerino_id"));
         String testo = request.getParameter("reply");
         int ext_discussione = SecurityLayer.checkNumeric(request.getParameter("discussion_id"));
         GregorianCalendar data = new GregorianCalendar();

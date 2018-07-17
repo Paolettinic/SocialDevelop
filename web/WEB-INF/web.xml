@@ -17,6 +17,18 @@
         <servlet-class>socialdevelop.controller.Index</servlet-class>
     </servlet>
     <servlet>   
+	<servlet-name>DoEditTask</servlet-name>
+        <servlet-class>socialdevelop.controller.DoEditTask</servlet-class>
+    </servlet>
+    <servlet>   
+	<servlet-name>EditTask</servlet-name>
+        <servlet-class>socialdevelop.controller.EditTask</servlet-class>
+    </servlet>
+    <servlet>   
+	<servlet-name>InviteSendReceive</servlet-name>
+        <servlet-class>socialdevelop.controller.InviteSendReceive</servlet-class>
+    </servlet>
+    <servlet>   
 	<servlet-name>DoCreateProject</servlet-name>
         <servlet-class>socialdevelop.controller.DoCreateProject</servlet-class>
     </servlet>
@@ -232,6 +244,18 @@
         <servlet-name>DoAdminSkillDelete</servlet-name>
         <servlet-class>socialdevelop.controller.DoAdminSkillDelete</servlet-class>
     </servlet>
+    <servlet-mapping>
+        <servlet-name>DoEditTask</servlet-name>
+        <url-pattern>/DoEditTask</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditTask</servlet-name>
+        <url-pattern>/EditTask</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InviteSendReceive</servlet-name>
+        <url-pattern>/InviteSendReceive</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>CreateProject</servlet-name>
         <url-pattern>/CreateProject</url-pattern>
