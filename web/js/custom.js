@@ -16,36 +16,16 @@ function add_skill() {
     var skills = document.getElementById('skills');
     var new_skill = document.createElement("div");
     new_skill.setAttribute("class","row");
-    new_skill.innerHTML = '<div class="col-xs-6"> <div class="form-group"> <select name="nome_skill_'+skill+'" id="nome_skill_'+skill+'" class="form-control form-sm nome_skill" data-trigger="selectmenu"></select> </div> </div> <div class="col-xs-6"> <div class="form-group"> <input name="voto_skill_'+skill+'" type="number" class="form-control voto_skill"  step="1" min="1"  max="10" required> </div> </div>';
+    new_skill.innerHTML = '<div class="col-xs-6"> <div class="form-group"> <select name="nome_skill_'+skill+'" id="nome_skill_'+skill+'" class="form-control nome_skill"></select> </div> </div> <div class="col-xs-6"> <div class="form-group"> <input name="voto_skill_'+skill+'" type="number" class="form-control voto_skill"  step="1" min="1"  max="10" required> </div> </div>';
     skills.appendChild(new_skill);
     var $options = $("[name='nome_skill_1'] > option").clone();
     $('#nome_skill_'+skill+'').append($options);
-    $('#nome_skill_'+skill+'').customSelectMenu();
-}
-
-// ------------------------------------------------------------
-// Creazione di nuovo html per l'inserimento di una nuova skill (lato profilo utente)
-
-var skill_profile = 1;
-
-function add_skill_profile() {
-    skill_profile++;
-    var skills = document.getElementById('skills');
-    var new_skill = document.createElement("div");
-    new_skill.setAttribute("class","row");
-    new_skill.innerHTML = '<div class="col-xs-6"> <div class="form-group"> <select name="nome_skill_'+skill_profile+'" id="nome_skill_'+skill_profile+'" class="form-control form-sm nome_skill" data-trigger="selectmenu"></select> </div> </div> <div class="col-xs-6"> <div class="form-group"> <input name="voto_skill_'+skill_profile+'" type="number" class="form-control voto_skill"  step="1" min="1"  max="10" required> </div> </div>';
-    skills.appendChild(new_skill);
-    var $options = $("[name='nome_skill_1'] > option").clone();
-    $('#nome_skill_'+skill_profile+'').append($options);
-    $('#nome_skill_'+skill_profile+'').customSelectMenu();
 }
 
 // ------------------------------------------------------------
 // Controllo dei dati inseriti nella form di registrazione iniziale
 
 function signup_check() {
-    // Rimuovo l'attributo 'name' alle select, perché è presente un campo input hidden (con lo stesso nome) con la vera selezione
-    $('select').removeAttr('name');
     
     // Controllo il nome
     var nome = document.forms["signup_form"]["nome"].value;

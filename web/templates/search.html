@@ -33,15 +33,13 @@
                                 <div class="col-md-4 col-xs-6 col-xxs-12">
                                     <!-- Box Item Start -->
                                     <div class="box--item text-center">
-                                        
-                                        
                                         <div class="info project_info">
                                             <div class="icon fs--18 text-lightest bg-primary">
                                                 <i class="fa fa-code"></i>
                                             </div>
                                             
                                             <div class="title">
-                                                <h2 class="h6"><a href="#">${project.nome}</a></h2>
+                                                <h2 class="h6"><a href="Project?progetto_id=${project.key}">${project.nome}</a></h2>
                                             </div>
                                             <div class="desc text-darker line-clamp-3">
                                                 <p>${project.descrizione}</p>
@@ -62,7 +60,7 @@
                                 <div class="col-md-4 col-xs-4 col-xxs-12">
                                     <!-- Box Item Start -->
                                     <div class="box--item text-center">
-                                        <a href="#" class="img dev_img" data-overlay="0.1">
+                                        <a href="UserProfile?username=${user.username}" class="img dev_img" data-overlay="0.1">
                                             <img src="image?imgid=${user.immagine.key}" alt="">
                                         </a>
                                         <div class="info">
@@ -70,16 +68,10 @@
                                                 <i class="fa fa-user"></i>
                                             </div>
                                             <div class="title">
-                                                <h2 class="h6"><a href="#">${user.nome} ${user.cognome}</a></h2>
-                                            </div>
-                                            <div class="meta">
-                                                <p><i class="fa mr--8 fa-code"></i>Public Group / 2500 Members</p>
+                                                <h2 class="h6"><a href="UserProfile?username=${user.username}">${user.nome} ${user.cognome}</a></h2>
                                             </div>
                                             <div class="desc text-darker line-clamp-2">
                                                 <p>${user.biografia}</p>
-                                            </div>
-                                            <div class="action">
-                                                <a href="group-home.html">Group Details<i class="fa ml--10 fa-caret-right"></i></a>
                                             </div>
                                         </div>
                                     </div>
@@ -205,7 +197,7 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                
                                 <div class="col-xs-12 col-xxs-12">                                    
                                     <h2 class="h4 fw--700 widget--title">Ricerca per progetti</h2>
                                     <div class="form-group">
@@ -246,7 +238,7 @@
                                         <!-- Filter item end -->
                                     </div>
                                 </div>
-
+                                
                                 </#if>   
                             </div>
                             <div class="row">

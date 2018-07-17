@@ -172,6 +172,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             cur.setKey(rs.getInt("id"));
             cur.setNome(rs.getString("nome"));
             cur.setTipo(rs.getString("tipo"));
+            cur.setTestuale(rs.getString("testuale"));
             return cur;
         } catch (SQLException ex) {
             throw new DataLayerException("Impossibile creare l'istanza del curriculum dal ResultSet", ex);

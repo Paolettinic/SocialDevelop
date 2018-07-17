@@ -137,6 +137,10 @@
         <servlet-class>socialdevelop.controller.GetImage</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>GetCurriculum</servlet-name>
+        <servlet-class>socialdevelop.controller.GetCurriculum</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>TaskForum</servlet-name>
         <servlet-class>socialdevelop.controller.TaskForum</servlet-class>
     </servlet>
@@ -391,6 +395,10 @@
     <servlet-mapping>
         <servlet-name>GetImage</servlet-name>
         <url-pattern>/image</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetCurriculum</servlet-name>
+        <url-pattern>/GetCurriculum</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Rate</servlet-name>

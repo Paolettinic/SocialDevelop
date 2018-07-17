@@ -37,7 +37,7 @@ public class SignUp extends SocialDevelopBaseController {
             request.setAttribute("utente_key", (int) s.getAttribute("userid"));
         }
         
-        if (s.getAttribute("userid") != null && ((int) s.getAttribute("userid")) > 0) {
+        if (s.getAttribute("userid") != null) {
             response.sendRedirect("Index");
         }
         

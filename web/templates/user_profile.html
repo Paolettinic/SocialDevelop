@@ -1,20 +1,43 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12">
-            <div class="cover--header pt--80 text-center">
+            <div class="cover--header pt--100 text-center">
                 <div class="cover--avatar" data-overlay="0.5" data-overlay-color="primary">
                     <img src="image?imgid=${utente.immagine.key}" alt="">
                 </div>
                 <div>
-                    <h2 class="h3 fw--600">${utente.nome} ${utente.cognome} (${utente.username})</h2>
+                    <h2 class="fw--400 margin_bottom_20 margin_top_20">${utente.nome} ${utente.cognome} (${utente.username})</h2>
                 </div>
             </div>
         </div>
     </div>
+    
+    <div class="row margin_bottom_20">
+        <div class="col-xs-4 col-xs-offset-4">
+            <#if no_mio_profilo == true>
+                <#if tasks_invito?size == 0>
+                    <p>Questo utente non soddisfa nessuno dei task dei tuoi progetti</p>
+                <#else>
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            Invita questo utente a far parte di un tuo progetto
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <#list tasks_invito as task_invito>
+                            <li><a href="SendTaskRequest?taskiddi=${task_invito.key}&utente_key=${utente.key}">Task "${task_invito.nome}" - Progetto "${task_invito.progetto.nome}"</a></li>
+                            </#list>
+                        </ul>
+                    </div>
+                </#if>
+            </#if>
+        </div>
+    </div>
+    
     <div class="row">
         <div class="col-xs-12">
-            <div class="product--details-nav">
-                <ul class="nav ff--primary fs--18 fw--600 text-black bg-lighter">
+            <div class="product--details-nav fs--18 text-black bg-lighter">
+                <ul class="nav ff--primary">
                     <li class="active">
                         <a href="#profileDetailsTab01" data-toggle="tab">Profilo</a>
                     </li>
@@ -27,39 +50,46 @@
                     <li>
                         <a href="#profileDetailsTab04" data-toggle="tab">Progetti</a>
                     </li>
+                    <li>
+                        <a href="#profileDetailsTab05" data-toggle="tab">Curriculum</a>
+                    </li>
                 </ul>
             </div>
-            <div class="product--details tab-content pb--60">
+            <div class="product--details tab-content pb--60 fs--14">
                 <div class="tab-pane fade in active" id="profileDetailsTab01">
-                    <div class="profile--details fs--14">
-                        <div class="profile--item">
-                            <div class="profile--info">
-                                <table class="table">
-                                    <tr>
-                                        <th class="fw--700 text-darkest">Nome completo</th>
-                                        <td>${utente.nome} ${utente.cognome}</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="fw--700 text-darkest">Data di nascita</th>
-                                        <td>${data_nascita.time?string["dd MMMM yyyy"]}</td>
-                                    </tr>
-                                    <tr>
-                                        <th class="fw--700 text-darkest">E-mail</th>
-                                        <td>${utente.email}</td>
-                                    </tr>
-                                </table>
+                    <div class="profile--item">
+                        <div class="profile--info">
+                            <div class="row">
+                                <div class="col-xs-2">
+                                    <p><b class="text-darkest">Nome completo: </b></p>
+                                </div>
+                                <div class="col-xs-10">
+                                    <p>${utente.nome} ${utente.cognome}</p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="profile--item">
-                            <div class="profile--heading">
-                                <h3 class="h4 fw--700">
-                                    <span class="mr--4">Biografia</span>
-                                    <i class="ml--10 text-primary fa fa-caret-right"></i>
-                                </h3>
+                            <div class="row">
+                                <div class="col-xs-2">
+                                    <p><b class="text-darkest">Data di nascita: </b></p>
+                                </div>
+                                <div class="col-xs-10">
+                                    <p>${data_nascita.time?string["dd MMMM yyyy"]}</p>
+                                </div>
                             </div>
-                            
-                            <div class="profile--info">
-                                <p>${utente.biografia}</p>
+                            <div class="row">
+                                <div class="col-xs-2">
+                                    <p><b class="text-darkest">E-mail: </b></p>
+                                </div>
+                                <div class="col-xs-10">
+                                    <p>${utente.email}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-2">
+                                    <p><b class="text-darkest">Biografia: </b></p>
+                                </div>
+                                <div class="col-xs-10">
+                                    <p>${utente.biografia}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -67,32 +97,26 @@
                 <div class="tab-pane fade" id="profileDetailsTab02">
                     <div class="profile--item">                        
                         <div class="profile--info">
-                            <dl>
-                                <#list utente.skills?keys as skill>
-                                <dt>
-                                    <p class="h6 fw--700 text-darkest">${skill.nome}</p>
-                                    <p class="fw--400 fs--12 text-darker">Voto: ${utente.skills?values[skill?index]}</p>
-                                </dt>
-                                </#list>
-                            </dl>
+                            <#list utente.skills?keys as skill>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <p><b class="text-darkest">${skill.nome}:</b> ${utente.skills?values[skill?index]}</p>
+                                </div>
+                            </div>
+                            </#list>
                         </div>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="profileDetailsTab03">
                     <div class="profile--item">
                         <div class="profile--info">
-                            <dl>
-                                <#if utente.tasks?size == 0>
-                                <p>Questo utente non collabora a dei tasks</p>
-                                <#else>
-                                <#list utente.tasks?keys as task>
-                                <dt>
-                                    <p class="h6 fw--700 text-darkest"><a href="Task?task_id=${task.key}"><span>"${task.nome}"</span></a> nel progetto <a href="Progetto?progetto_id=${task.progetto.key}"><span>"${task.progetto.nome}"</span></a></p>
-                                    <p class="fw--400 fs--12 text-darker">Voto: <#if utente.tasks?values[task?index]??>task in corso<#else>${utente.tasks?values[task?index]}</#if></p>
-                                </dt>
-                                </#list>
-                                </#if>
-                            </dl>
+                            <#if utente.tasks?size == 0>
+                            <p>Questo utente non collabora a nessun task</p>
+                            <#else>
+                            <#list utente.tasks?keys as task>
+                            <p><a href="Task?task_id=${task.key}"><span>"${task.nome}"</span></a> nel progetto <a href="Progetto?progetto_id=${task.progetto.key}"><span>"${task.progetto.nome}"</span></a> di <a href="UserProfile?username=${task.progetto.utente.username}"><span>${task.progetto.utente.nome} ${task.progetto.utente.cognome} (${task.progetto.utente.email})</span></a> - voto: <#if utente.tasks?values[task?index] gt 0>${utente.tasks?values[task?index]}<#else>in corso</#if></p>
+                            </#list>
+                            </#if>
                         </div>
                     </div>
                 </div>
@@ -105,6 +129,24 @@
                             <#list utente.progetti as progetto>
                             <a href="Project?progetto_id=${progetto.key}"><span>${progetto.nome}</span></a>
                             </#list>
+                            </#if>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="profileDetailsTab05">
+                    <div class="profile--item">
+                        <div class="profile--info">
+                            <#if utente.curriculum.testuale??>
+                                <div class="row">
+                                    <div class="col-xs-2">
+                                        <p><b class="text-darkest">Curriculum testuale: </b></p>
+                                    </div>
+                                    <div class="col-xs-10">
+                                        <p>${utente.curriculum.testuale}</p>
+                                    </div>
+                                </div>
+                            <#else>
+                                <a href="GetCurriculum?cv_key=${utente.curriculum.key}">Scarica il curriculum vitae in PDF</a>
                             </#if>
                         </div>
                     </div>

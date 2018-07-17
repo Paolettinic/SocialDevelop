@@ -41,6 +41,10 @@ public class DoEditUserProfileAddSkills extends SocialDevelopBaseController {
         
         // RECUPERO LE SKILLS DALLA FORM
         while (request.getParameter("nome_skill_".concat(String.valueOf(i))) != null) {
+            
+            System.out.println(request.getParameter("nome_skill_".concat(String.valueOf(i))));
+            System.out.println(request.getParameter("nome_skill_".concat(String.valueOf(i))));
+            
             nomi_skill.add(request.getParameter("nome_skill_".concat(String.valueOf(i))));
             nomi_skill_check.add(request.getParameter("nome_skill_".concat(String.valueOf(i))));
             voti_skill.add(Integer.valueOf(request.getParameter("voto_skill_".concat(String.valueOf(i)))));
@@ -49,7 +53,6 @@ public class DoEditUserProfileAddSkills extends SocialDevelopBaseController {
         
         // CONTROLLO SE SONO STATI RIPETUTI DEGLI SKILL
         if (nomi_skill_check.size() != nomi_skill.size()) {
-            request.setAttribute("errore_skills", "Skill ripetute");
             response.sendRedirect("EditUserProfileSkills");
             return;
         }
@@ -57,7 +60,6 @@ public class DoEditUserProfileAddSkills extends SocialDevelopBaseController {
         // PRENDO LE SKILLS E CONTROLLO CHE NON SIANO GIA' PRESENTI SULL'UTENTE
         for (int k = 0; k < nomi_skill.size(); k++) {
             if (utente.getSkills().containsKey(((SocialDevelopDataLayer) request.getAttribute("datalayer")).getSkillByNome(nomi_skill.get(k)))) {
-                request.setAttribute("errore_skills", "Skill già esistente");
                 response.sendRedirect("EditUserProfileSkills");
                 return;
             }
@@ -83,15 +85,5 @@ public class DoEditUserProfileAddSkills extends SocialDevelopBaseController {
             action_error(request, response);
         }
     }
-    
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
     
 }

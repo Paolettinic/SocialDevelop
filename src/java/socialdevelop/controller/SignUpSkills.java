@@ -32,7 +32,8 @@ public class SignUpSkills extends SocialDevelopBaseController {
     private void action_signup_skills(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, TemplateManagerException, DataLayerException, SQLException, NamingException {
         request.setAttribute("page_title", "Registrazione - Skills");
         HttpSession s = request.getSession(true);
-        if (s.getAttribute("userid") != null && ((int) s.getAttribute("userid")) > 0) {
+        
+        if (s.getAttribute("userid") != null) {
             response.sendRedirect("Index");
         }
         

@@ -11,7 +11,7 @@ import java.util.List;
  * @author Davide De Marco
  */
 
-public class ProgettoImpl implements Progetto{
+public class ProgettoImpl implements Progetto {
     
     private int key;
     private String nome;
