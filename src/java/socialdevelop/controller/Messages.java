@@ -50,18 +50,20 @@ public class Messages extends SocialDevelopBaseController {
                 request.setAttribute("utente_key", (int) s.getAttribute("userid"));
             }
             
-            int utente_key = (int) s.getAttribute("userid");
-            
-            Utente utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtente(utente_key);
+            if( s.getAttribute("userid")!=null){
+                int utente_key = (int) s.getAttribute("userid");
+
+                Utente utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtente(utente_key);
+
+                request.setAttribute("utente", utente);
+            }
             
             Discussione discussione = datalayer.getDiscussione(discussione_id);
             List<Messaggio> messaggi = datalayer.getMessaggi(discussione);
             Task task = datalayer.getTask(discussione.getTask().getKey());
             Map<Utente,Integer> utenti = datalayer.getUtenti(task);
-            System.out.println(utenti);
             
             request.setAttribute("utente_key", s.getAttribute("userid"));
-            request.setAttribute("utente", utente);
             request.setAttribute("task", task);
             request.setAttribute("task_name", task.getNome());
             request.setAttribute("task_id", task.getKey());

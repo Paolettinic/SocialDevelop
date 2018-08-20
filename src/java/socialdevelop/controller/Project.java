@@ -41,11 +41,6 @@ public class Project extends SocialDevelopBaseController {
                 request.setAttribute("utente_key", (int) s.getAttribute("userid"));
             }
             
-            int utente_key = (int) s.getAttribute("userid");
-            
-            Utente utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtente(utente_key);
-            
-            
             SocialDevelopDataLayer datalayer = ((SocialDevelopDataLayer)request.getAttribute("datalayer"));
             Progetto progetto = datalayer.getProgetto(progetto_id);
             List<Task> tasks = datalayer.getTasks(progetto);
@@ -64,7 +59,14 @@ public class Project extends SocialDevelopBaseController {
                 n_posts.add(d.getMessaggi().size());
             }
             
-            request.setAttribute("utente", utente);
+            if( s.getAttribute("userid")!=null){
+                int utente_key = (int) s.getAttribute("userid");
+
+                Utente utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtente(utente_key);
+
+                request.setAttribute("utente", utente);
+            }
+            
             request.setAttribute("tasks", tasks);
             request.setAttribute("progetto", progetto);
             request.setAttribute("project_id", progetto.getKey());

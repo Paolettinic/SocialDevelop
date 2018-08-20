@@ -13,19 +13,9 @@
         
         <br>
         <ul class="breadcrumb text-gray ff--primary">
-            <li><a href="Project?utente_key=${utente.key}&progetto_id=${project_id}&page=1&perPage=1" class="btn-link">${project_name}</a></li>
+            <li><a href="Project?progetto_id=${project_id}" class="btn-link">${project_name}</a></li>
             <li class="active"><span class="text-primary">${task_name}</span></li>
         </ul>
-        <div>
-            <div class="cover--user-desc fw--400 fs--18 fstyle--i text-white">
-                <p>${task.descrizione}</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <span class="cover--user-desc fw--400 fs--18 fstyle--i text-white"> Skills e livelli richiesti: <#list skills as skill, vote> ${skill.nome}: ${vote} </#list></span>
-            </div>
-        </div>
         </br>
         <#assign presente = false>
         <#list inviti as invito>
@@ -62,7 +52,8 @@
                     <!-- Content Nav Start -->
                     <div class="content--nav pb--30">
                         <ul class="nav ff--primary fs--14 fw--500 bg-lighter">
-                            <li class="active"><a data-toggle="tab" href="#discussioni">Discussioni</a></li>
+                            <li class="active"><a data-toggle="tab" href="#overview">Overview</a></li>
+                            <li><a data-toggle="tab" href="#discussioni">Discussioni</a></li>
                             <li><a data-toggle="tab" href="#membri">Membri</a></li>
                         </ul>
                     </div>
@@ -70,8 +61,34 @@
 
                     <!-- Filter Nav Start -->
                     <div class="tab-content">
-                        <div id="discussioni" class="tab-pane fade in active">
+                        <div id="overview" class="tab-pane fade in active">
                             <div class="forum--header pb--30">
+                                <div class="forum--title">
+                                    <h3 class="h3 fw--500 text-default">Descrizione</h3>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p>${task.descrizione}</p>
+                                    </div>
+                                </div>
+                                <div class="forum--title">
+                                    <h3 class="h3 fw--500 text-default">Competenze richieste</h3>
+                                    <#list skills as skill, vote>
+                                    <div class="row">
+                                        <div class="col-xs-2">
+                                            <p><b class="text-darkest">Nome skill e livello richiesto:</b></p>
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <p>${skill.nome}, ${vote}</p>
+                                        </div>
+                                    </div>
+                                    </#list>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="discussioni" class="tab-pane fade">
+                            <div class="forum--header pb--30">
+                                <#if topics?has_content>
                                 <div class="forum--title">
                                     <h3 class="h3 fw--500 text-default">Ultime discussioni</h3>
                                 </div>
@@ -123,6 +140,12 @@
                                     <a href="TaskForum?task_id=${task.key}&page=1&perPage=1&async=0" class="btn btn-primary col-md float--right">Guarda tutte le discussioni del relativo task</a>
                                 </div>
                             </div>
+                            <#else>
+                            <div class="forum--title">
+                                <h3 class="h3 fw--500 text-default">Non ci sono discussioni</h3>
+                            </div>
+                               
+                            </#if>
                             </div>
                         </div>
                         
@@ -134,7 +157,11 @@
                                     <#list task.utenti as user, vote>
                                     <#assign i++>
                                     </#list>
-                                    <h2 class="h4"><a class="btn-link">Membri: ${i}</a></h2>
+                                    <#if i==0>
+                                    <h3 class="h3 fw--500 text-default">Non ci sono membri in questo task</h3>
+                                    <#else>
+                                    <h3 class="h3 fw--500 text-default">Membri: ${i}</h3>
+                                    </#if>
                                 </div>
                             </div>
                     <!-- Filter Nav End -->
@@ -142,7 +169,6 @@
                     <!-- Member Items Start -->
                             <div class="member--items">
                                 <div class="row gutter--15 AdjustRow">
-                                    
                                     <div class="col-md-3 col-xs-6 col-xxs-12">
                                         <#list task.utenti as user, vote>
                                         <!-- Member Item Start -->
@@ -166,20 +192,6 @@
                                 </div>
                             </div>
                     <!-- Member Items End -->
-
-                    <!-- Page Count Start -->
-                            <div class="page--count pt--30">
-                                <label class="ff--primary fs--14 fw--500 text-darker">
-                                    <span>Viewing</span>
-
-                                    <a href="#" class="btn-link"><i class="fa fa-caret-left"></i></a>
-                                    <input type="number" name="page-count" value="01" class="form-control form-sm">
-                                    <a href="#" class="btn-link"><i class="fa fa-caret-right"></i></a>
-
-                                    <span>of 68</span>
-                                </label>
-                            </div>
-                    
                         </div>
                     </div>
                     

@@ -1,7 +1,6 @@
 <!-- Cover Header Start -->
 <div class="page--header pt--60 pb--60 text-center" data-bg-img="img/page-header-img/bg.jpg" data-overlay="0.85">
     <div class="container">
-        
 
         <div class="title">
             <h2 class="h1 text-white">${progetto.nome}</h2>
@@ -16,7 +15,7 @@
                 </li>
             </ul>
 
-            <p>Amministratore progetto: ${progetto.utente.nome} ${progetto.utente.cognome}</p>
+            <p>Amministratore progetto: <a href="UserProfile?utente_key=${progetto.utente.key}">${progetto.utente.nome} ${progetto.utente.cognome}</a></p>
         </div>
         <div class="row">
             <div class="col-xs-12">
@@ -28,10 +27,7 @@
         </br>
         <#if progetto.utente.key == utente.key>
             <div class="row">
-                <div class="col-xs-3 col-xs-offset-2">
-                    <a href="CreateTask?progetto_id=${progetto.key}" class="btn btn-primary col-md">Crea un task</a>
-                </div>
-                <div class="col-xs-3 col-xs-offset-2">
+                <div class="col-xs-12">
                     <a href="EditProject?progetto_id=${progetto.key}" class="btn btn-primary col-md"> Modifica progetto</a>
                 </div>
             </div>
@@ -62,9 +58,9 @@
                     <!-- Filter Nav Start -->
                     <div class="tab-content">
                         <div id="discussioni" class="tab-pane fade in active">
-                            
+                            <#if topicss?has_content>
                             <div class="forum--title">
-                                    <h3 class="h3 fw--500 text-default">Ultime discussioni</h3>
+                                <h3 class="h3 fw--500 text-default">Ultime discussioni</h3>
                             </div>
                             <br>
                             <div class="activity--list">
@@ -89,11 +85,11 @@
                                                 <div class="activity--meta fs--12">
                                                     <p><i class="fa mr--8 fa-clock-o"></i>${topicc.data.time?string["dd MMMM yyyy"]}</p>
                                                 </div>
-                                                
+
                                                 <div class="activity--content">
                                                     <p><a href="Messages?utente_key=${utente.key}&task_id=${task.key}&discussione_id=${topicc.key}">${topicc.titolo}</a></p>
                                                 </div>
-                                                
+
                                             </div>
                                         </div>
                                         <!-- Activity Item End -->
@@ -103,10 +99,16 @@
                                 </ul>
                                 <!-- Activity Items End -->
                             </div>
+                            <#else>
+                            <div class="forum--title">
+                                <h3 class="h3 fw--500 text-default">Non ci sono discussioni</h3>
+                            </div>
+                            </#if>
                         </div>
-                        
+
                         <div id="tasks" class="tab-pane fade">
                             <div class="forum--header pb--30">
+                                <#if tasks?has_content>
                                 <div class="forum--title">
                                     <h3 class="h3 fw--500 text-default">Tasks</h3>
                                 </div>
@@ -127,7 +129,7 @@
                                             <#assign pippo = task?index>
                                             <tr>
                                                 <td>
-                                                    <h4 class="h6 fw--500 text-darkest"><a href="TaskPage?utente_key=${utente.key}&task_id=${task.key}&page=1&perPage=1" class="btn-link"><strong>${task.nome}</strong></a></h4>
+                                                    <h4 class="h6 fw--500 text-darkest"><a href="TaskPage?task_id=${task.key}" class="btn-link"><strong>${task.nome}</strong></a></h4>
                                                 </td>
                                                 <td>
                                                     <#assign numCol = 0>
@@ -147,19 +149,23 @@
                                         </tbody>
                                     </table>
                                 </div>
-                            
+                                <#else>
+                                <div class="forum--title">
+                                    <h3 class="h3 fw--500 text-default">Non ci sono ancora task<#if progetto.utente.key == utente.key>, <a href="CreateTask?progetto_id=${progetto.key}">creane uno</a></#if></h3>
+                                </div> 
+                                </#if>
                             </div>
-                        </div>
+                            <#if progetto.utente.key == utente.key>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <a href="CreateTask?progetto_id=${progetto.key}" class="btn btn-primary col-md float--right">Crea un nuovo task</a>
+                                </div>
+                            </div>
+                            </#if>
                     </div>
-                    
-                    <!-- Page Count End -->
                 </div>
             </div>
             <!-- Main Content End -->
-
-            <!-- Main Sidebar Start -->
-            
-            <!-- Main Sidebar End -->
         </div>
     </div>
 </section>

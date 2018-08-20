@@ -69,6 +69,9 @@
                     <!-- Topic Replies End -->
 
                 </div>
+                <#if utente == null>
+                <span>PORCODDIO</span>
+                <#else>
                 <form action ="SetMessage" method="GET">
                     <input type="hidden" name="discussion_id" value="${discussione.key}"/>
                 
@@ -83,11 +86,9 @@
                         <button type="submit" class="btn btn-default">Conferma</button>
                     </div>
                 </form>
+                </#if>
             </div>
             <!-- Main Content End -->
-
-            <!-- Main Sidebar Start -->
-            <!-- Main Sidebar End -->
         </div>
     </div>
 </section>
