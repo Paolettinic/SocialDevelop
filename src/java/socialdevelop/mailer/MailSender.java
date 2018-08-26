@@ -29,7 +29,7 @@ public class MailSender {
         this.text = text;
     }   
     
-    public void sendEmail(){
+    public void sendMail(){
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.socketFactory.port", "465");

@@ -17,12 +17,12 @@
                         <#assign i = topic?index>
                         <tr>
                             <td>
-                                <h4 class="h6 fw--500 text-darkest"><a href="#" class="btn-link">${topic.titolo}</a></h4>
+                                <h4 class="h6 fw--500 text-darkest"><a href="Messages?discussione_id=${topic.key}" class="btn-link">${topic.titolo}</a></h4>
                             </td>
                             <td>
                                 <p>${topic.data.time?string["dd MMMM yyyy"]}</p>
                                     
-                                <a href="member-activity-personal.html" class="topic--author">
+                                <a href="UserProfile?username=${topic.utente.username}" class="topic--author">
                                     <span class="name">${topic.utente.nome} ${topic.utente.cognome}</span>
                                     <span class="avatar"><img src="image?imgid=${topic.utente.immagine.key}" alt=""></span>
                                 </a>

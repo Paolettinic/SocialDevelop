@@ -45,6 +45,8 @@ public class TaskForum extends SocialDevelopBaseController{
                 request.setAttribute("utente_key", 0);
             } else {
                 request.setAttribute("utente_key", (int) s.getAttribute("userid"));
+                request.setAttribute("logged",true);
+                
             }
             int firstResult = (page-1)*perPage; //numero del primo risultato della paginazione
             
@@ -83,7 +85,7 @@ public class TaskForum extends SocialDevelopBaseController{
                 request.setAttribute("posts",n_posts);
                 request.setAttribute("date",date_creazione);
                 request.setAttribute("users",utenti);
-
+                request.setAttribute("page_title","SocialDevelop | Forum");
                 request.setAttribute("currentpage",page);
                 request.setAttribute("perPage",perPage);
                 request.setAttribute("totalResults",total);

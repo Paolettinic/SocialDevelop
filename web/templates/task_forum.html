@@ -36,12 +36,12 @@
                                 <#assign i = topic?index>
                                 <tr>
                                     <td>
-                                        <h4 class="h6 fw--500 text-darkest"><a href="#" class="btn-link">${topic.titolo}</a></h4>
+                                        <h4 class="h6 fw--500 text-darkest"><a href="Messages?discussione_id=${topic.key}" class="btn-link">${topic.titolo}</a></h4>
                                     </td>
                                     <td>
                                         <p>${topic.data.time?string["dd MMMM yyyy"]}</p>
                                         
-                                        <a href="member-activity-personal.html" class="topic--author">
+                                        <a href="UserProfile?username=${topic.utente.username}" class="topic--author">
                                             <span class="name">${topic.utente.nome} ${topic.utente.cognome}</span>
                                             <span class="avatar"><img src="image?imgid=${topic.utente.immagine.key}" alt=""></span>
                                         </a>
@@ -89,12 +89,16 @@
                 <!-- Page Count End -->
             </div>
         </div>
+        <#if logged??>
+        <#if logged>
         <div class="row">
             <div class="col-md-9"></div>
             <div class="col-md-3 col-xs-12  float--left main--content">
-                <a class="btn btn-primary max-width" href="#">Nuova discussione</a>
+                <a class="btn btn-primary max-width" href="CreateDiscussion?task_id=${task_id}">Nuova discussione</a>
             </div>
         </div>
+        </#if>
+        </#if>
     </div>
 </section>
 <!-- Page Wrapper End -->

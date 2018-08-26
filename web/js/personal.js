@@ -12,6 +12,13 @@ $("skill_filter").ready(function(){
 function reloadContent(){
     $('.script_enabled').removeClass('display_none'); 
    
+    var $adjustRow = $('.AdjustRow');   
+    if ( $adjustRow.length ) {
+        $adjustRow.isotope({
+            layoutMode: 'fitRows'
+        });
+    }
+   
     $("#currentTaskPage").keypress(function(e) {
         if(e.which === 13) {
             var urlParams = new URLSearchParams(window.location.search);
@@ -21,14 +28,14 @@ function reloadContent(){
     
     $("#currentSearchPage").keypress(function(e) {
         if(e.which === 13) {
+            
             var urlParams = new URLSearchParams(window.location.search);
-            goToSearchPage(urlParams.get('filter'),this.value,8);
+            goToSearchPage(urlParams.get('type'),urlParams.get('filter'),this.value,9);
         }
     });  
     
     $("#project_select").change(function(){
         var project = $("#project_select").val();
-        console.log(project);
         $("#task_select").children().remove();
         $.ajax({
             type: 'POST',
@@ -50,12 +57,17 @@ function reloadContent(){
                 opt.setAttribute("disabled","disabled");
                 opt.setAttribute("selected","selected");
                 opt.setAttribute("hidden","hidden");
-                opt.innerHTML="Seleziona un task";
-                $("#task_select").append(opt);
-                for(var i=0;i<biarray.length;i++){
-                    opt = document.createElement("option");
-                    opt.setAttribute("value",biarray[i][0]);
-                    opt.innerHTML=biarray[i][1];
+                if(biarray[0][0]!==""){
+                    opt.innerHTML="Seleziona un task";
+                    $("#task_select").append(opt);
+                    for(var i=0;i<biarray.length;i++){
+                        opt = document.createElement("option");
+                        opt.setAttribute("value",biarray[i][0]);
+                        opt.innerHTML=biarray[i][1];
+                        $("#task_select").append(opt);
+                    }
+                }else{
+                    opt.innerHTML="Nessn task";
                     $("#task_select").append(opt);
                 }
             }
@@ -102,7 +114,7 @@ function reloadContent(){
     $("#btn_new_skill").on("click",function(){
         var parent = $("#skill_parent").val() !== null && $("#select_father").checked? $("#skill_parent").val() : 0;
         var nome = $("#newskill").val();
-        if(nome === "") return
+        if(nome === "") return;
         $.ajax({
             type: 'POST',
             url: 'doadminskilladd',
@@ -166,7 +178,6 @@ function reloadContent(){
     
     $("#skill_edit").change(function(){
         var selected=$("#skill_edit").val();
-        console.log(selected);
         if(actual_skill === 0){
             actual_skill=$("#skill_edit_parent option[value='"+selected+"']");
             $("#skill_edit_parent option[value='"+selected+"']").remove();
@@ -187,7 +198,7 @@ function reloadContent(){
             data:{
                 skill_id: $("#skill_edit").val(),
                 newname: newname,
-                newparent: newparent,
+                newparent: newparent
             },
             success: function () {
                 window.location.replace("skill");
@@ -205,23 +216,47 @@ function add_filter_skill(){
     var skill_container = $("#skill_filter");
     let new_skill = document.createElement("div");
     new_skill.setAttribute("class","filter-item skill_filter");
-    new_skill.innerHTML = "<div class=\"row\"> <div class=\"col-xs-9 col-xxs-9\"> <label class=\"mt--30\"> <span class=\"text-darker ff--primary fw--500\">Skill</span> <select name=\"skills_"+skills+"\" class=\"form-control form-sm\" data-trigger=\"selectmenu\"> </select> </label> </div> <div class=\"col-xs-3 col-xxs-3\"> <label class=\"mt--30\"> <span class=\"text-darker ff--primary fw--500\">Livello</span> <input type=\"number\" class=\"form-control\" min=\"1\" max=\"10\" name=\"skill_level_"+skills+"\"/> </label> </div> </div> <button class=\"btn btn-red btn-delete\" onclick=\"remove_filter_skill(this)\"><i class=\"fa fa-trash \"></i></button>";
+    new_skill.innerHTML = "<div class=\"row\"> <div class=\"col-xs-9 col-xxs-9\"> <label class=\"mt--30\"> <span class=\"text-darker ff--primary fw--500\">Skill</span> <select name=\"skills_"+skills+"\" class=\"form-control form-sm\"> </select> </label> </div> <div class=\"col-xs-3 col-xxs-3\"> <label class=\"mt--30\"> <span class=\"text-darker ff--primary fw--500\">Livello</span> <input type=\"number\" class=\"form-control\" min=\"1\" max=\"10\" name=\"skill_level_"+skills+"\"/> </label> </div> </div> <button type=\"button\" name=\"btn_delete_"+skills+"\" class=\"btn btn-red btn-delete\" onclick=\"remove_filter_skill(this,"+skills+")\"><i class=\"fa fa-trash \"></i></button>";
     var options = $('.filter-item select').first().children("option").clone();
     skill_container.append(new_skill);
     new_skill = $('.skill_filter select').last();
     new_skill.append(options);
+    new_skill.children("option").removeAttr("selected");
+    console.log(new_skill.children("option:first-child"));
+    console.log(new_skill.children("option"));
+    new_skill.children("option:first-child").attr("selected","selected");
 
-    new_skill.customSelectMenu();
     skills++;
 }
 
-function remove_filter_skill(element){
+function remove_filter_skill(element,index){
+    console.log(index);
+    console.log($("select[name='skills_1']"));
+
+    if(index === 1 && skills<=2){
+        $("select[name='skills_1']").children("option").removeAttr("selected");
+        $("select[name='skills_1']").children("option:first-child").attr("selected","selected");
+        $("input[name='skill_level_1']").val("");
+        return;
+    }
+    if(index < skills-1){
+        for(var i = index+1;i<skills;i++){
+            console.log(i);
+            console.log(index+1);
+            console.log("name='skills_"+i+"'");
+            console.log($("select[name='skills_"+i+"']"));
+            $("select[name='skills_"+i+"']").attr("name","skills_"+(i-1));
+            $("input[name='skill_level_"+i+"']").attr("name","skill_level_"+(i-1));
+            $("button[name='btn_delete_"+i+"']").attr({"name":"btn_delete_"+(i-1),"onclick":"remove_filter_skill(this,"+(i-1)+")"});
+            
+        }
+    }
     $(element).parent().remove();
+
     skills--;
 }
 
 function setVote(form){
-    console.log($(form).children("input[name='vote']").val());
     $.ajax({
         type: 'POST',
         url: 'setVote',
@@ -287,6 +322,7 @@ function goToTaskPage(taskid,page,perpage){
         },
         success: function (response) {
             if(response){
+                updateQueryStringParam("page",page);
                 $('#updatable_content').html(response);
                 $("html, body").animate({scrollTop: $('.main--content').offset().top - 140}, "slow");
                 reloadContent();
@@ -297,24 +333,60 @@ function goToTaskPage(taskid,page,perpage){
     });
 }
 
-function goToSearchPage(filter,page,perpage){
+function goToSearchPage(type,filter,page,perpage){
+    var correct_filter = filter === null ? "" : filter;
     $.ajax({
         type: 'POST',
         url: 'search',
-        data:{
-            page:       page,
-            filter:     filter,
-            perpage:    perpage,
-            async:      "1"  
-        },
+        data: "type="+type+"&filter="+correct_filter+"&"+$("form[name='skill_form']").serialize() + "&page="+page+"&perpage="+perpage+"&async=1",
         success: function (response) {
             if(response){
+                updateQueryStringParam("page",page);
                 $('#updatable_content').html(response);
                 $("html, body").animate({scrollTop: $('.main--content').offset().top - 140}, "slow");
                 reloadContent();
             }else{
-                
+                console.log("empty response");
             }
         }
     });
 }
+// Explicitly save/update a url parameter using HTML5's replaceState().
+//function updateQueryStringParam(param, value) {
+//  baseUrl = [location.protocol, '//', location.host, location.pathname].join('');
+//  urlQueryString = document.location.search;
+//  var newParam = key + '=' + value,
+//  params = '?' + newParam;
+//
+//  // If the "search" string exists, then build params from it
+//  if (urlQueryString) {
+//    keyRegex = new RegExp('([\?&])' + key + '[^&]*');
+//    // If param exists already, update it
+//    if (urlQueryString.match(keyRegex) !== null) {
+//      params = urlQueryString.replace(keyRegex, "$1" + newParam);
+//    } else { // Otherwise, add it to end of query string
+//      params = urlQueryString + '&' + newParam;
+//    }
+//  }
+//  window.history.replaceState({}, "", baseUrl + params);
+//}
+
+var updateQueryStringParam = function (key, value) {
+    var baseUrl = [location.protocol, '//', location.host, location.pathname].join(''),
+        urlQueryString = document.location.search,
+        newParam = key + '=' + value,
+        params = '?' + newParam;
+
+    // If the "search" string exists, then build params from it
+    if (urlQueryString) {
+        keyRegex = new RegExp('([\?&])' + key + '[^&]*');
+
+        // If param exists already, update it
+        if (urlQueryString.match(keyRegex) !== null) {
+            params = urlQueryString.replace(keyRegex, "$1" + newParam);
+        } else { // Otherwise, add it to end of query string
+            params = urlQueryString + '&' + newParam;
+        }
+    }
+    window.history.replaceState({}, "", baseUrl + params);
+};

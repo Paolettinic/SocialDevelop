@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 package socialdevelop.controller;
 
 import it.univaq.f4i.iw.framework.data.DataLayerException;
@@ -35,7 +35,7 @@ import socialdevelop.data.model.Skill;
  * @author Davide
  */
 
-    public class TaskPage extends SocialDevelopBaseController {
+public class TaskPage extends SocialDevelopBaseController {
     
     private void action_error(HttpServletRequest request, HttpServletResponse response) {
         System.out.print(request.getAttribute("message")+"\n");
@@ -55,9 +55,6 @@ import socialdevelop.data.model.Skill;
                 request.setAttribute("utente_key", (int) s.getAttribute("userid"));
             }
             
-            int utente_key = (int) s.getAttribute("userid");
-            Utente utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtente(utente_key);
-            
             Task task = datalayer.getTask(task_id);
             Progetto proj = task.getProgetto();
             int id_coordinatore = proj.getUtente().getKey();
@@ -65,15 +62,26 @@ import socialdevelop.data.model.Skill;
             Map<Utente,Integer> utenti = datalayer.getUtenti(task);
             List<Discussione> discussioni = datalayer.getDiscussioni(task,0,3);
             List<Integer> n_posts = new ArrayList();
-            boolean skilled = datalayer.checkUtenteTask(utente, task);
+            
+            if(s.getAttribute("userid") == null){
+                int utente_key = (int) s.getAttribute("userid");
+                Utente utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtente(utente_key);
+                boolean skilled = datalayer.checkUtenteTask(utente, task);
+                request.setAttribute("skilled", skilled);
+            }
+            
+            
+            
+            
+            
             Map<Skill, Integer> skills = datalayer.getSkills(task);
             
             request.setAttribute("coordinatore", id_coordinatore);
             request.setAttribute("skills", skills);
-            request.setAttribute("skilled", skilled);
+            
             request.setAttribute("utente_key", s.getAttribute("userid"));
             request.setAttribute("inviti", inviti);
-            request.setAttribute("utente", utente);
+            
             request.setAttribute("task", task);
             request.setAttribute("task_name", task.getNome());
             request.setAttribute("task_id", task.getKey());

@@ -44,7 +44,7 @@ public class Rate extends SocialDevelopBaseController {
                 request.setAttribute("utente_key", (int) s.getAttribute("userid"));
             }
             if(s.getAttribute("userid") == null){
-                response.sendRedirect("Index");
+                response.sendRedirect("Login");
             }else{
             Utente u = datalayer.getUtente((int) s.getAttribute("userid"));
             Progetto proj = datalayer.getProgetto(project_id);
@@ -55,7 +55,7 @@ public class Rate extends SocialDevelopBaseController {
                     found = true;
             }
             if(!found)
-                response.sendRedirect("Index");
+                response.sendRedirect("Login");
             else{
                 request.setAttribute("project_id", project_id);
                 request.setAttribute("project", proj);
@@ -79,13 +79,9 @@ public class Rate extends SocialDevelopBaseController {
         } catch (IOException ex) {
             request.setAttribute("exception", ex);
             action_error(request, response);
-            
         } catch (TemplateManagerException ex) {
             request.setAttribute("exception", ex);
             action_error(request, response);
-            
         }
     }
-    
-    
 }

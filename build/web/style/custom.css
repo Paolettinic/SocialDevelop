@@ -165,10 +165,9 @@
 }
 
 .dev_img img {
-    height: 100%;
-    max-width: unset;
+    height: auto;
+    width: 100%;
 }
-
 .member--item .img.img-circle img {
     object-fit: cover !important;
     height: -webkit-fill-available !important;

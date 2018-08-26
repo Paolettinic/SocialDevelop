@@ -75,7 +75,7 @@ public class SendTaskRequest extends SocialDevelopBaseController {
         invito.setDataInvio(date);
         invito.setTask(task);
         
-        invito.setStato("processing");
+        invito.setStato("In attesa");
         
         
         ((SocialDevelopDataLayer) request.getAttribute("datalayer")).salvaInvito(invito);

@@ -99,7 +99,7 @@ public class DoSignUp extends SocialDevelopBaseController {
         ((SocialDevelopDataLayer) request.getAttribute("datalayer")).salvaImmagine(immagine);
         utente.setImmagine(immagine);
         //File file = new File("/Users/Mario/Desktop/prova", utente.getUsername().concat("_PROPIC.png"));
-        File file = new File(getServletContext().getRealPath(File.separator)+
+        File file = new File(getServletContext().getRealPath("")+
                 getServletContext().getInitParameter("images.directory")+File.separator+
                 utente.getImmagine().getTipo(), utente.getUsername().concat("_PROPIC.png"));
         try (InputStream IS_PROPIC = Propic_Part.getInputStream();) {
@@ -124,7 +124,7 @@ public class DoSignUp extends SocialDevelopBaseController {
         SecurityLayer.createSession(request, utente.getUsername(), utente.getKey());
         
         // MANDO L'UTENTE ALLA SUA PAGINA DEL PROFILO
-        response.sendRedirect("ProfiloUtente?utente_key="+utente.getKey());
+        response.sendRedirect("UserProfile?username="+utente.getUsername());
         
     }
     

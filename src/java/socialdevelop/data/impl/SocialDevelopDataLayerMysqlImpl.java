@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.naming.NamingException;
@@ -1631,39 +1632,33 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
         String filter_skill = "";
         int skill;
         int livello;
-        //SELECT * FROM utenti inner join preparazioni on preparazioni.ext_utente = utenti.id WHERE 
-        //(preparazioni.ext_skill=1 AND preparazioni.livello>=1) 
-        //OR (preparazioni.ext_skill=2 AND preparazioni.livello>=1) 
-        //nome LIKE '%%' OR cognome LIKE '%%' OR username = '%%'
-
-        
         String SQL_string;
         try {
-            SQL_string = "SELECT * FROM utenti ";
             
-            if(skills.size()>0)
-                SQL_string += "INNER JOIN preparazioni ON preparazioni.ext_utente = utenti.id ";
-            SQL_string+="WHERE ";    
-            for(Map.Entry<Integer, Integer> entry : skills.entrySet()) {
-                SQL_string += "(preparazioni.ext_skill=";
-                skill = entry.getKey();
-                livello = entry.getValue();
-                SQL_string+=skill+" AND preparazioni.livello>="+livello+") AND ";
+            SQL_string = "SELECT * FROM utenti ";    
+            if(skills.size()>0){
+                SQL_string += "INNER JOIN (SELECT preparazioni.ext_utente as ext_utente FROM preparazioni WHERE ";
+                int i = 0;
+                for (Map.Entry<Integer, Integer> entry : skills.entrySet()) {
+                    SQL_string += "(preparazioni.ext_skill=";
+                    skill = entry.getKey();
+                    livello = entry.getValue();
+                    SQL_string += skill+" AND preparazioni.livello>="+livello+") ";
+                    if(i++ != skills.size() - 1){
+                        SQL_string += "OR ";
+                    }
+                }
+                SQL_string += "GROUP BY preparazioni.ext_utente HAVING COUNT(DISTINCT preparazioni.ext_skill)="+skills.size()+") as t ON utenti.id = t.ext_utente ";
             }
-            SQL_string+= "(nome LIKE ? OR cognome LIKE ? OR username LIKE ?) LIMIT ?,?";
+            SQL_string += "WHERE (utenti.nome LIKE ? OR utenti.cognome LIKE ? OR utenti.username LIKE ?) LIMIT ?,?";
+
             sUtentiByFiltro = connection.prepareStatement(SQL_string);
             sUtentiByFiltro.setString(1, "%"+filtro+"%");
             sUtentiByFiltro.setString(2, "%"+filtro+"%");
             sUtentiByFiltro.setString(3, "%"+filtro+"%");
             sUtentiByFiltro.setInt(4, first);
             sUtentiByFiltro.setInt(5, perPage);
-            
-            System.out.println("\n\n "+SQL_string+" \n\n");
-            
-            System.out.println("first: "+first);
-            System.out.println("perpage: "+perPage);
-            System.out.println("SKILLS: "+skills.size());
-            
+            System.out.println(sUtentiByFiltro.toString());
             try (ResultSet rs = sUtentiByFiltro.executeQuery()) {
                 while (rs.next()) {
                     result.add(creaUtente(rs));
@@ -1683,24 +1678,39 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
         int livello;
         String SQL_string;
         try{
-            SQL_string = "SELECT COUNT(utenti.id) as total FROM utenti ";
-            if(skills.size()>0)
-                SQL_string += "INNER JOIN preparazioni ON preparazioni.ext_utente = utenti.id ";
-            SQL_string+="WHERE ";  
-            for(Map.Entry<Integer, Integer> entry : skills.entrySet()) {
-                SQL_string += "(preparazioni.ext_skill=";
-                skill = entry.getKey();
-                livello = entry.getValue();
-                SQL_string+=skill+" AND preparazioni.livello>="+livello+") AND ";
+              SQL_string = "SELECT COUNT(utenti.id) as total FROM utenti ";
+              if(skills.size()>0){
+                SQL_string += "INNER JOIN (SELECT preparazioni.ext_utente as ext_utente FROM preparazioni WHERE ";
+                int i = 0;
+                for (Map.Entry<Integer, Integer> entry : skills.entrySet()) {
+                    SQL_string += "(preparazioni.ext_skill=";
+                    skill = entry.getKey();
+                    livello = entry.getValue();
+                    SQL_string += skill+" AND preparazioni.livello>="+livello+") ";
+                    if(i++ != skills.size() - 1){
+                        SQL_string += "OR ";
+                    }
+                }
+                SQL_string += "GROUP BY preparazioni.ext_utente HAVING COUNT(DISTINCT preparazioni.ext_skill)="+skills.size()+") as t ON utenti.id = t.ext_utente ";
             }
-            SQL_string+= "(nome LIKE ? OR cognome LIKE ? OR username LIKE ?)";
-            countUtentiByFiltro = connection.prepareStatement(SQL_string);
+            SQL_string += "WHERE (utenti.nome LIKE ? OR utenti.cognome LIKE ? OR utenti.username LIKE ?)";
+//            SQL_string = "SELECT COUNT(utenti.id) as total FROM utenti ";
+//            if(skills.size()>0)
+//                SQL_string += "INNER JOIN preparazioni ON preparazioni.ext_utente = utenti.id ";
+//            SQL_string+="WHERE ";  
+//            for(Map.Entry<Integer, Integer> entry : skills.entrySet()) {
+//                SQL_string += "(preparazioni.ext_skill=";
+//                skill = entry.getKey();
+//                livello = entry.getValue();
+//                SQL_string+=skill+" AND preparazioni.livello>="+livello+") AND ";
+//            }
+//            SQL_string+= "(nome LIKE ? OR cognome LIKE ? OR username LIKE ?)";
+           countUtentiByFiltro = connection.prepareStatement(SQL_string);
             
             countUtentiByFiltro.setString(1, "%"+filtro+"%");
             countUtentiByFiltro.setString(2, "%"+filtro+"%");
             countUtentiByFiltro.setString(3, "%"+filtro+"%");
 
-            System.out.println("\n\n "+countUtentiByFiltro.toString()+" \n\n");
             try (ResultSet rs = countUtentiByFiltro.executeQuery()) {
                 if (rs.next()) {
                    result = rs.getInt("total");

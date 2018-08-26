@@ -49,13 +49,13 @@ public class SetVote extends SocialDevelopBaseController {
             HttpSession s = request.getSession(true);
             int logged_id;
             if (s.getAttribute("userid") == null) {
-                response.sendRedirect("Index");
+                response.sendRedirect("Login");
             }else{
                 logged_id = (int) s.getAttribute("userid");
                 Utente u = datalayer.getUtente(logged_id);
                 Task t = datalayer.getTask(ext_task);
                 if(!t.getChiuso())
-                    response.sendRedirect("Index");
+                    response.sendRedirect("Rate");
                 Progetto proj = t.getProgetto();
                 List<Progetto> user_projects = u.getProgetti();
                 boolean found = false;
