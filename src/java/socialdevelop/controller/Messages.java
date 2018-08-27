@@ -46,29 +46,24 @@ public class Messages extends SocialDevelopBaseController {
             
             if (s.getAttribute("userid") == null) {
                 request.setAttribute("utente_key", 0);
-                
             } else {
                 request.setAttribute("utente_key", (int) s.getAttribute("userid"));
+            }
+            
+            if( s.getAttribute("userid")!=null){
+                int utente_key = (int) s.getAttribute("userid");
+
+                Utente utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtente(utente_key);
+
+                request.setAttribute("utente", utente);
             }
             
             Discussione discussione = datalayer.getDiscussione(discussione_id);
             List<Messaggio> messaggi = datalayer.getMessaggi(discussione);
             Task task = datalayer.getTask(discussione.getTask().getKey());
             Map<Utente,Integer> utenti = datalayer.getUtenti(task);
-            System.out.println(utenti);
             
-            if(s.getAttribute("userid")!=null){
-                 int utente_key = (int) s.getAttribute("userid");
-                 Utente utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtente(utente_key);
-                 request.setAttribute("utente", utente);
-                 request.setAttribute("utente_key", s.getAttribute("userid"));
-                 request.setAttribute("logged", true);
-            }else{
-                if(!discussione.getPubblica())
-                    response.sendRedirect("Index");
-            }
-            
-            
+            request.setAttribute("utente_key", s.getAttribute("userid"));
             request.setAttribute("task", task);
             request.setAttribute("task_name", task.getNome());
             request.setAttribute("task_id", task.getKey());

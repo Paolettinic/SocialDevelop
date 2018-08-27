@@ -1,4 +1,3 @@
-
 <!-- Page Header Start -->
 <div class="page--header pt--60 pb--60 text-center" data-bg-img="img/page-header-img/bg.jpg" data-overlay="0.85">
     <div class="container">
@@ -69,7 +68,9 @@
                     <!-- Topic Replies End -->
 
                 </div>
-                <#if logged>
+                <#if utente == null>
+                <span>PORCODDIO</span>
+                <#else>
                 <form action ="SetMessage" method="GET">
                     <input type="hidden" name="discussion_id" value="${discussione.key}"/>
                 
@@ -87,11 +88,7 @@
                 </#if>
             </div>
             <!-- Main Content End -->
-
-            <!-- Main Sidebar Start -->
-            <!-- Main Sidebar End -->
         </div>
     </div>
 </section>
 <!-- Page Wrapper End -->
-

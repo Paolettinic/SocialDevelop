@@ -1,8 +1,8 @@
 /*
-* To change this license header, choose License Headers in Project Properties.
-* To change this template file, choose Tools | Templates
-* and open the template in the editor.
-*/
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package socialdevelop.controller;
 
 import it.univaq.f4i.iw.framework.data.DataLayerException;
@@ -35,7 +35,7 @@ import socialdevelop.data.model.Skill;
  * @author Davide
  */
 
-public class TaskPage extends SocialDevelopBaseController {
+    public class TaskPage extends SocialDevelopBaseController {
     
     private void action_error(HttpServletRequest request, HttpServletResponse response) {
         System.out.print(request.getAttribute("message")+"\n");
@@ -63,18 +63,18 @@ public class TaskPage extends SocialDevelopBaseController {
             List<Discussione> discussioni = datalayer.getDiscussioni(task,0,3);
             List<Integer> n_posts = new ArrayList();
             
-            if(s.getAttribute("userid") == null){
+            Map<Skill, Integer> skills = datalayer.getSkills(task);
+            
+            if( s.getAttribute("userid")!=null){
                 int utente_key = (int) s.getAttribute("userid");
                 Utente utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtente(utente_key);
                 boolean skilled = datalayer.checkUtenteTask(utente, task);
+                
                 request.setAttribute("skilled", skilled);
+                request.setAttribute("utente", utente);
             }
             
             
-            
-            
-            
-            Map<Skill, Integer> skills = datalayer.getSkills(task);
             
             request.setAttribute("coordinatore", id_coordinatore);
             request.setAttribute("skills", skills);
@@ -127,4 +127,3 @@ public class TaskPage extends SocialDevelopBaseController {
     
     
 }
-
