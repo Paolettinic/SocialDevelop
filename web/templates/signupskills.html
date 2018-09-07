@@ -12,35 +12,37 @@
                     </div>
                     <div id="skills">
                         <#list 1..100 as i>
-                        <div class="row">
-                            <div class="col-xs-6">
-                                <div class="form-group">
-                                    <select name="nome_skill_${i}" class="form-control">
-                                        <#list skills as skill>
-                                        <option value="${skill.nome}">${skill.nome}</option>
-                                        <#list skill.figli as figlio>
-                                        <option value="${figlio.nome}"> --- ${figlio.nome} (sotto-skill)</option>
-                                        </#list>
-                                        </#list>
-                                    </select>
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <select name="nome_skill_${i}" id="nome_skill_${i}" class="form-control">
+                                            <#list skills as skill>
+                                            <option value="${skill.nome}">${skill.nome}</option>
+                                            <#list skill.figli as figlio>
+                                            <option value="${figlio.nome}"> --- ${figlio.nome} (sotto-skill)</option>
+                                            </#list>
+                                            </#list>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <input name="voto_skill_${i}" type="number" class="form-control voto_skill" step="1" min="1"  max="10">
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-xs-6">
-                                <div class="form-group">
-                                    <input name="voto_skill_${i}" type="number" class="form-control voto_skill" step="1" min="1"  max="10">
-                                </div>
-                            </div>
-                        </div>
-                        <#if i == numero_skill>
-                        <#break>
-                        </#if>
-                        </#list>        
+                            <#if i == numero_skill>
+                                <#break>
+                            </#if>
+                        </#list>
                     </div>
+                    
                     <div class="row">
                         <div class="col-xs-12">
                             <button type="submit" class="btn btn-primary float--right">Avanti</button>
                         </div>
                     </div>
+                    
                 </form>
             </div>
         </div>

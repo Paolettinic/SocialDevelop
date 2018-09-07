@@ -41,10 +41,6 @@ public class DoEditUserProfileAddSkills extends SocialDevelopBaseController {
         
         // RECUPERO LE SKILLS DALLA FORM
         while (request.getParameter("nome_skill_".concat(String.valueOf(i))) != null) {
-            
-            System.out.println(request.getParameter("nome_skill_".concat(String.valueOf(i))));
-            System.out.println(request.getParameter("nome_skill_".concat(String.valueOf(i))));
-            
             nomi_skill.add(request.getParameter("nome_skill_".concat(String.valueOf(i))));
             nomi_skill_check.add(request.getParameter("nome_skill_".concat(String.valueOf(i))));
             voti_skill.add(Integer.valueOf(request.getParameter("voto_skill_".concat(String.valueOf(i)))));

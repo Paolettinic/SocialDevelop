@@ -14,6 +14,7 @@ import socialdevelop.data.model.SocialDevelopDataLayer;
 /**
  * @author Mario Vetrini
  */
+
 public class DoEditUserProfileDeleteSkill extends SocialDevelopBaseController {
     
     private void action_error(HttpServletRequest request, HttpServletResponse response) {
@@ -25,24 +26,19 @@ public class DoEditUserProfileDeleteSkill extends SocialDevelopBaseController {
     }
     
     private void action_default(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, TemplateManagerException {
-//        try {
-//            TemplateResult res = new TemplateResult(getServletContext());
-//            //aggiungiamo al template un wrapper che ci permette di chiamare la funzione stripSlashes
-//            //add to the template a wrapper object that allows to call the stripslashes function
-//            request.setAttribute("strip_slashes", new SplitSlashesFmkExt());
-//            res.activate("write_list.ftl.html", request, response);
-//        } catch (DataLayerException ex) {
-//            request.setAttribute("message", "Data access exception: " + ex.getMessage());
-//            action_error(request, response);
-//        }
+        // TODO
     }
     
     private void action_do_edit_user_profile_delete_skill(HttpServletRequest request, HttpServletResponse response, int skill_key) throws IOException, ServletException, TemplateManagerException, DataLayerException {
         HttpSession s = request.getSession(true);
-        int utente_key = (int) s.getAttribute("userid");
+        
+        if (s.getAttribute("userid") == null) {
+            response.sendRedirect("Login");
+            return;
+        }
         
         // ELIMINO LA SKILL DELL'UTENTE
-        ((SocialDevelopDataLayer) request.getAttribute("datalayer")).eliminaPreparazioni(utente_key, skill_key);
+        ((SocialDevelopDataLayer) request.getAttribute("datalayer")).eliminaPreparazioni((int) s.getAttribute("userid"), skill_key);
         
         // RIMANDO L'UTENTE ALLA PAGINA DI MODIFICA DELLE SKILLS (MODALE?)
         response.sendRedirect("EditUserProfileSkills");
@@ -63,15 +59,5 @@ public class DoEditUserProfileDeleteSkill extends SocialDevelopBaseController {
             action_error(request, response);
         }
     }
-    
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-    
+
 }

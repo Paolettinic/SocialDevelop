@@ -114,7 +114,11 @@
                             <p>Questo utente non collabora a nessun task</p>
                             <#else>
                             <#list utente.tasks?keys as task>
-                            <p><a href="Task?task_id=${task.key}"><span>"${task.nome}"</span></a> nel progetto <a href="Progetto?progetto_id=${task.progetto.key}"><span>"${task.progetto.nome}"</span></a> di <a href="UserProfile?username=${task.progetto.utente.username}"><span>${task.progetto.utente.nome} ${task.progetto.utente.cognome} (${task.progetto.utente.email})</span></a> - voto: <#if utente.tasks?values[task?index] gt 0>${utente.tasks?values[task?index]}<#else>in corso</#if></p>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <p><a href="Task?task_id=${task.key}"><span>"${task.nome}"</span></a> nel progetto <a href="Progetto?progetto_id=${task.progetto.key}"><span>"${task.progetto.nome}"</span></a> di <a href="UserProfile?username=${task.progetto.utente.username}"><span>${task.progetto.utente.nome} ${task.progetto.utente.cognome} (${task.progetto.utente.email})</span></a> - voto: <#if utente.tasks?values[task?index] gt 0>${utente.tasks?values[task?index]}<#else>in corso</#if></p>
+                                </div>
+                            </div>
                             </#list>
                             </#if>
                         </div>
@@ -127,7 +131,11 @@
                             <p>Questo utente non possiede dei progetti</p>
                             <#else>
                             <#list utente.progetti as progetto>
-                            <a href="Project?progetto_id=${progetto.key}"><span>${progetto.nome}</span></a>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <a href="Project?progetto_id=${progetto.key}"><span>${progetto.nome}</span></a>
+                                </div>
+                            </div>
                             </#list>
                             </#if>
                         </div>

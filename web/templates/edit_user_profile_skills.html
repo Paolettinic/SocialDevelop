@@ -36,7 +36,7 @@
         </div>
         <div class="col-xs-9">
             <div class="contact--form margin_bottom_50 margin_top_50 margin_left_right_0">
-                <form action="DoEditUserProfileAddSkills" method="post">
+                <form action="DoEditUserProfileAddSkills" method="post" onsubmit="return check_add_skills()">
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="form-group">
@@ -48,11 +48,11 @@
                         <div class="row">
                             <div class="col-xs-6">
                                 <div class="form-group">
-                                    <select name="nome_skill_1" class="form-control nome_skill">
+                                    <select name="nome_skill_1" id="nome_skill_1"  class="form-control nome_skill">
                                         <#list skills as skill>
                                         <option value="${skill.nome}">${skill.nome}</option>
                                         <#list skill.figli as figlio>
-                                        <option value="${figlio.nome}"> --- ${figlio.nome} (sotto-skill)</option>
+                                        <option value="${figlio.nome}">----- ${figlio.nome}</option>
                                         </#list>
                                         </#list>
                                     </select>
@@ -60,7 +60,7 @@
                             </div>
                             <div class="col-xs-6">
                                 <div class="form-group">
-                                    <input name="voto_skill_1" type="number" class="form-control voto_skill" step="1" min="1"  max="10">
+                                    <input name="voto_skill_1" type="number" class="form-control voto_skill" step="1" min="1"  max="10" required>
                                 </div>
                             </div>
                         </div>

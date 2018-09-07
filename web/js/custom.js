@@ -6,6 +6,8 @@ $(document).ready(function() {
     $(".no_javascript").removeClass("no_javascript");
 });
 
+
+
 // ------------------------------------------------------------
 // Creazione di nuovo html per l'inserimento di una nuova skill
 
@@ -22,10 +24,14 @@ function add_skill() {
     $('#nome_skill_'+skill+'').append($options);
 }
 
+
+
 // ------------------------------------------------------------
 // Controllo dei dati inseriti nella form di registrazione iniziale
 
 function signup_check() {
+    
+    $('select').removeAttr('name');
     
     // Controllo il nome
     var nome = document.forms["signup_form"]["nome"].value;
@@ -126,30 +132,62 @@ function signup_check() {
         return false;
     }
     
-    // Controllo gli skill
+    // Controllo le skill
     var valori_skill = new Set();
     for (i = 1; i <= skill; i++) {
-        valori_skill.add($('input[name=nome_skill_'+i+']').val());
+        valori_skill.add($('#nome_skill'+i).val());
     }
-    if(valori_skill.size !== skill) {
-        alert("Sono presenti degli skill ripetuti");
+    if (valori_skill.size !== skill) {
+        alert("Sono presenti delle skill ripetute");
         return false;
     }
     
-    // Controllo i voti degli skill
+    // Controllo i voti delle skill
     for (i = 1; i <= skill; i++) {
-        var voto = $('input[name=voto_skill_'+i+']').val();
-        if(voto < 1 || voto === "") {
+        var voto = $('#nome_skill'+i).val();
+        if (voto < 1 || voto === "" || voto > 10) {
             alert("I voti degli skill devono essere compresi tra 1 e 10");
             return false;
         }
-    };
+    }
     
     document.signup_form.action = "SignUpFiles";
     
     return true;
     
 }
+
+
+
+// ------------------------------------------------------------
+// Controllo le skill che l'utente vuole aggiungersi modificando il suo profilo 
+
+function check_add_skills() {
+    
+    // Controllo le skill
+    var valori_skill = new Set();
+    for (i = 1; i <= skill; i++) {
+        valori_skill.add($('#nome_skill'+i).val());
+    }
+    if (valori_skill.size !== skill) {
+        alert("Sono presenti delle skill ripetute");
+        return false;
+    }
+    
+    // Controllo i voti delle skill
+    for (i = 1; i <= skill; i++) {
+        var voto = $('#nome_skill'+i).val();
+        if (voto < 1 || voto === "" || voto > 10) {
+            alert("I voti degli skill devono essere compresi tra 1 e 10");
+            return false;
+        }
+    }
+    
+    return true;
+    
+}
+
+
 
 // ------------------------------------------------------------
 // Controllo dei dati inseriti nella form di registrazione finale
@@ -176,6 +214,9 @@ function signup_cv_pic_check() {
         alert("Carica la foto profilo.");
         return false;
     }
+    
+    return true;
+    
 }
 
 // ------------------------------------------------------------

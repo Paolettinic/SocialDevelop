@@ -1463,7 +1463,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             sTasksByUtente.setInt(1, utente.getKey());
             try (ResultSet rs = sTasksByUtente.executeQuery()) {
                 while (rs.next()) {
-                    result.put(creaTask(rs), rs.getInt("coprenti.voto"));
+                    result.put((Task) getTask(rs.getInt("ext_task")), rs.getInt("voto"));
                 }
             }
         } catch (SQLException ex) {
