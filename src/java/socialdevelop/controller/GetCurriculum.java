@@ -14,9 +14,8 @@ import socialdevelop.data.model.Curriculum;
 /**
  * @author Mario Vetrini
  */
-
 public class GetCurriculum extends SocialDevelopBaseController {
-    
+
     private void action_error(HttpServletRequest request, HttpServletResponse response) {
 //        // Ad esempio possiamo caricare un'immagine di default se non riusciamo a trovare quella indicata
 //        try {
@@ -31,7 +30,7 @@ public class GetCurriculum extends SocialDevelopBaseController {
 //            }
 //        }
     }
-    
+
     private void action_download(HttpServletRequest request, HttpServletResponse response, int cv_key) throws IOException, DataLayerException {
         StreamResult result = new StreamResult(getServletContext());
         Curriculum curriculum = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getCurriculum(cv_key);
@@ -43,9 +42,9 @@ public class GetCurriculum extends SocialDevelopBaseController {
             // Prendiamo il file dal filesystem
             result.activate(
                     new File(
-                            getServletContext().getRealPath("/")+
-                                    getServletContext().getInitParameter("cv.directory")+File.separator+
-                                    curriculum.getNome()
+                            getServletContext().getRealPath("")
+                            + getServletContext().getInitParameter("cv.directory") + File.separator
+                            + curriculum.getNome()
                     ),
                     request,
                     response
@@ -54,7 +53,7 @@ public class GetCurriculum extends SocialDevelopBaseController {
             throw new DataLayerException("Curriculum non disponibile");
         }
     }
-    
+
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         try {
@@ -64,5 +63,5 @@ public class GetCurriculum extends SocialDevelopBaseController {
             action_error(request, response);
         }
     }
-    
+
 }

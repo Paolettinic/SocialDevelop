@@ -39,7 +39,7 @@ public class DoEditUserProfileAddSkills extends SocialDevelopBaseController {
         Set<String> nomi_skill_check =  new HashSet<>();
         ArrayList<Integer> voti_skill = new ArrayList<>();
         
-        // RECUPERO LE SKILLS DALLA FORM
+        // RECUPERO LE SKILL DALLA FORM
         while (request.getParameter("nome_skill_".concat(String.valueOf(i))) != null) {
             nomi_skill.add(request.getParameter("nome_skill_".concat(String.valueOf(i))));
             nomi_skill_check.add(request.getParameter("nome_skill_".concat(String.valueOf(i))));

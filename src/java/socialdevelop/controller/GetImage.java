@@ -45,7 +45,7 @@ public class GetImage extends SocialDevelopBaseController {
             // Prendiamo il file dal filesystem
             result.activate(
                 new File(
-                    getServletContext().getRealPath("/")+
+                    getServletContext().getRealPath("")+
                     getServletContext().getInitParameter("images.directory")+File.separator+
                     image.getTipo()+File.separator+
                     image.getNome()

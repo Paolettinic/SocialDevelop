@@ -47,12 +47,12 @@ public class DoEditUserProfilePic extends SocialDevelopBaseController {
         }
         
         // ELIMINO LA VECCHIA IMMAGINE DEL SERVER E CARICO LA NUOVA
-        File file_delete = new File(getServletContext().getRealPath(File.separator)+
+        File file_delete = new File(getServletContext().getRealPath("")+
                 getServletContext().getInitParameter("images.directory")+File.separator+
                 utente.getImmagine().getTipo()+File.separator+
                 utente.getImmagine().getNome());
         if (file_delete.delete()) {
-            File file_upload = new File(getServletContext().getRealPath(File.separator)+
+            File file_upload = new File(getServletContext().getRealPath("")+
                 getServletContext().getInitParameter("images.directory")+File.separator+
                 utente.getImmagine().getTipo(), utente.getImmagine().getNome());
                 try (InputStream IS_PROPIC = Propic_Part.getInputStream();) {

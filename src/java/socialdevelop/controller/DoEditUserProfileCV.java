@@ -59,7 +59,7 @@ public class DoEditUserProfileCV extends SocialDevelopBaseController {
         // CONTROLLO SE E' STATO CARICATO IL PDF TESTUALE E SETTO I CAMPI
         if (!"".equals(CV_text)) {
             // PROVO A CANCELLARE IL VECCHIO CV (SE C'E')
-            File file_delete = new File(getServletContext().getRealPath(File.separator)+
+            File file_delete = new File(getServletContext().getRealPath("")+
                     getServletContext().getInitParameter("cv.directory")+File.separator+
                     utente.getCurriculum().getNome());
             file_delete.delete();
@@ -70,13 +70,14 @@ public class DoEditUserProfileCV extends SocialDevelopBaseController {
             // SETTO I CAMPI
             curriculum.setNome(utente.getUsername().concat("_CV.pdf"));
             curriculum.setTipo("curriculum");
+            curriculum.setTestuale(null);
             // ELIMINO IL VECCHIO CV DAL SERVER E CARICO IL NUOVO
-            File file_delete = new File(getServletContext().getRealPath(File.separator)+
+            File file_delete = new File(getServletContext().getRealPath("")+
                     getServletContext().getInitParameter("cv.directory")+File.separator+
                     utente.getCurriculum().getNome());
             file_delete.delete();
             // CARICO IL NUOVO
-            File file_upload = new File(getServletContext().getRealPath(File.separator)+
+            File file_upload = new File(getServletContext().getRealPath("")+
                     getServletContext().getInitParameter("cv.directory"), utente.getUsername().concat("_CV.pdf"));
             try (InputStream IS_CV_DPF = CV_PDF_Part.getInputStream();) {
                 Files.copy(IS_CV_DPF, file_upload.toPath());

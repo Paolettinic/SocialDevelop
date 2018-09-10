@@ -45,7 +45,7 @@ public class OffersApplicationsPanel extends SocialDevelopBaseController {
 
         request.setAttribute("page_title", "Pannello delle offerte e delle proposte");
         TemplateResult tmp = new TemplateResult(getServletContext());
-        tmp.activate("action_offers_applications_panel.html", request, response);
+        tmp.activate("offers_applications_panel.html", request, response);
         
     }
     

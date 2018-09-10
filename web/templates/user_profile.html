@@ -97,6 +97,9 @@
                 <div class="tab-pane fade" id="profileDetailsTab02">
                     <div class="profile--item">                        
                         <div class="profile--info">
+                            <#if utente.skills?size == 0>
+                            <p>Questo utente non possiede delle skill</p>
+                            <#else>
                             <#list utente.skills?keys as skill>
                             <div class="row">
                                 <div class="col-xs-12">
@@ -104,6 +107,7 @@
                                 </div>
                             </div>
                             </#list>
+                            </#if>
                         </div>
                     </div>
                 </div>
@@ -116,7 +120,7 @@
                             <#list utente.tasks?keys as task>
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <p><a href="Task?task_id=${task.key}"><span>"${task.nome}"</span></a> nel progetto <a href="Progetto?progetto_id=${task.progetto.key}"><span>"${task.progetto.nome}"</span></a> di <a href="UserProfile?username=${task.progetto.utente.username}"><span>${task.progetto.utente.nome} ${task.progetto.utente.cognome} (${task.progetto.utente.email})</span></a> - voto: <#if utente.tasks?values[task?index] gt 0>${utente.tasks?values[task?index]}<#else>in corso</#if></p>
+                                    <p><a href="TaskPage?task_id=${task.key}"><span>"${task.nome}"</span></a> nel progetto <a href="Progetto?progetto_id=${task.progetto.key}"><span>"${task.progetto.nome}"</span></a> di <a href="UserProfile?username=${task.progetto.utente.username}"><span>${task.progetto.utente.nome} ${task.progetto.utente.cognome} (${task.progetto.utente.email})</span></a> - voto: <#if utente.tasks?values[task?index] gt 0>${utente.tasks?values[task?index]}<#else>in corso</#if></p>
                                 </div>
                             </div>
                             </#list>

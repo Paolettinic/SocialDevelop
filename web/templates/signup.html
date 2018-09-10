@@ -55,10 +55,11 @@
                     </div>
                     
                     <div class="no_javascript">
+                        
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="form-group">
-                                    <h4>Seleziona i tuoi skill e inserisci il relativo voto</h4>
+                                    <h4>Seleziona le tue skill ed inserisci il relativo voto</h4>
                                 </div>
                             </div>
                         </div>
@@ -67,7 +68,7 @@
                             <div class="row">
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <select name="nome_skill_1" class="form-control nome_skill">
+                                        <select name="nome_skill_1" id="nome_skill_1" class="form-control nome_skill">
                                             <#list skills as skill>
                                             <option value="${skill.nome}">${skill.nome}</option>
                                             <#list skill.figli as figlio>
@@ -79,7 +80,7 @@
                                 </div>
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <input name="voto_skill_1" type="number" class="form-control voto_skill" step="1" min="1"  max="10" required>
+                                        <input name="voto_skill_1" type="number" class="form-control" step="1" min="1"  max="10" required>
                                     </div>
                                 </div>
                             </div>
@@ -90,6 +91,7 @@
                                 <button type="button" class="btn btn-primary float--left" onclick="add_skill();">Aggiungi una nuova skill</button>
                             </div>
                         </div>
+                        
                     </div>
                     
                     <noscript>

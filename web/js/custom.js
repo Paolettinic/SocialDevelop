@@ -135,7 +135,7 @@ function signup_check() {
     // Controllo le skill
     var valori_skill = new Set();
     for (i = 1; i <= skill; i++) {
-        valori_skill.add($('#nome_skill'+i).val());
+        valori_skill.add($('#nome_skill_'+i).val());
     }
     if (valori_skill.size !== skill) {
         alert("Sono presenti delle skill ripetute");
@@ -144,7 +144,7 @@ function signup_check() {
     
     // Controllo i voti delle skill
     for (i = 1; i <= skill; i++) {
-        var voto = $('#nome_skill'+i).val();
+        var voto = $('#nome_skill_'+i).val();
         if (voto < 1 || voto === "" || voto > 10) {
             alert("I voti degli skill devono essere compresi tra 1 e 10");
             return false;
@@ -167,7 +167,7 @@ function check_add_skills() {
     // Controllo le skill
     var valori_skill = new Set();
     for (i = 1; i <= skill; i++) {
-        valori_skill.add($('#nome_skill'+i).val());
+        valori_skill.add($('#nome_skill_'+i).val());
     }
     if (valori_skill.size !== skill) {
         alert("Sono presenti delle skill ripetute");
@@ -176,7 +176,7 @@ function check_add_skills() {
     
     // Controllo i voti delle skill
     for (i = 1; i <= skill; i++) {
-        var voto = $('#nome_skill'+i).val();
+        var voto = $('#nome_skill_'+i).val();
         if (voto < 1 || voto === "" || voto > 10) {
             alert("I voti degli skill devono essere compresi tra 1 e 10");
             return false;

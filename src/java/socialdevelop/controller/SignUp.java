@@ -73,14 +73,4 @@ public class SignUp extends SocialDevelopBaseController {
         }
     }
     
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Servlet SignUp";
-    }
-    
 }

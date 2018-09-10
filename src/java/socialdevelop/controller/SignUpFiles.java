@@ -22,6 +22,7 @@ import socialdevelop.data.model.Utente;
 /**
  * @author Mario Vetrini
  */
+
 public class SignUpFiles extends SocialDevelopBaseController {
     
     private void action_error(HttpServletRequest request, HttpServletResponse response) {
@@ -31,8 +32,12 @@ public class SignUpFiles extends SocialDevelopBaseController {
     }
     
     private void action_signup_files(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, TemplateManagerException, DataLayerException, SQLException, NamingException {
-        request.setAttribute("page_title", "Registrazione - CV e Propic");
         HttpSession s = request.getSession(true);
+        if (s.getAttribute("userid") == null) {
+            request.setAttribute("utente_key", 0);
+        } else {
+            request.setAttribute("utente_key", (int) s.getAttribute("userid"));
+        }
         
         if (s.getAttribute("userid") != null) {
             response.sendRedirect("Index");
@@ -44,6 +49,7 @@ public class SignUpFiles extends SocialDevelopBaseController {
         Set<String> nomi_skill_check =  new HashSet<>();
         ArrayList<Integer> voti_skill = new ArrayList<>();
         
+        // RECUPERO LE SKILLS DALLA FORM
         while (request.getParameter("nome_skill_".concat(String.valueOf(i))) != null) {
             nomi_skill.add(request.getParameter("nome_skill_".concat(String.valueOf(i))));
             nomi_skill_check.add(request.getParameter("nome_skill_".concat(String.valueOf(i))));
@@ -53,8 +59,8 @@ public class SignUpFiles extends SocialDevelopBaseController {
         
         // CONTROLLO SE SONO STATI RIPETUTI DEGLI SKILL
         if (nomi_skill_check.size() != nomi_skill.size()) {
-            request.setAttribute("errore_signup", "Skill ripetute");
             response.sendRedirect("SignUp");
+            return;
         }
         
         Utente utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).creaUtente();
@@ -100,6 +106,7 @@ public class SignUpFiles extends SocialDevelopBaseController {
         s.setAttribute("nomi_skill", nomi_skill);
         s.setAttribute("voti_skill", voti_skill);
         
+        request.setAttribute("page_title", "Registrazione - CV e Propic");
         TemplateResult res = new TemplateResult(getServletContext());
         res.activate("signupfiles.html", request, response);
     }

@@ -23,7 +23,7 @@ import socialdevelop.data.model.Utente;
  */
 
 public class UserProfile extends SocialDevelopBaseController {
-    
+
     private void action_error(HttpServletRequest request, HttpServletResponse response) {
         if (request.getAttribute("exception") != null) {
             (new FailureResult(getServletContext())).activate((Exception) request.getAttribute("exception"), request, response);
@@ -31,7 +31,7 @@ public class UserProfile extends SocialDevelopBaseController {
             (new FailureResult(getServletContext())).activate((String) request.getAttribute("message"), request, response);
         }
     }
-    
+
     private void action_user_profile(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, TemplateManagerException, DataLayerException {
         HttpSession s = request.getSession(true);
         if (s.getAttribute("userid") == null) {
@@ -39,7 +39,7 @@ public class UserProfile extends SocialDevelopBaseController {
         } else {
             request.setAttribute("utente_key", (int) s.getAttribute("userid"));
         }
-        
+
         Utente utente;
         if (request.getParameter("username") != null) {
             utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtenteByUsername(request.getParameter("username"));
@@ -54,11 +54,11 @@ public class UserProfile extends SocialDevelopBaseController {
             }
             utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtente((int) s.getAttribute("userid"));
         }
-        
+
         request.setAttribute("utente", utente);
         request.setAttribute("data_nascita", utente.getDataNascita());
         request.setAttribute("no_mio_profilo", false);
-        
+
         if (s.getAttribute("userid") != null && (int) s.getAttribute("userid") > 0) {
             // SONO LOGGATO
             List<Task> tasks_invito = new ArrayList();
@@ -69,11 +69,11 @@ public class UserProfile extends SocialDevelopBaseController {
                 List<Progetto> progetti_utente_visualizzatore = utente_visualizzatore.getProgetti();
                 if (progetti_utente_visualizzatore != null) {
                     // L'UTENTE CHE STA VISUALIZZANDO LA PAGINA HA DEI PROGETTI
-                    for (Progetto progetto_utente_visualizzatore: progetti_utente_visualizzatore) {
+                    for (Progetto progetto_utente_visualizzatore : progetti_utente_visualizzatore) {
                         List<Task> tasks_progetto_utente_visualizzatore = progetto_utente_visualizzatore.getTasks();
-                        for (Task task_progetto_utente_visualizzatore: tasks_progetto_utente_visualizzatore) {
-                            if(((SocialDevelopDataLayer) request.getAttribute("datalayer")).checkUtenteTask(utente, task_progetto_utente_visualizzatore)) {
-                                if(!task_progetto_utente_visualizzatore.getUtenti().containsKey(utente)) {
+                        for (Task task_progetto_utente_visualizzatore : tasks_progetto_utente_visualizzatore) {
+                            if (((SocialDevelopDataLayer) request.getAttribute("datalayer")).checkUtenteTask(utente, task_progetto_utente_visualizzatore)) {
+                                if (!task_progetto_utente_visualizzatore.getUtenti().containsKey(utente)) {
                                     tasks_invito.add(task_progetto_utente_visualizzatore);
                                 }
                             }
@@ -83,13 +83,13 @@ public class UserProfile extends SocialDevelopBaseController {
             }
             request.setAttribute("tasks_invito", tasks_invito);
         }
-            
+
         request.setAttribute("page_title", utente.getUsername());
         TemplateResult res = new TemplateResult(getServletContext());
         res.activate("user_profile.html", request, response);
-        
+
     }
-    
+
     @Override
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         try {
@@ -101,5 +101,5 @@ public class UserProfile extends SocialDevelopBaseController {
             Logger.getLogger(UserProfile.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
 }
