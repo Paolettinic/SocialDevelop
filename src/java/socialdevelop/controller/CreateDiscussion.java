@@ -51,6 +51,7 @@ public class CreateDiscussion extends SocialDevelopBaseController{
             
             request.setAttribute("utente_key", s.getAttribute("userid"));
             request.setAttribute("utente", utente);
+            request.setAttribute("page_title", task.getNome());
             request.setAttribute("task", task);
             request.setAttribute("task_name", task.getNome());
             request.setAttribute("task_id", task.getKey());

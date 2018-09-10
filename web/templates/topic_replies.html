@@ -6,8 +6,8 @@
         </div>
 
         <ul class="breadcrumb text-gray ff--primary">
-            <li><a href="Project?utente_key=${utente.key}&progetto_id=${task.progetto.key}&page=1&perPage=1" class="btn-link">${task.progetto.nome}</a></li>
-            <li><a href="TaskPage?utente_key=${utente.key}&task_id=${task.key}&page=1&perPage=1" class="btn-link">${task.nome}</a></li>
+            <li><a href="Project?progetto_id=${task.progetto.key}" class="btn-link">${task.progetto.nome}</a></li>
+            <li><a href="TaskPage?task_id=${task.key}" class="btn-link">${task.nome}</a></li>
             <li class="active"><span class="text-primary">${discussione.titolo}</span></li>
         </ul>
     </div>
@@ -68,9 +68,7 @@
                     <!-- Topic Replies End -->
 
                 </div>
-                <#if utente == null>
-                <span>PORCODDIO</span>
-                <#else>
+                <#if utente_key gt 0>
                 <form action ="SetMessage" method="GET">
                     <input type="hidden" name="discussion_id" value="${discussione.key}"/>
                 

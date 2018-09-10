@@ -9,7 +9,7 @@
         <div class="cover--avatars">
             <ul class="nav">
                 <li>
-                    <a href="UserProfile?utente_key=${progetto.utente.key}" data-overlay="0.3" data-overlay-color="primary">
+                    <a href="UserProfile?username=${progetto.utente.username}" data-overlay="0.3" data-overlay-color="primary">
                         <img src="image?imgid=${progetto.utente.immagine.key}" alt="">
                     </a>
                 </li>
@@ -87,7 +87,7 @@
                                                 </div>
 
                                                 <div class="activity--content">
-                                                    <p><a href="Messages?utente_key=${utente.key}&task_id=${task.key}&discussione_id=${topicc.key}">${topicc.titolo}</a></p>
+                                                    <p><a href="Messages?discussione_id=${topicc.key}">${topicc.titolo}</a></p>
                                                 </div>
 
                                             </div>
@@ -155,7 +155,7 @@
                                 </div> 
                                 </#if>
                             </div>
-                            <#if progetto.utente.key == utente.key>
+                            <#if progetto.utente.key == utente.key && tasks?has_content>
                             <div class="row">
                                 <div class="col-xs-12">
                                     <a href="CreateTask?progetto_id=${progetto.key}" class="btn btn-primary col-md float--right">Crea un nuovo task</a>

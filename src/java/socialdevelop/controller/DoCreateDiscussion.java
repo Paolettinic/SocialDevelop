@@ -20,6 +20,7 @@ import socialdevelop.data.model.Invito;
 import socialdevelop.data.model.SocialDevelopDataLayer;
 import socialdevelop.data.model.Utente;
 import socialdevelop.data.model.Discussione;
+import socialdevelop.data.model.Messaggio;
 import socialdevelop.data.model.Task;
 
 /**
@@ -43,6 +44,7 @@ public class DoCreateDiscussion extends SocialDevelopBaseController{
         int utente_key = (int) s.getAttribute("userid");
         String titolo = request.getParameter("titolo");
         String pubblica = request.getParameter("pubblica");
+        String testo = request.getParameter("testo");
         int taskid = SecurityLayer.checkNumeric(request.getParameter("taskerino_id"));
         Task task = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getTask(taskid);
         Utente utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtente(utente_key);
@@ -56,12 +58,21 @@ public class DoCreateDiscussion extends SocialDevelopBaseController{
         }
             
         Discussione discussione = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).creaDiscussione();
+        Messaggio messaggio = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).creaMessaggio();
         discussione.setUtente(utente);
         discussione.setTitolo(titolo);
         discussione.setPubblica(pubbblica);
         discussione.setData(time);
         discussione.setTask(task);
+        
         ((SocialDevelopDataLayer) request.getAttribute("datalayer")).salvaDiscussione(discussione);
+        
+        messaggio.setData(time);
+        messaggio.setUtente(utente);
+        messaggio.setDiscussione(discussione);
+        messaggio.setTesto(testo);
+        
+        ((SocialDevelopDataLayer) request.getAttribute("datalayer")).salvaMessaggio(messaggio);
         
         response.sendRedirect("TaskForum?task_id="+taskid+"&page=1&perPage=1");
         

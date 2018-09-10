@@ -45,6 +45,7 @@ public class CreateProject extends SocialDevelopBaseController{
             
             request.setAttribute("utente_key", s.getAttribute("userid"));
             request.setAttribute("utente", utente);
+            request.setAttribute("page_title", "SocialDevelop");
             
             TemplateResult res = new TemplateResult(getServletContext());
             res.activate("create_project.html", request, response);

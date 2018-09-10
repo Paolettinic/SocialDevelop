@@ -70,6 +70,7 @@ public class Messages extends SocialDevelopBaseController {
             request.setAttribute("data_fine",task.getDataFine());
             request.setAttribute("utenti",utenti);
             request.setAttribute("discussione",discussione);
+            request.setAttribute("page_title", discussione.getTitolo());
             request.setAttribute("messaggi",messaggi);
             //request.setAttribute("currentpage",page);
             //request.setAttribute("perPage",perPage);

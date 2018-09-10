@@ -45,7 +45,9 @@ public class EditTask extends SocialDevelopBaseController{
             Utente utente = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getUtente(utente_key);
             Task task = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getTask(task_id);
             
+            request.setAttribute("page_title", task.getNome());
             request.setAttribute("utente_key", s.getAttribute("userid"));
+            request.setAttribute("page_title", task.getNome());
             request.setAttribute("utente", utente);
             request.setAttribute("task", task);
             

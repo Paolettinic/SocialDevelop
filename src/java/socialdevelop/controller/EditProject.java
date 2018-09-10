@@ -45,6 +45,7 @@ public class EditProject extends SocialDevelopBaseController{
             Progetto progetto = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getProgetto(progetto_id);
             
             request.setAttribute("utente_key", s.getAttribute("userid"));
+            request.setAttribute("page_title", progetto.getNome());
             request.setAttribute("utente", utente);
             request.setAttribute("progetto", progetto);
             

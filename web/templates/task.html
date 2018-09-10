@@ -84,6 +84,9 @@
                                     </div>
                                     </#list>
                                 </div>
+                                <div class="forum--title">
+                                    <h3 class="h3 fw--500 text-default">Tipo: ${task.tipo.nome}</h3>
+                                </div>
                             </div>
                         </div>
                         <div id="discussioni" class="tab-pane fade">
@@ -142,7 +145,7 @@
                             </div>
                             <#else>
                             <div class="forum--title">
-                                <h3 class="h3 fw--500 text-default">Non ci sono discussioni</h3>
+                                <h3 class="h3 fw--500 text-default">Non ci sono discussioni, <#assign permesso = 0> <#list task.utenti as user, vote> <#if user == utente.key><#assign permesso = 1></#if></#list> <#if permesso == 1 || utente.key == coordinatore> <a href="CreateDiscussion?task_id=${task.key}">creane una.</#if></a> </h3>
                             </div>
                                
                             </#if>
@@ -158,7 +161,7 @@
                                     <#assign i++>
                                     </#list>
                                     <#if i==0>
-                                    <h3 class="h3 fw--500 text-default">Non ci sono membri in questo task</h3>
+                                    <h3 class="h3 fw--500 text-default">Non ci sono membri per questo task, <a href="search?type=developers">aggiungine di nuovi.</a></h3>
                                     <#else>
                                     <h3 class="h3 fw--500 text-default">Membri: ${i}</h3>
                                     </#if>
@@ -167,30 +170,28 @@
                     <!-- Filter Nav End -->
 
                     <!-- Member Items Start -->
-                            <div class="member--items">
-                                <div class="row gutter--15 AdjustRow">
-                                    <div class="col-md-3 col-xs-6 col-xxs-12">
-                                        <#list task.utenti as user, vote>
-                                        <!-- Member Item Start -->
-                                        <div class="member--item online">
-                                            <div class="img img-circle">
-                                                <a href="UserProfile?utente_key=${user.key}" class="btn-link">
-                                                    <img src="image?imgid=${user.immagine.key}" alt="">
-                                                </a>
+                            <#list task.utenti as user, vote>
+                                <div class="col-md-4 col-xs-4 col-xxs-12">
+                                    <!-- Box Item Start -->
+                                    <div class="box--item text-center">
+                                        <a href="UserProfile?username=${user.username}" class="img dev_img" data-overlay="0.1">
+                                            <img src="image?imgid=${user.immagine.key}" alt="">
+                                        </a>
+                                        <div class="info">
+                                            <div class="icon fs--18 text-lightest bg-primary">
+                                                <i class="fa fa-user"></i>
                                             </div>
-
-                                            <div class="name">
-                                                <h3 class="h6 fs--12">
-                                                    <a href="UserProfile?utente_key=${user.key}" class="btn-link">${user.nome} ${user.cognome}</a>
-                                                </h3>
+                                            <div class="title">
+                                                <h2 class="h6"><a href="UserProfile?username=${user.username}">${user.nome} ${user.cognome}</a></h2>
+                                            </div>
+                                            <div class="desc text-darker line-clamp-2">
+                                                <p>${user.biografia}</p>
                                             </div>
                                         </div>
-                                    <!-- Member Item End -->
-                                    </#list>
                                     </div>
-                                    
+                                    <!-- Box Item End -->
                                 </div>
-                            </div>
+                                </#list>
                     <!-- Member Items End -->
                         </div>
                     </div>

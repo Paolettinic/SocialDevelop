@@ -51,6 +51,7 @@ public class CreateTask extends SocialDevelopBaseController{
             List<Tipo> tipi = datalayer.getTipi();
             
             request.setAttribute("tipi", tipi);
+            request.setAttribute("page_title", progetto.getNome());
             request.setAttribute("progetto", progetto);
             request.setAttribute("utente_key", s.getAttribute("userid"));
             request.setAttribute("utente", utente);

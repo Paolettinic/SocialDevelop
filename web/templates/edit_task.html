@@ -1,32 +1,37 @@
-<div class="col-xs-9">
-    <div class="contact--form margin_bottom_50 margin_top_50">
-        <form action="DoEditTask" method="post" name="signup_form">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="form-group">
-                        <h4>Modifica Task</h4>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-2"></div>
+        <div class="col-xs-8">
+            <div class="contact--form margin_bottom_50 margin_top_50">
+                <form action="DoEditTask" method="post" name="signup_form">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <h3>Modifica Task</h3>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-6">
-                    <div class="form-group">
-                        <input type="text" value="${task.nome}" name="nome" id="nome" placeholder="Nome" class="form-control" required>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <input type="text" value="${task.nome}" name="nome" id="nome" placeholder="Nome" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <input type="radio" name="open" <#if task.chiuso == false> checked="checked" </#if> value="${task.chiuso}"> Aperto
+                                <input type="radio" name="open" <#if task.chiuso == true> checked="checked" </#if> value="${task.chiuso}"> Chiuso
+                                <input type="hidden" name="taskid" value="${task.key}"/>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="col-xs-6">
-                    <div class="form-group">
-                        <input type="radio" name="open" <#if task.chiuso == false> checked="checked" </#if> value="${task.chiuso}"> Aperto
-                        <input type="radio" name="open" <#if task.chiuso == true> checked="checked" </#if> value="${task.chiuso}"> Chiuso
-                        <input type="hidden" name="taskid" value="${task.key}"/>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <button type="submit" class="btn btn-primary float--right">Modifica</button>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
-            <div class="row">
-                <div class="col-xs-12">
-                    <button type="submit" class="btn btn-primary float--right">Modifica</button>
-                </div>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
