@@ -1,0 +1,48 @@
+<div class="container">
+    <div class="row">
+        <div class="col-xs-2"></div>
+        <div class="col-xs-8">
+            <div class="contact--form margin_bottom_50 margin_top_50">
+                <form action="DoAddSkills" method="post" name="add_skills" accept-charset="UTF-8">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="form-group">
+                                <h3>Aggiungi la lista degli Skill</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="skills">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <select name="nome_skill_1" id="nome_skill_1" class="form-control nome_skill">
+                                        <#list skills as skill>
+                                        <option value="${skill.nome}">${skill.nome}</option>
+                                        </#list>
+                                    </select>
+                                    <input type="hidden" name="maxskill" id="maxskill"/>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <input name="voto_skill_1" placeholder="Competenza minima" type="number" class="form-control" step="1" min="1"  max="10" required>
+                                    <input type="hidden" name="taskiddi" value="${task.key}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <button type="button" class="btn btn-primary float--left" onclick="add_skill();">Aggiungi una nuova skill</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <button type="submit" class="btn btn-primary float--right">Fine</button>
+                        </div>
+                    </div>
+                </form>
+            </div>  
+        </div>
+    </div>
+</div>

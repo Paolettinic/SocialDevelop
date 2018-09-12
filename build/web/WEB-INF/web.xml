@@ -53,6 +53,14 @@
         <servlet-class>socialdevelop.controller.CreateTask</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>AddSkills</servlet-name>
+        <servlet-class>socialdevelop.controller.AddSkills</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DoAddSkills</servlet-name>
+        <servlet-class>socialdevelop.controller.DoAddSkills</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>SendTaskRequest</servlet-name>
         <servlet-class>socialdevelop.controller.SendTaskRequest</servlet-class>
     </servlet>
@@ -379,6 +387,14 @@
     <servlet-mapping>
         <servlet-name>TaskPage</servlet-name>
         <url-pattern>/TaskPage</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddSkills</servlet-name>
+        <url-pattern>/AddSkills</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoAddSkills</servlet-name>
+        <url-pattern>/DoAddSkills</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>NotFound</servlet-name>

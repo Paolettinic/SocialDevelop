@@ -56,7 +56,7 @@ public class DoCreateTask extends SocialDevelopBaseController{
         Progetto progetto = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getProgetto(progettoid);
         Tipo tipo = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getTipo(tipoid);
         GregorianCalendar time = new GregorianCalendar();
-            
+        
         boolean close;
         if (chiuso.equals("0")) {
             close = false;
@@ -77,7 +77,7 @@ public class DoCreateTask extends SocialDevelopBaseController{
         
         ((SocialDevelopDataLayer) request.getAttribute("datalayer")).salvaTask(task);
         
-        response.sendRedirect("TaskPage?task_id="+task.getKey());
+        response.sendRedirect("AddSkills?task_id="+task.getKey());
         
     }
     

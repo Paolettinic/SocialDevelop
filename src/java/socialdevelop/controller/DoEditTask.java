@@ -10,6 +10,7 @@ import it.univaq.f4i.iw.framework.result.FailureResult;
 import it.univaq.f4i.iw.framework.result.TemplateManagerException;
 import it.univaq.f4i.iw.framework.security.SecurityLayer;
 import java.io.IOException;
+import java.util.GregorianCalendar;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,7 +35,15 @@ public class DoEditTask extends SocialDevelopBaseController{
         
         String nome = request.getParameter("nome");
         String open = request.getParameter("open");
+        String max = request.getParameter("maxcollab");
         int taskid = SecurityLayer.checkNumeric(request.getParameter("taskid"));
+        String deadline = request.getParameter("deadline");
+        
+        GregorianCalendar dl = new GregorianCalendar();
+        dl.setLenient(false);
+        dl.set(GregorianCalendar.YEAR, Integer.valueOf(deadline.split("-")[0]));
+        dl.set(GregorianCalendar.MONTH, Integer.valueOf(deadline.split("-")[1]) - 1); // Bello Java, eh?
+        dl.set(GregorianCalendar.DATE, Integer.valueOf(deadline.split("-")[2]));
         
         boolean aperto;
         if (open.equals("0")) {
@@ -43,9 +52,13 @@ public class DoEditTask extends SocialDevelopBaseController{
             aperto = true;
         }
         
+        int maxcoll = Integer.parseInt(max);
+        
         Task task = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getTask(taskid);
         task.setChiuso(aperto);
         task.setNome(nome);
+        task.setNumeroMassimoCollaboratori(maxcoll);
+        task.setDataFine(dl);
         
         ((SocialDevelopDataLayer) request.getAttribute("datalayer")).salvaTask(task);
         

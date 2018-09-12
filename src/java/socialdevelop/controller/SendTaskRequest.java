@@ -62,9 +62,9 @@ public class SendTaskRequest extends SocialDevelopBaseController {
         
         Invito invito = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).creaInvito();
         if(utente.getKey()!=progetto.getUtente().getKey()){
-            invito.setMessaggio("L'utente "+utente.getNome()+" "+utente.getCognome()+"vorrebbe partecipare al task");
+            invito.setMessaggio("L'utente "+utente.getNome()+" "+utente.getCognome()+" vorrebbe partecipare al task");
             invito.setOfferta(true);
-            invito.setUtente(progetto.getUtente());
+            invito.setUtente(utente);
         }
         else{
             invito.setMessaggio("Il coordinatore "+utente.getNome()+" "+utente.getCognome()+"vorrebbe tu partecipassi al task");

@@ -22,6 +22,7 @@ function add_skill() {
     skills.appendChild(new_skill);
     var $options = $("[name='nome_skill_1'] > option").clone();
     $('#nome_skill_'+skill+'').append($options);
+    $('#maxskill').attr('value', skill);
 }
 
 
@@ -235,3 +236,9 @@ inp.addEventListener('change', function(e){
 },false);
 
 // ------------------------------------------------------------
+
+function popupInvite(){
+    alert("Richiesta inviata con successo");
+    window.location.reload(true);
+}
+
