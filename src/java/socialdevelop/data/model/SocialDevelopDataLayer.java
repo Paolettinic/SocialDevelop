@@ -12,6 +12,8 @@ import java.util.Map;
 
 public interface SocialDevelopDataLayer extends DataLayer {
     
+    Amministratore creaAmministratore();
+    
     Curriculum creaCurriculum();
     
     Discussione creaDiscussione();
@@ -33,6 +35,8 @@ public interface SocialDevelopDataLayer extends DataLayer {
     Utente creaUtente();
     
     // ---------------
+    
+    void salvaAmministratore(Amministratore amministratore) throws DataLayerException;
     
     void salvaCurriculum(Curriculum curriculum) throws DataLayerException;
     
@@ -64,6 +68,8 @@ public interface SocialDevelopDataLayer extends DataLayer {
     
     // ---------------
     
+    void eliminaAmministratore(Amministratore amministratore) throws DataLayerException;
+    
     void eliminaCurriculum(Immagine curriculum) throws DataLayerException;
     
     void eliminaDiscussione(Discussione discussione) throws DataLayerException;
@@ -94,6 +100,12 @@ public interface SocialDevelopDataLayer extends DataLayer {
     
     // ---------------
     
+    Amministratore getAmministratore (int amministratore_key) throws DataLayerException;
+    
+    Amministratore getAmministratoreByEmail(String email) throws DataLayerException;
+    
+    Amministratore getAmministratoreByUsername(String username) throws DataLayerException;
+    
     Curriculum getCurriculum(int curriculum_key) throws DataLayerException;
     
     Discussione getDiscussione(int discussione_key) throws DataLayerException;
@@ -122,7 +134,11 @@ public interface SocialDevelopDataLayer extends DataLayer {
     
     List<Progetto> getProgetti(String filtro ,int first, int perPage) throws DataLayerException;
     
+    List<Progetto> getProgetti(String filtro , int userid, int first, int perPage) throws DataLayerException;
+    
     int getCountProgetti(String filtro) throws DataLayerException;
+    
+    int getCountProgetti(String filtro, int userid) throws DataLayerException;
     
     Skill getSkill(int skill_key) throws DataLayerException;
     

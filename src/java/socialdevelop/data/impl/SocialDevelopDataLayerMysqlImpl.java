@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+import socialdevelop.data.model.Amministratore;
 import socialdevelop.data.model.Curriculum;
 import socialdevelop.data.model.Discussione;
 import socialdevelop.data.model.Invito;
@@ -35,20 +36,21 @@ import socialdevelop.data.model.Immagine;
 
 public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implements SocialDevelopDataLayer {
     // select, insert, update, delete, generiche funzionalità del sito, ecc...
+    private PreparedStatement sAmministratoreByID,sAmministratoreByEmail,sAmministratoreByUsername, iAmministratore, uAmministratore, dAmministratore;
+    private PreparedStatement sAppartenenti, iAppartenenti, uAppartenenti, dAppartenenti;
+    private PreparedStatement sCoprenti, iCoprenti, uCoprenti, dCoprenti;
     private PreparedStatement sCurriculumByID, iCurriculum, uCurriculum, dCurriculum;
     private PreparedStatement sDiscussioneByID, sDiscussioniByTask, iDiscussione, uDiscussione, dDiscussione, countDiscussioniByTask, sDiscussioniByProgetto;
     private PreparedStatement sImmagineByID, iImmagine, uImmagine, dImmagine;
     private PreparedStatement sInvitoByID, sInvitiByUtente, sInvitiByTask, iInvito, uInvito, dInvito;
     private PreparedStatement sMessaggioByID, sMessaggiByDiscussione, iMessaggio, uMessaggio, dMessaggio;
-    private PreparedStatement sProgettoByID, sProgettiByUtente, sProgettiByFiltro, iProgetto, uProgetto, dProgetto,countProgettiByFiltro;
+    private PreparedStatement sPreparazioni, iPreparazioni, uPreparazioni, dPreparazioni;
+    private PreparedStatement sProgettoByID, sProgettiByUtente, sProgettiByFiltro,sProgettiByFiltroAndUser, iProgetto, uProgetto, dProgetto,countProgettiByFiltro,countProgettiByFiltroAndUser;
+    private PreparedStatement sRequisiti, iRequisiti, uRequisiti, dRequisiti;
     private PreparedStatement sSkillByID, sSkillByNome, sSkills, sSkillsByTipo, sSkillsByUtente, sSkillsByTask, sSkillsFigli, sSkillsNoPadre, iSkill, uSkill, dSkill;
     private PreparedStatement sTaskByID, sTasksByUtente, sTasksByProgetto, sTasksByTipo, sTasksBySkill, iTask, uTask, dTask;
     private PreparedStatement sTipoByID, sTipi, sTipiBySkill, iTipo, uTipo, dTipo;
     private PreparedStatement sUtenteByID, sUtenteByEmail, sUtenteByUsername, sUtentiByTask, sUtentiByFiltro, sUtentiBySkill, iUtente, uUtente, dUtente,countUtentiByFiltro;
-    private PreparedStatement sAppartenenti, iAppartenenti, uAppartenenti, dAppartenenti;
-    private PreparedStatement sCoprenti, iCoprenti, uCoprenti, dCoprenti;
-    private PreparedStatement sPreparazioni, iPreparazioni, uPreparazioni, dPreparazioni;
-    private PreparedStatement sRequisiti, iRequisiti, uRequisiti, dRequisiti;
     
     public SocialDevelopDataLayerMysqlImpl(DataSource datasource) throws SQLException, NamingException {
         super(datasource);
@@ -58,6 +60,13 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     public void init() throws DataLayerException {
         try {
             super.init();
+            
+            sAmministratoreByID = connection.prepareStatement("SELECT * FROM amministratori WHERE id = ?");
+            sAmministratoreByEmail = connection.prepareStatement("SELECT * FROM amministratori WHERE email = ?");
+            sAmministratoreByUsername = connection.prepareStatement("SELECT * FROM amministratori WHERE username = ?");
+            iAmministratore = connection.prepareStatement("INSERT INTO amministratori (username,email,password) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            uAmministratore = connection.prepareStatement("UPDATE amministratori SET username = ?, email = ?, password = ? WHERE id = ?");
+            dAmministratore = connection.prepareStatement("DELETE FROM amministratori WHERE di = ?");
             
             sCurriculumByID = connection.prepareStatement("SELECT * FROM curricula WHERE id = ?");
             iCurriculum = connection.prepareStatement("INSERT INTO curricula (nome, tipo, testuale) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
@@ -93,7 +102,9 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             sProgettoByID = connection.prepareStatement("SELECT * FROM progetti WHERE id = ?");
             sProgettiByUtente = connection.prepareStatement("SELECT * FROM progetti WHERE ext_coordinatore = ?");
             sProgettiByFiltro = connection.prepareStatement("SELECT * FROM progetti WHERE nome LIKE ? OR descrizione LIKE ? LIMIT ?, ?");
+            sProgettiByFiltroAndUser = connection.prepareStatement("SELECT progetti.* FROM progetti JOIN tasks ON tasks.ext_progetto = progetti.id JOIN requisiti ON requisiti.ext_task = tasks.id JOIN skills ON requisiti.ext_skill = skills.id INNER JOIN preparazioni on preparazioni.ext_skill = skills.id WHERE skills.nome IN (SELECT skills.nome AS nomeskill FROM utenti INNER JOIN preparazioni ON preparazioni.ext_utente = utenti.id INNER JOIN skills ON preparazioni.ext_skill = skills.id WHERE utenti.id = ?) AND requisiti.livello <=preparazioni.livello AND progetti.nome LIKE ? GROUP by progetti.id LIMIT ?, ?");
             countProgettiByFiltro = connection.prepareStatement("SELECT COUNT(id) as total FROM progetti WHERE nome LIKE ? OR descrizione LIKE ?");
+            countProgettiByFiltroAndUser = connection.prepareStatement("SELECT COUNT(*) as total FROM ( SELECT progetti.id from progetti JOIN tasks ON tasks.ext_progetto = progetti.id JOIN requisiti ON requisiti.ext_task = tasks.id JOIN skills ON requisiti.ext_skill = skills.id INNER JOIN preparazioni on preparazioni.ext_skill = skills.id WHERE skills.nome IN (SELECT skills.nome AS nomeskill FROM utenti INNER JOIN preparazioni ON preparazioni.ext_utente = utenti.id INNER JOIN skills ON preparazioni.ext_skill = skills.id WHERE utenti.id = ?) AND requisiti.livello <=preparazioni.livello AND progetti.nome LIKE ? GROUP by progetti.id) as t");
             iProgetto = connection.prepareStatement("INSERT INTO progetti (nome, descrizione, ext_coordinatore) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
             uProgetto = connection.prepareStatement("UPDATE progetti SET nome = ?, descrizione = ?, ext_coordinatore = ? WHERE id = ?");
             dProgetto = connection.prepareStatement("DELETE FROM progetti WHERE id = ?");
@@ -159,6 +170,24 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             
         } catch (SQLException ex) {
             throw new DataLayerException("Error initializing SocialDevelop data layer", ex);
+        }
+    }
+    
+    @Override
+    public Amministratore creaAmministratore(){
+        return new AmministratoreImpl(this);
+    }
+    
+    public Amministratore creaAmministratore(ResultSet rs) throws DataLayerException{
+        AmministratoreImpl amministratore = new AmministratoreImpl(this);
+        try{
+            amministratore.setKey(rs.getInt("id"));
+            amministratore.setUsername(rs.getString("username"));
+            amministratore.setEmail(rs.getString("email"));
+            amministratore.setPassword(rs.getString("password"));
+            return amministratore;
+        }catch (SQLException ex){
+            throw new DataLayerException("Impossibile creare l'istanza dell'amministratore dal ResultSet", ex);
         }
     }
     
@@ -395,6 +424,34 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             return utente;
         } catch (SQLException ex) {
             throw new DataLayerException("Impossibile creare l'utente dal ResultSet", ex);
+        }
+    }
+    
+    @Override
+    public void salvaAmministratore(Amministratore amministratore) throws DataLayerException{
+        int key = amministratore.getKey();
+        try{
+            if(amministratore.getKey() > 0){ //update
+                if(!amministratore.isDirty())
+                    return;
+                this.uAmministratore.setString(1, amministratore.getUsername());
+                this.uAmministratore.setString(2, amministratore.getEmail());
+                this.uAmministratore.setString(3, amministratore.getPassword());
+                this.uAmministratore.setInt(4, key);
+                this.uAmministratore.executeUpdate();
+            } else { //insert
+                this.iAmministratore.setString(1, amministratore.getUsername());
+                this.iAmministratore.setString(2, amministratore.getEmail());
+                this.iAmministratore.setString(3, amministratore.getPassword());
+                if(this.iAmministratore.executeUpdate() == 1){
+                    try(ResultSet keys = iAmministratore.getGeneratedKeys()){
+                        if(keys.next())
+                            key = keys.getInt(1);
+                    }
+                }
+            }
+        }catch (SQLException ex) {
+            throw new DataLayerException("Impossibile salvare l'amministratore", ex);
         }
     }
     
@@ -908,6 +965,17 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     }
     
     @Override
+    public void eliminaAmministratore(Amministratore amministratore) throws DataLayerException {
+        int key = amministratore.getKey();
+        try{
+            this.dAmministratore.setInt(1, key);
+            this.dAmministratore.executeUpdate();
+        }catch(SQLException ex){
+            throw new DataLayerException("Impossibile eliminare l'amministratore", ex);
+        }
+    }
+    
+    @Override
     public void eliminaCurriculum(Immagine curriculum) throws DataLayerException {
         int key = curriculum.getKey();
         try {
@@ -975,6 +1043,11 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
     
     @Override
     public void eliminaSkill(Skill skill) throws DataLayerException {
+        List<Tipo> tipi = skill.getTipi();
+        for(Tipo t : tipi){
+            eliminaAppartenenti(skill.getKey(),t.getKey());
+        }
+        
         int key = skill.getKey();
         try {
             dSkill.setInt(1, key);
@@ -1059,6 +1132,48 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
         } catch (SQLException ex) {
             throw new DataLayerException("Impossibile cancellare la tupla di 'requisiti'", ex);
         }
+    }
+    
+    @Override
+    public Amministratore getAmministratore(int amministratore_key) throws DataLayerException {
+        try {
+            this.sAmministratoreByID.setInt(1, amministratore_key);
+            try(ResultSet rs = this.sAmministratoreByID.executeQuery()){
+                if (rs.next())
+                    return creaAmministratore(rs);
+            }
+        } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile recuperare l'amministratore", ex);
+        }
+        return null;
+    }
+    
+    @Override
+    public Amministratore getAmministratoreByEmail(String email) throws DataLayerException {
+        try {
+            this.sAmministratoreByEmail.setString(1, email);
+            try(ResultSet rs = this.sAmministratoreByEmail.executeQuery()){
+                if (rs.next())
+                    return creaAmministratore(rs);
+            }
+        } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile recuperare l'amministratore tramite email", ex);
+        }
+        return null;
+    }
+    
+    @Override
+    public Amministratore getAmministratoreByUsername(String username) throws DataLayerException {
+        try {
+            this.sAmministratoreByUsername.setString(1, username);
+            try(ResultSet rs = this.sAmministratoreByUsername.executeQuery()){
+                if (rs.next())
+                    return creaAmministratore(rs);
+            }
+        } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile recuperare l'amministratore tramite lo username", ex);
+        }
+        return null;
     }
     
     @Override
@@ -1281,7 +1396,25 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
         }
         return result;
     }
-   
+    @Override
+    public List<Progetto> getProgetti(String filtro,int userid, int first, int perPage) throws DataLayerException {
+        List<Progetto> result = new ArrayList();
+        try {
+            sProgettiByFiltroAndUser.setInt(1, userid);
+            sProgettiByFiltroAndUser.setString(2, "%"+filtro+"%");
+            sProgettiByFiltroAndUser.setInt(3, first);
+            sProgettiByFiltroAndUser.setInt(4, perPage);
+            try (ResultSet rs = sProgettiByFiltroAndUser.executeQuery()) {
+                while (rs.next()) {
+                    result.add(creaProgetto(rs));
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataLayerException("Impossibile caricare i progetti", ex);
+        }
+        return result;
+    }
+    
     @Override
     public int getCountProgetti(String filtro) throws DataLayerException{
         int result = 0;
@@ -1289,6 +1422,23 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             countProgettiByFiltro.setString(1, "%"+filtro+"%");
             countProgettiByFiltro.setString(2, "%"+filtro+"%");
             try(ResultSet rs = countProgettiByFiltro.executeQuery()){
+                if(rs.next()){
+                    result = rs.getInt("total");
+                }
+            }
+        }catch(SQLException ex){
+            throw new DataLayerException("Impossibile contare i progetti", ex);
+        }
+        return result;
+    }
+    
+    @Override
+    public int getCountProgetti(String filtro, int userid) throws DataLayerException{
+        int result = 0;
+        try{
+            countProgettiByFiltroAndUser.setInt(1, userid);
+            countProgettiByFiltroAndUser.setString(2, "%"+filtro+"%");
+            try(ResultSet rs = countProgettiByFiltroAndUser.executeQuery()){
                 if(rs.next()){
                     result = rs.getInt("total");
                 }
@@ -1832,4 +1982,5 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
         super.destroy();
     }
 
+    
 }

@@ -16,24 +16,24 @@
         <servlet-name>Index</servlet-name>
         <servlet-class>socialdevelop.controller.Index</servlet-class>
     </servlet>
-    <servlet>   
-	<servlet-name>DoEditTask</servlet-name>
+    <servlet>
+        <servlet-name>DoEditTask</servlet-name>
         <servlet-class>socialdevelop.controller.DoEditTask</servlet-class>
     </servlet>
-    <servlet>   
-	<servlet-name>EditTask</servlet-name>
+    <servlet>
+        <servlet-name>EditTask</servlet-name>
         <servlet-class>socialdevelop.controller.EditTask</servlet-class>
     </servlet>
-    <servlet>   
-	<servlet-name>InviteSendReceive</servlet-name>
+    <servlet>
+        <servlet-name>InviteSendReceive</servlet-name>
         <servlet-class>socialdevelop.controller.InviteSendReceive</servlet-class>
     </servlet>
-    <servlet>   
-	<servlet-name>DoCreateProject</servlet-name>
+    <servlet>
+        <servlet-name>DoCreateProject</servlet-name>
         <servlet-class>socialdevelop.controller.DoCreateProject</servlet-class>
     </servlet>
-    <servlet>   
-	<servlet-name>CreateProject</servlet-name>
+    <servlet>
+        <servlet-name>CreateProject</servlet-name>
         <servlet-class>socialdevelop.controller.CreateProject</servlet-class>
     </servlet>
     <servlet>
@@ -56,12 +56,12 @@
         <servlet-name>SendTaskRequest</servlet-name>
         <servlet-class>socialdevelop.controller.SendTaskRequest</servlet-class>
     </servlet>
-    <servlet>   
-	<servlet-name>EditProject</servlet-name>
+    <servlet>
+        <servlet-name>EditProject</servlet-name>
         <servlet-class>socialdevelop.controller.EditProject</servlet-class>
     </servlet>
-    <servlet>   
-	<servlet-name>DoEditProject</servlet-name>
+    <servlet>
+        <servlet-name>DoEditProject</servlet-name>
         <servlet-class>socialdevelop.controller.DoEditProject</servlet-class>
     </servlet>
     <servlet>
@@ -232,7 +232,7 @@
         <servlet-name>DoAdminTypeAdd</servlet-name>
         <servlet-class>socialdevelop.controller.DoAdminTypeAdd</servlet-class>
     </servlet>
-     <servlet>
+    <servlet>
         <servlet-name>AdminSkill</servlet-name>
         <servlet-class>socialdevelop.controller.AdminSkill</servlet-class>
     </servlet>
@@ -247,6 +247,14 @@
     <servlet>
         <servlet-name>DoAdminSkillDelete</servlet-name>
         <servlet-class>socialdevelop.controller.DoAdminSkillDelete</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DoAdminSkillEdit</servlet-name>
+        <servlet-class>socialdevelop.controller.DoAdminSkillEdit</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetTypesBySkill</servlet-name>
+        <servlet-class>socialdevelop.controller.GetTypesBySkill</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>DoEditTask</servlet-name>
@@ -440,7 +448,7 @@
         <servlet-name>ChangeInviteStatus</servlet-name>
         <url-pattern>/ChangeInviteStatus</url-pattern>
     </servlet-mapping>
-        <servlet-mapping>
+    <servlet-mapping>
         <servlet-name>GetTasksByProject</servlet-name>
         <url-pattern>/getTasks</url-pattern>
     </servlet-mapping>
@@ -483,6 +491,14 @@
     <servlet-mapping>
         <servlet-name>DoAdminSkillDelete</servlet-name>
         <url-pattern>/doadminskilldelete</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoAdminSkillEdit</servlet-name>
+        <url-pattern>/doadminskilledit</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetTypesBySkill</servlet-name>
+        <url-pattern>/gettypesbyskill</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

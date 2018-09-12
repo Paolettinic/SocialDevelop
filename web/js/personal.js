@@ -112,8 +112,10 @@ function reloadContent(){
     });
     
     $("#btn_new_skill").on("click",function(){
-        var parent = $("#skill_parent").val() !== null && $("#select_father").checked? $("#skill_parent").val() : 0;
+        var parent = ($("#parent_skill").val() !== null && $("#has_child").prop("checked")) ? $("#parent_skill").val() : 0;
         var nome = $("#newskill").val();
+        console.log(parent);
+        console.log(nome);
         if(nome === "") return;
         $.ajax({
             type: 'POST',
@@ -127,9 +129,22 @@ function reloadContent(){
             }
         });
     });
-    
+    var association;
     $("#skill_select").change(function(){
         $("input[name='task_parent']").removeAttr("disabled");
+        $("input[name='task_parent']").removeAttr("checked");
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: 'gettypesbyskill',
+            data: {skill_id: $("#skill_select").val()},
+            success: function(result){
+                association = result;
+                for(i=0;i<result.length;i++){
+                    $('#task_parent_'+result[i]).attr("checked","checked");
+                }
+            }
+        });
     });
     
     $("#btn_set_types").on("click",function(){
@@ -351,6 +366,21 @@ function goToSearchPage(type,filter,page,perpage){
         }
     });
 }
+
+function deleteBelonging(skill,type){
+    $.ajax({
+        type:   'POST',
+        url:    'doadmindeletebelonging',
+        data:{
+            skill:skill,
+            type: type
+        },
+        succes: function(){
+            
+        }
+    });
+}
+
 // Explicitly save/update a url parameter using HTML5's replaceState().
 //function updateQueryStringParam(param, value) {
 //  baseUrl = [location.protocol, '//', location.host, location.pathname].join('');
@@ -390,3 +420,4 @@ var updateQueryStringParam = function (key, value) {
     }
     window.history.replaceState({}, "", baseUrl + params);
 };
+

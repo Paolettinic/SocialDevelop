@@ -55,7 +55,7 @@ public class Search extends SocialDevelopBaseController {
     private void action_default(HttpServletRequest request, HttpServletResponse response, Map<String,String[]> parameters) throws IOException, ServletException, TemplateManagerException{
         int page, first, perPage, totalResults;
         int project_id, task_id,user_id;
-        boolean async;
+        boolean async,check_available;
         String filtro, type,url_prev,url_next;
         List<Task> tasks;
         List<Integer> k_collaboratori = new ArrayList();
@@ -88,6 +88,7 @@ public class Search extends SocialDevelopBaseController {
             perPage = parameter_get.containsKey("perpage") ? SecurityLayer.checkNumeric(parameter_get.remove("perpage")[0]) : 9;
             project_id = parameter_get.containsKey("project_select") ? SecurityLayer.checkNumeric(parameter_get.remove("project_select")[0]) : -1;
             async = parameter_get.containsKey("async") ? SecurityLayer.checkNumeric(parameter_get.remove("async")[0]) == 1 : false;
+            check_available = parameter_get.containsKey("available_projects") ? SecurityLayer.stripSlashes(parameter_get.remove("available_projects")[0]).equals("on") : false;
             
             first = (page-1)*perPage;
             
@@ -97,8 +98,14 @@ public class Search extends SocialDevelopBaseController {
             Ricerca dei progetti
             */
             if(type.equals("projects")){
-                List<Progetto> progetti = datalayer.getProgetti(filtro,first,perPage);
-                totalResults = datalayer.getCountProgetti(filtro);
+                List<Progetto> progetti;
+                if(user_id > 0 && check_available){
+                    progetti = datalayer.getProgetti(filtro,user_id,first,perPage);
+                    totalResults = datalayer.getCountProgetti(filtro,user_id);
+                }else{
+                    progetti = datalayer.getProgetti(filtro,first,perPage);
+                    totalResults = datalayer.getCountProgetti(filtro);
+                }
                 /*
                 Per ogni progetto aggiungo ad un HashMap i collaboratori di ogni
                 task, in modo da poterli contare senza ripetizione (e.g. un utente
@@ -191,6 +198,7 @@ public class Search extends SocialDevelopBaseController {
                     url_next = url_query.replace("page="+page, "page="+(page+1));
                 }
                 request.setAttribute("page",page);
+                request.setAttribute("available_project",check_available);
                 request.setAttribute("type",type);
                 request.setAttribute("perpage",perPage);
                 request.setAttribute("filter",filtro);

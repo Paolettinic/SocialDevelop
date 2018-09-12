@@ -11,7 +11,7 @@
                             <h2 class="h4"><#if type = "projects">Progetti<#else>Sviluppatori</#if> trovati : ${total}</h2>
                             <#else>
                             <h2 class="h4">Nessun<#if type = "projects"> progetto<#else>o sviluppatore</#if> trovato</h2>
-                            <p>Nessun<#if type = "projects"> progetto<#else>o sviluppatore</#if> corrisponde ai parametri della tua ricerca, prova a rimuovere o modficare i requisiti minimi.</p>
+                            <p>Nessun<#if type = "projects"> progetto<#else>o sviluppatore</#if> corrisponde ai parametri della tua ricerca, prova a rimuovere o modficare i campi della ricerca.</p>
                             </#if>
                         </div>
                     </div>
@@ -97,8 +97,9 @@
                             <label class="ff--primary fs--14 fw--500 text-darker">
                                 <span>Viewing</span>
                                 <a id="prevpage" href="search?${query_prev}" class="btn-link <#if page lte 1> display_none</#if>"><i class="fa fa-caret-left"></i></a>
-                                <form action="search" method="POST" class="display_inline_block">
+                                <form action="search" method="GET" class="display_inline_block">
                                     <input type="hidden" name="filter" value="${filter}"/>
+                                    <input type="hidden" name="type" value="${type}"/>
                                     <input type="number" id="currentSearchPage" name="page" value="${page}" max="${totalPages}" class="form-control form-sm">
                                 </form>
                                 <a id="nextpage" href="search?${query_next}" class="btn-link <#if page gte totalPages> display_none </#if>"><i class="fa fa-caret-right"></i></a>
@@ -131,6 +132,16 @@
                                         <input type="text" name="filter" value="${filter}" placeholder='<#if type = "developers">Nome, Cognome, nickname...<#else>Nome progetto, descrizione...</#if>' class="form-control" autocomplete="off"/>
                                     </div>
                                 </div>
+                                <#if type ="projects" &&  utente_key != 0>
+                                <div class="col-xs-12 col-xxs-12">
+                                    <div class="form-group">
+                                        <div class="checkbox">
+                                            <input type="checkbox"  class="checkbox_personal" id="available_projects" name="available_projects" <#if available_project> checked="checked" </#if> />
+                                            <label for="available_projects">Solo progetti nei quali posso entrare.</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                </#if>
                                 <#if type = "developers">
                                 <div class="col-xs-12 col-xxs-12">
                                     <h2 class="h4 fw--700 widget--title">Requisiti minimi</h2>

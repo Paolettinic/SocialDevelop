@@ -49,6 +49,7 @@ public class AdminSkill extends SocialDevelopBaseController{
             datamodel.put("encoding","UTF-8");
             datamodel.put("logged","true");
             datamodel.put("tipi",typeList);
+            datamodel.put("page_title","Skill | SocialdevelopAdmin");
             datamodel.put("skills",skillList);
             
             TemplateResult tmp = new TemplateResult(getServletContext());

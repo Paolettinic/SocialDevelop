@@ -11,9 +11,8 @@
             </div>
             <div class="col-md-2">
                 <div class="checkbox">
-                    <label class="collapsed" data-toggle="collapse" data-target="#select_father">
-                        <input type="checkbox" name="has_child"><span>Skill figlio</span>
-                    </label>
+                    <input type="checkbox" class="checkbox_personal" id="has_child" name="has_child" data-toggle="collapse" data-target="#select_father">
+                    <label class="collapsed " for="has_child">Skill figlio</label>
                 </div>
             </div>
         </div>
@@ -52,9 +51,8 @@
                 <span class="fstyle--i">Seleziona i tipi associati</span>
                 <#list tipi as tipo>
                 <div class="checkbox">
-                    <label>
-                        <input type="checkbox" name="task_parent" disabled value="${tipo.key}"><span>${tipo.nome}</span>
-                    </label>
+                    <input type="checkbox" class="checkbox_personal" name="task_parent" id="task_parent_${tipo.key}" disabled value="${tipo.key}">
+                    <label for="task_parent_${tipo.key}">${tipo.nome}</label>
                 </div>
                 </#list>
             </div>

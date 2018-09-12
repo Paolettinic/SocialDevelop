@@ -12,7 +12,18 @@
     position: absolute;
     top: 40%;
 }
+.checkbox_personal{
+    margin-left: 0px !important;
+}
 
+.theiaStickySidebar{
+    padding-top: 58px !important;
+    padding-bottom: 60px !important;
+}
+
+.box--items{
+    min-height: 750px !important;
+}
 .padding_top_150 {
     padding-top: 150px !important;
 }

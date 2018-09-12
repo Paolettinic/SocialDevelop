@@ -47,6 +47,10 @@ public class Rate extends SocialDevelopBaseController {
                 response.sendRedirect("Login");
             }else{
             Utente u = datalayer.getUtente((int) s.getAttribute("userid"));
+            if(u == null){
+                response.sendRedirect("Logout");
+                return;
+            }
             Progetto proj = datalayer.getProgetto(project_id);
             List<Progetto> user_projects = u.getProgetti();
             boolean found = false;

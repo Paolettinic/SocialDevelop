@@ -11,7 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import socialdevelop.data.model.Utente;
+import socialdevelop.data.model.Amministratore;
 import socialdevelop.data.model.SocialDevelopDataLayer;
 
 /**
@@ -29,25 +29,25 @@ public class DoLoginAdmin extends SocialDevelopBaseController {
         HttpSession s = request.getSession(true);
         String user_email = request.getParameter("email");
         String password = request.getParameter("password");
-        Utente utente;
+        Amministratore admin;
         if (user_email != null && !user_email.equals("") && password != null && !password.equals("")) {
             SocialDevelopDataLayer datalayer = (SocialDevelopDataLayer) request.getAttribute("datalayer");
             if (user_email.contains("@")){
-                utente = datalayer.getUtenteByEmail(user_email);
+                admin = datalayer.getAmministratoreByEmail(user_email);
             } else {
-                utente = datalayer.getUtenteByUsername(user_email);
+                admin = datalayer.getAmministratoreByUsername(user_email);
             }
-            if (utente != null) {
+            if (admin != null) {
                 password = datalayer.GeneraPasswordMD5(password);
-                if (utente.getPassword().equals(password)) {
-                    SecurityLayer.createSession(request, utente.getUsername(), utente.getKey());
+                if (admin.getPassword().equals(password)) {
+                    SecurityLayer.createSession(request, admin.getUsername(), admin.getKey());
                     response.sendRedirect("type");
                 } else { // Password inserita in modo errato
                     s.setAttribute("errore", "password_errata");
                     response.sendRedirect("admin");
                 }
             } else { // Username o email non esistenti
-                s.setAttribute("errore", "user_email_errata");
+                s.setAttribute("errore", "admin_email_errata");
                 response.sendRedirect("admin");
             }
         } else {

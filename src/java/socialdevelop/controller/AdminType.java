@@ -48,6 +48,7 @@ public class AdminType extends SocialDevelopBaseController{
             datamodel.put("encoding","UTF-8");
             datamodel.put("logged","true");
             datamodel.put("tipi",typeList);
+            datamodel.put("page_title","Tipi | SocialdevelopAdmin");
             
             TemplateResult tmp = new TemplateResult(getServletContext());
             tmp.activate("admin_tipi.html", datamodel, response);

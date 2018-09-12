@@ -128,7 +128,7 @@ public class SkillImpl implements Skill {
         key = skill.getKey();
         nome = skill.getNome();
         // ----------
-        skill_padre_key = skill.getPadre().getKey();
+        if(skill.getPadre()!= null) skill_padre_key = skill.getPadre().getKey();
         // ----------
         this.dirty = true;
     }
