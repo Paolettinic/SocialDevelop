@@ -42,32 +42,17 @@ public class DoEditUserProfileCV extends SocialDevelopBaseController {
         // RECUPERO GLI IPOTETICI CV DPF E TESTUALI
         Part CV_PDF_Part = request.getPart("CV_PDF");
         String CV_text = request.getParameter("CV_text");
-        
-        //CONTROLLO SE SONO STATI USATI ENTRAMBI I METODI DI CARICAMENTO
-        if (!"".equals(CV_text) && CV_PDF_Part.getSize() > 0) {
-            request.setAttribute("errore", "CV caricato in entrambi i modi");
-            response.sendRedirect("EditUserProfileCV");
-            return;
-        } else if (CV_PDF_Part.getSize() == 0 && "".equals(CV_text)) {
-            // CONTROLLO SE NON E' STATO CARICATO IL PDF IN ALCUN MODO
+
+        // CONTROLLO SE NON E' STATO CARICATO IL PDF IN ALCUN MODO
+        if (CV_PDF_Part.getSize() == 0 && "".equals(CV_text)) {
             request.setAttribute("errore", "CV non caricato");
             response.sendRedirect("EditUserProfileCV");
             return;
         }
         
         Curriculum curriculum = utente.getCurriculum();
-        // CONTROLLO SE E' STATO CARICATO IL PDF TESTUALE E SETTO I CAMPI
-        if (!"".equals(CV_text)) {
-            // PROVO A CANCELLARE IL VECCHIO CV (SE C'E')
-            File file_delete = new File(getServletContext().getRealPath("")+
-                    getServletContext().getInitParameter("cv.directory")+File.separator+
-                    utente.getCurriculum().getNome());
-            file_delete.delete();
-            curriculum.setNome(utente.getUsername().concat("_CV testuale"));
-            curriculum.setTipo("curriculum testuale");
-            curriculum.setTestuale(CV_text);
-        } else {
-            // SETTO I CAMPI
+
+        if (CV_PDF_Part.getSize() > 0) {
             curriculum.setNome(utente.getUsername().concat("_CV.pdf"));
             curriculum.setTipo("curriculum");
             curriculum.setTestuale(null);
@@ -82,6 +67,15 @@ public class DoEditUserProfileCV extends SocialDevelopBaseController {
             try (InputStream IS_CV_DPF = CV_PDF_Part.getInputStream();) {
                 Files.copy(IS_CV_DPF, file_upload.toPath());
             }
+        } else {
+            // PROVO A CANCELLARE IL VECCHIO CV (SE C'E')
+            File file_delete = new File(getServletContext().getRealPath("")+
+                    getServletContext().getInitParameter("cv.directory")+File.separator+
+                    utente.getCurriculum().getNome());
+            file_delete.delete();
+            curriculum.setNome(utente.getUsername().concat("_CV testuale"));
+            curriculum.setTipo("curriculum testuale");
+            curriculum.setTestuale(CV_text);
         }
         ((SocialDevelopDataLayer) request.getAttribute("datalayer")).salvaCurriculum(curriculum);
         
