@@ -63,7 +63,6 @@ public class Messages extends SocialDevelopBaseController {
             Task task = datalayer.getTask(discussione.getTask().getKey());
             Map<Utente,Integer> utenti = datalayer.getUtenti(task);
             
-            request.setAttribute("utente_key", s.getAttribute("userid"));
             request.setAttribute("task", task);
             request.setAttribute("task_name", task.getNome());
             request.setAttribute("task_id", task.getKey());

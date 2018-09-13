@@ -8,7 +8,7 @@
     <#else>
     <div class="row">
         <div class="col-xs-6">
-            <div class="contact--form margin_bottom_50 margin_top_50 margin_left_right">
+            <div class="contact--form margin_bottom_50 margin_top_50 margin_left_right_0">
                 <h4>Pannello delle domande</h4>
                 <hr>
                 <#list inviti as invito>
@@ -17,13 +17,20 @@
                     <div class="col-xs-12">
                         <p>Progetto: <a href="Project?progetto_id=${invito.task.progetto.key}"><span>"${invito.task.progetto.nome}"</span></a> - Task: <a href="Task?task_id=${invito.task.key}"><span>"${invito.task.nome}"</span></a></p>
                         <#if invito.stato == "In attesa">
-                            <a href="ChangeInviteStatus?invito_key=${invito.key}&stato=Annullato" class="btn btn-primary float red-btn float--right">Annulla</a>
+                             <<div class="row">
+                                <div class="col-md-3 col-md-offset-6 col-xs-offset-0 col-xs-3">
+                                    <a href="ChangeInviteStatus?invito_key=${invito.key}&stato=Rifiutato" class="btn btn-primary float red-btn">Rifiuta</a>
+                                </div>
+                                <div class="col-md-3 col-xs-3 col-xs-offset-6 col-md-offset-0">
+                                    <a href="ChangeInviteStatus?invito_key=${invito.key}&stato=Accettato" class="btn btn-primary float green-btn float--right">Accetta</a>
+                                </div>
+                            </div>
                         <#elseif invito.stato == "Rifiutato">
-                            <p>L'amministratore del progetto ha rifiutato questo invito</p>
+                            <p>Hai rifiutato l'invito di ${invito.utente.username}</p>
                         <#elseif invito.stato == "Annullato">
-                            <p>Hai annullato questo invito</p>
+                            <p>L'utente ${invito.utente.username} ha annullato questo invito</p>
                         <#elseif invito.stato == "Accettato">
-                            <p>L'amministratore del progetto ha accettato questo invito</p>
+                            <p>Hai accettato l'invito di ${invito.utente.nome}</p>
                         </#if>
                     </div>
                 </div>
@@ -33,29 +40,26 @@
             </div>
         </div>
         <div class="col-xs-6">
-            <div class="contact--form margin_bottom_50 margin_top_50 margin_left_right">
+            <div class="contact--form margin_bottom_50 margin_top_50 margin_left_right_0">
                 <h4>Pannello degli inviti</h4>
                 <hr>
                 <#list inviti as invito>
                 <#if invito.offerta == false>
                 <div class="row">
                     <div class="col-xs-12">
-                        <p>Progetto: <a href="Project?progetto_id=${invito.task.progetto.key}"><span>"${invito.task.progetto.nome}"</span></a> - Task: <a href="Task?task_id=${invito.task.key}"><span>"${invito.task.nome}"</span></a></p>
+                        <p>Progetto: <a href="Project?progetto_id=${invito.task.progetto.key}"><span>"${invito.task.progetto.nome}"</span></a> - Task: <a href="Task?task_id=${invito.task.key}"><span>"${invito.task.nome}"</span></a>, inviato a <a href="UserProfile?username=${invito.utente.username}">${invito.utente.username}</a></p>
                         <#if invito.stato == "In attesa">
                             <div class="row">
-                                <div class="col-xs-3 col-xs-offset-6">
-                                    <a href="ChangeInviteStatus?invito_key=${invito.key}&stato=Rifiutato" class="btn btn-primary float red-btn">Rifiuta</a>
-                                </div>
-                                <div class="col-xs-3">
-                                    <a href="ChangeInviteStatus?invito_key=${invito.key}&stato=Accettato" class="btn btn-primary float green-btn float--right">Accetta</a>
+                                <div class="col-xs-3 col-xs-offset-9">
+                                    <a href="ChangeInviteStatus?invito_key=${invito.key}&stato=Annullato" class="btn btn-primary float red-btn">Annulla</a>
                                 </div>
                             </div>
                         <#elseif invito.stato == "Rifiutato">
-                            <p>Hai rifiutato questo invito</p>
+                            <p>${invito.utente.username} ha rifiutato questo invito</p>
                         <#elseif invito.stato == "Annullato">
-                            <p>Lo sviluppatore ha annullato questo invito</p>
+                            <p>Hai annullato l'invito di ${invito.utente.username}</p>
                         <#elseif invito.stato == "Accettato">
-                            <p>Hai accettato questo invito</p>
+                            <p>${invito.utente.username} ha accettato questo invito</p>
                         </#if>
                     </div>
                 </div>

@@ -126,8 +126,8 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             sTasksByProgetto = connection.prepareStatement("SELECT * FROM tasks WHERE tasks.ext_progetto = ?");
             sTasksByTipo = connection.prepareStatement("SELECT * FROM tasks WHERE tasks.ext_tipo = ?");
             sTasksBySkill = connection.prepareStatement("SELECT tasks.* FROM tasks INNER JOIN requisiti ON tasks.id = requisiti.ext_task WHERE requisiti.ext_skill = ?");
-            iTask = connection.prepareStatement("INSERT INTO tasks (nome, descrizione, chiuso, numero_corrente_collaboratori, numero_massimo_collaboratori, data_inizio, data_fine, ext_progetto, ext_tipo) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-            uTask = connection.prepareStatement("UPDATE tasks SET nome = ?, descrizione = ?, chiuso = ?, numero_corrente_collaboratori = ?, numero_massimo_collaboratori = ?, data_inizio = ?, data_fine = ?, ext_progetto = ?, ext_tipo = ? WHERE id = ?");
+            iTask = connection.prepareStatement("INSERT INTO tasks (nome, descrizione, chiuso, terminato, numero_corrente_collaboratori, numero_massimo_collaboratori, data_inizio, data_fine, ext_progetto, ext_tipo) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            uTask = connection.prepareStatement("UPDATE tasks SET nome = ?, descrizione = ?, chiuso = ?, terminato = ?, numero_corrente_collaboratori = ?, numero_massimo_collaboratori = ?, data_inizio = ?, data_fine = ?, ext_progetto = ?, ext_tipo = ? WHERE id = ?");
             dTask = connection.prepareStatement("DELETE FROM tasks WHERE id = ?");
             
             sTipoByID = connection.prepareStatement("SELECT * FROM tipi WHERE id = ?");
@@ -358,6 +358,7 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
             task.setNome(rs.getString("nome"));
             task.setDescrizione(rs.getString("descrizione"));
             task.setChiuso(rs.getBoolean("chiuso"));
+            task.setTerminato(rs.getBoolean("terminato"));
             task.setNumeroCorrenteCollaboratori(rs.getInt("numero_corrente_collaboratori"));
             task.setNumeroMassimoCollaboratori(rs.getInt("numero_massimo_collaboratori"));
             task.setProgettoKey(rs.getInt("ext_progetto"));
@@ -761,36 +762,31 @@ public class SocialDevelopDataLayerMysqlImpl extends DataLayerMysqlImpl implemen
                 uTask.setString(1, task.getNome());
                 uTask.setString(2, task.getDescrizione());
                 uTask.setBoolean(3, task.getChiuso());
-                uTask.setInt(4, task.getNumeroCorrenteCollaboratori());
-                uTask.setInt(5, task.getNumeroMassimoCollaboratori());
+                uTask.setBoolean(4, task.getTerminato());
+                uTask.setInt(5, task.getNumeroCorrenteCollaboratori());
+                uTask.setInt(6, task.getNumeroMassimoCollaboratori());
                 Date data_inizio = new Date(task.getDataInizio().getTimeInMillis());
-                uTask.setDate(6, data_inizio);
+                uTask.setDate(7, data_inizio);
                 Date data_fine = new Date(task.getDataFine().getTimeInMillis());
-                uTask.setDate(7, data_fine);
-                uTask.setInt(8, task.getProgetto().getKey());
-                uTask.setInt(9, task.getTipo().getKey());
-                uTask.setInt(10, task.getKey());
+                uTask.setDate(8, data_fine);
+                uTask.setInt(9, task.getProgetto().getKey());
+                uTask.setInt(10, task.getTipo().getKey());
+                uTask.setInt(11, task.getKey());
                 uTask.executeUpdate();
             } else { // Insert
                 iTask.setString(1, task.getNome());
                 iTask.setString(2, task.getDescrizione());
                 iTask.setBoolean(3, task.getChiuso());
-                iTask.setInt(4, task.getNumeroCorrenteCollaboratori());
-                iTask.setInt(5, task.getNumeroMassimoCollaboratori());
+                iTask.setBoolean(4, task.getTerminato());
+                iTask.setInt(5, task.getNumeroCorrenteCollaboratori());
+                iTask.setInt(6, task.getNumeroMassimoCollaboratori());
                 Date data_inizio = new Date(task.getDataInizio().getTimeInMillis());
-                iTask.setDate(6, data_inizio);
+                iTask.setDate(7, data_inizio);
                 Date data_fine = new Date(task.getDataFine().getTimeInMillis());
-                iTask.setDate(7, data_fine);
-                if (task.getProgetto() != null) {
-                    iTask.setInt(8, task.getProgetto().getKey());
-                } else {
-                    iTask.setNull(8, java.sql.Types.INTEGER);
-                }
-                if(task.getTipo() != null) {
-                    iTask.setInt(9, task.getProgetto().getKey());
-                } else {
-                    iTask.setNull(9, java.sql.Types.INTEGER);
-                }
+                iTask.setDate(8, data_fine);
+                iTask.setInt(9, task.getProgetto().getKey());
+                iTask.setInt(10, task.getTipo().getKey());
+
                 if (iTask.executeUpdate() == 1) {
                     try (ResultSet keys = iTask.getGeneratedKeys()) {
                         if (keys.next()) {

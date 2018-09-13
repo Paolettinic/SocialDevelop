@@ -37,7 +37,7 @@ public class DoAddSkills extends SocialDevelopBaseController{
     
     private void action_default(HttpServletRequest request, HttpServletResponse response)throws IOException, ServletException, TemplateManagerException{
         try {
-            
+            SocialDevelopDataLayer datalayer = ((SocialDevelopDataLayer) request.getAttribute("datalayer"));
             int maxskill = Integer.parseInt(request.getParameter("maxskill"));
             String[] nomi = new String[maxskill];
             int[] voti = new int [maxskill];
@@ -50,13 +50,15 @@ public class DoAddSkills extends SocialDevelopBaseController{
             }
 
             int taskid = SecurityLayer.checkNumeric(request.getParameter("taskiddi"));
+            Task t = datalayer.getTask(taskid);
+            Progetto p = t.getProgetto();
 
             for (int k = 0; k < maxskill; k++) {
-                int skill_key = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getSkillByNome(nomi[k]).getKey();
-                ((SocialDevelopDataLayer) request.getAttribute("datalayer")).salvaRequisiti(voti[k], skill_key, taskid);
+                int skill_key = datalayer.getSkillByNome(nomi[k]).getKey();
+                datalayer.salvaRequisiti(voti[k], skill_key, taskid);
             }
 
-            response.sendRedirect("search?type=developers");
+            response.sendRedirect("search?type=developers&project_select="+p.getKey()+"&task_submit="+t.getKey());
         } catch (DataLayerException ex){
             request.setAttribute("message", "Data access exception: " + ex.getMessage());
             action_error(request, response);

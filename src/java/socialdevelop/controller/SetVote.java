@@ -21,7 +21,7 @@ import socialdevelop.data.model.Progetto;
 import socialdevelop.data.model.SocialDevelopDataLayer;
 import socialdevelop.data.model.Task;
 import socialdevelop.data.model.Utente;
-
+import socialdevelop.mailer.MailSender;
 /**
  *
  * @author Nicolò Paoletti
@@ -47,6 +47,7 @@ public class SetVote extends SocialDevelopBaseController {
         try{
             SocialDevelopDataLayer datalayer = ((SocialDevelopDataLayer)request.getAttribute("datalayer"));
             HttpSession s = request.getSession(true);
+            MailSender ms;
             int logged_id;
             if (s.getAttribute("userid") == null) {
                 response.sendRedirect("Login");
@@ -70,8 +71,10 @@ public class SetVote extends SocialDevelopBaseController {
                         datalayer.salvaCoprenti(0, ext_utente, ext_task);
                         response.sendRedirect("/SocialDevelop/Rate?proj_id="+proj.getKey());
                     } else {
-                        
                         datalayer.salvaCoprenti(voto, ext_utente, ext_task);
+                        ms = new MailSender("celticwarrior94@hotmail.it","VOTO FINE TASK",proj.getUtente().getNome()+" del progetto "+proj.getNome()+" ha espresso un voto per il tuo lavoro al task"
+                                +t.getNome()+".\nVOTO: "+voto+"/5.");
+                        ms.sendMail();
                         System.out.println(voto);
                         if(async){
                             response.setContentType("text/plain");

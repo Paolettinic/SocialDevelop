@@ -24,6 +24,10 @@ public interface Task {
     
     void setChiuso(boolean chiuso);
     
+    boolean getTerminato();
+    
+    void setTerminato(boolean terminato);
+    
     int getNumeroCorrenteCollaboratori();
     
     void setNumeroCorrenteCollaboratori(int numero_corrente_collaboratori);

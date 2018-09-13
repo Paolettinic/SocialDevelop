@@ -32,8 +32,6 @@ function add_skill() {
 
 function signup_check() {
     
-    $('select').removeAttr('name');
-    
     // Controllo il nome
     var nome = document.forms["signup_form"]["nome"].value;
     nome = nome.trim();
@@ -224,16 +222,24 @@ function signup_cv_pic_check() {
 // Cambia la src dell'immagine del profilo durante la registrazione con
 // l'anteprima di quella caricata momentanemanete (bisogna metterla dentro
 // una funziona onchange sull'input o qualcosa del genere)
-
-var inp = document.getElementById('foto_profilo');
-inp.addEventListener('change', function(e){
+$("#foto_profilo").on("change",function(){
     var file = this.files[0];
     var reader = new FileReader();
     reader.onload = function(){
         document.getElementById('immagine_profilo').src = this.result;
     };
     reader.readAsDataURL(file);
-},false);
+});
+
+//var inp = document.getElementById('foto_profilo');
+//inp.addEventListener('change', function(e){
+//    var file = this.files[0];
+//    var reader = new FileReader();
+//    reader.onload = function(){
+//        document.getElementById('immagine_profilo').src = this.result;
+//    };
+//    reader.readAsDataURL(file);
+//},false);
 
 // ------------------------------------------------------------
 

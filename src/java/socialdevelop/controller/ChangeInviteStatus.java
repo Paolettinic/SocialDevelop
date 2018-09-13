@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import socialdevelop.data.model.Invito;
 import socialdevelop.data.model.SocialDevelopDataLayer;
 import socialdevelop.data.model.Task;
+import socialdevelop.mailer.MailSender;
 
 /**
  * @author Mario Vetrini
@@ -34,9 +35,11 @@ public class ChangeInviteStatus extends SocialDevelopBaseController {
         }
         
         Invito invito = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getInvito(Integer.valueOf(request.getParameter("invito_key")));
-        if (invito.getUtente().getKey() == (int) s.getAttribute("userid")) {
-            Task task_invito = invito.getTask();
-            if (null != request.getParameter("stato")) switch (request.getParameter("stato")) {
+        
+        Task task_invito = invito.getTask();
+        //MailSender ms = new MailSender();
+        if (null != request.getParameter("stato"))
+            switch (request.getParameter("stato")) {
                 case "Annullato":
                     invito.setStato("Annullato");
                     ((SocialDevelopDataLayer) request.getAttribute("datalayer")).salvaInvito(invito);
@@ -60,7 +63,7 @@ public class ChangeInviteStatus extends SocialDevelopBaseController {
                 default:
                     break;
             }
-        }
+
         response.sendRedirect("OffersApplicationsPanel");
         
     }

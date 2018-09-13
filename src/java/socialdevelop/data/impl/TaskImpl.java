@@ -19,6 +19,7 @@ public class TaskImpl implements Task {
     private String nome;
     private String descrizione;
     private boolean chiuso;
+    private boolean terminato;
     private int numero_corrente_collaboratori;
     private int numero_massimo_collaboratori;
     private GregorianCalendar data_inizio;
@@ -41,6 +42,7 @@ public class TaskImpl implements Task {
         nome = "";
         descrizione = "";
         chiuso = false;
+        terminato = false;
         numero_corrente_collaboratori = 0;
         numero_massimo_collaboratori = 0;
         data_inizio = null;
@@ -75,7 +77,7 @@ public class TaskImpl implements Task {
         this.nome = nome;
         this.dirty = true;
     }
-
+    
     @Override
     public String getDescrizione() {
         return descrizione;
@@ -97,7 +99,18 @@ public class TaskImpl implements Task {
         this.chiuso = chiuso;
         this.dirty = true;
     }
-
+    
+    @Override
+    public boolean getTerminato(){
+        return this.terminato;
+    }
+    
+    @Override
+    public void setTerminato(boolean terminato){
+        this.terminato = terminato;
+        this.dirty = true;
+    }
+    
     @Override
     public int getNumeroCorrenteCollaboratori() {
         return numero_corrente_collaboratori;

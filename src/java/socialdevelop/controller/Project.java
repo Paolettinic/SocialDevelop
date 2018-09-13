@@ -80,7 +80,6 @@ public class Project extends SocialDevelopBaseController {
             request.setAttribute("posts",n_posts);
             request.setAttribute("deadline", deadline);
             request.setAttribute("topicss", discussionis);
-            request.setAttribute("utente_key", s.getAttribute("userid"));
             
             TemplateResult res = new TemplateResult(getServletContext());
             res.activate("project.html", request, response);

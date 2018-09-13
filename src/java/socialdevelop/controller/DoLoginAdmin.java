@@ -41,6 +41,7 @@ public class DoLoginAdmin extends SocialDevelopBaseController {
                 password = datalayer.GeneraPasswordMD5(password);
                 if (admin.getPassword().equals(password)) {
                     SecurityLayer.createSession(request, admin.getUsername(), admin.getKey());
+                    s.setAttribute("admin_key",admin.getKey());
                     response.sendRedirect("type");
                 } else { // Password inserita in modo errato
                     s.setAttribute("errore", "password_errata");

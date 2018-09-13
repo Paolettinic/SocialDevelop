@@ -41,13 +41,13 @@ public class MailSender {
             new javax.mail.Authenticator() {
                 @Override
                 protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication("","");//mail e password
+                    return new PasswordAuthentication("paolettinic@gmail.com","");//mail e password
                 }
             });
 
             try {
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("")); //mail from
+            message.setFrom(new InternetAddress("celticwarrior94@live.com")); //mail from
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(this.to));
             message.setSubject(this.ObjectMessage);

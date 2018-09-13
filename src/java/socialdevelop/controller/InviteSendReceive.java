@@ -39,7 +39,9 @@ public class InviteSendReceive extends SocialDevelopBaseController{
             HttpSession s = request.getSession(true);
             
             if (s.getAttribute("userid") == null) {
-                request.setAttribute("utente_key", 0);
+                response.sendRedirect("Login");
+                return;
+                
             } else {
                 request.setAttribute("utente_key", (int) s.getAttribute("userid"));
             }
@@ -50,11 +52,11 @@ public class InviteSendReceive extends SocialDevelopBaseController{
             
             List<Progetto> progetti = utente.getProgetti();
             List<Task> tasks;
-            List<Invito> inviti = null;
+            List<Invito> inviti = new ArrayList<>();
             for(Progetto p: progetti){
                 tasks = p.getTasks();
                 for(Task t: tasks){
-                    inviti = ((SocialDevelopDataLayer) request.getAttribute("datalayer")).getInviti(t);
+                    inviti.addAll(((SocialDevelopDataLayer) request.getAttribute("datalayer")).getInviti(t));
                 }
             }
             
