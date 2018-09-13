@@ -1,4 +1,3 @@
-
 <!-- Cover Header Start -->
 <div class="page--header pt--60 pb--60 text-center" data-bg-img="img/page-header-img/bg.jpg" data-overlay="0.85">
     <div class="container">
@@ -63,30 +62,28 @@
                     <div class="tab-content">
                         <div id="overview" class="tab-pane fade in active">
                             <div class="forum--header pb--30">
-                                <div class="forum--title">
-                                    <h3 class="h3 fw--500 text-default">Descrizione</h3>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <p><b class="text-darkest">Descrizione:</b> ${task.descrizione}</p>
+                                    </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        <p>${task.descrizione}</p>
+                                    <div class="col-xs-12">
+                                        <p><b class="text-darkest">Nome skill e livello competenza richiesti:</b> <#list skills as skill, vote> ${skill.nome}, ${vote};</#list></p>
                                     </div>
                                 </div>
-                                <div class="forum--title">
-                                    <h3 class="h3 fw--500 text-default">Competenze richieste</h3>
-                                    <div class="row">
-                                        <div class="col-xs-2">
-                                            <p><b class="text-darkest">Nome skill e livello richiesto:</b></p>
-                                        </div>
-                                        <#list skills as skill, vote>
-                                        <div class="col-xs-10">
-                                            <p>${skill.nome}, ${vote}</p>
-                                        </div>
-                                        </#list>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <p><b class="text-darkest">Tipo: </b> ${task.tipo.nome}</p>
                                     </div>
                                 </div>
-                                <div class="forum--title">
-                                    <h3 class="h3 fw--500 text-default">Tipo: ${task.tipo.nome}</h3>
+                                <#if utente.key == coordinatore && task.terminato == true>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <a href="Rate?project_id=${project_id}" class="btn btn-primary col-md float--right">Vota i dev di questo task</a>
+                                    </div>  
                                 </div>
+                                </#if>
                             </div>
                         </div>
                         <div id="discussioni" class="tab-pane fade">
@@ -154,22 +151,24 @@
                         
                         <div id="membri" class="tab-pane fade">
                             <div class="filter--nav pb--60 clearfix">
-                                <div class="filter--link float--left">
-                                    <#assign i=0>
-                                    <#assign visualizza = false>
-                                    <#list task.utenti as user, vote>
-                                    <#assign i++>
-                                    </#list>
-                                    <#if i==0>
-                                    <h3 class="h3 fw--500 text-default">Non ci sono membri per questo task<#if coordinatore == utente_key>,<a href="search?type=developers"> aggiungine di nuovi.</a></#if></h3>
-                                    <#else>
-                                    <h3 class="h3 fw--500 text-default">Membri: ${i}</h3>
-                                    </#if>
+                                <div class="row">
+                                    <div class="filter--link float--left">
+                                        <#assign i=0>
+                                        <#assign visualizza = false>
+                                        <#list task.utenti as user, vote>
+                                        <#assign i++>
+                                        </#list>
+                                        <#if i==0>
+                                        <h3 class="h3 fw--500 text-default">Non ci sono membri per questo task<#if coordinatore == utente_key>,<a href="search?type=developers"> aggiungine di nuovi.</a></#if></h3>
+                                        <#else>
+                                        <h3 class="h3 fw--500 text-default">Membri: ${i}</h3>
+                                        </#if>
+                                    </div>
                                 </div>
-                                <br>
+                                    <br>
                                 <div class="row">
                                     <#list task.utenti as user, vote>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <!-- Box Item Start -->
                                         <div class="box--item text-center">
                                             <a href="UserProfile?username=${user.username}" class="img dev_img" data-overlay="0.1">
@@ -185,6 +184,11 @@
                                                 <div class="desc text-darker line-clamp-2">
                                                     <p>${user.biografia}</p>
                                                 </div>
+                                                <#if utente.key == coordinatore>
+                                                <div>
+                                                    <a href="DoDeleteUserTask?utente_id=${user.key}&task_id=${task.key}" style="color: red">Escludi</a>
+                                                </div>
+                                                </#if>
                                             </div>
                                         </div>
                                         <!-- Box Item End -->

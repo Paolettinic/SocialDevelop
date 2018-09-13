@@ -32,7 +32,7 @@ import socialdevelop.data.model.Skill;
 
 /**
  *
- * @author Davide
+ * @author Davide De Marco
  */
 
     public class TaskPage extends SocialDevelopBaseController {
@@ -79,7 +79,6 @@ import socialdevelop.data.model.Skill;
             request.setAttribute("coordinatore", id_coordinatore);
             request.setAttribute("skills", skills);
             
-            request.setAttribute("utente_key", s.getAttribute("userid"));
             request.setAttribute("inviti", inviti);
             
             request.setAttribute("task", task);

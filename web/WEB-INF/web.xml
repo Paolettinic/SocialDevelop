@@ -141,6 +141,10 @@
         <servlet-class>socialdevelop.controller.DoEditUserProfileAddSkills</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>DoDeleteUserTask</servlet-name>
+        <servlet-class>socialdevelop.controller.DoDeleteUserTask</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>GetImage</servlet-name>
         <servlet-class>socialdevelop.controller.GetImage</servlet-class>
     </servlet>
@@ -379,6 +383,10 @@
     <servlet-mapping>
         <servlet-name>DoEditUserProfileAddSkills</servlet-name>
         <url-pattern>/DoEditUserProfileAddSkills</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DoDeleteUserTask</servlet-name>
+        <url-pattern>/DoDeleteUserTask</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Project</servlet-name>
